@@ -41,6 +41,7 @@ from crab_optimizer import CRABOptimizer
 plt.rcParams.update({
     "text.usetex": False,
     "font.family": "serif",
+    "mathtext.fontset": "cm",
     "font.size": 14,
 })
 

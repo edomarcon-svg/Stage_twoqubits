@@ -36,6 +36,7 @@ from grape_optimizer import GRAPEOptimizer, GRAPEResult
 plt.rcParams.update({
     "text.usetex": False,
     "font.family": "serif",
+    "mathtext.fontset": "cm",
     "font.size": 14,
 })
 
