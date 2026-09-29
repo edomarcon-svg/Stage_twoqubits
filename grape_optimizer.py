@@ -210,22 +210,7 @@ class GRAPEOptimizer:
     ) -> GRAPEResult:
 
 
-# Use random guess if none provided
-        if initial_guess is None:
-            controls = self.initial_guess()
-        else:
-            if len(initial_guess) != self.n_controls:
-                raise ValueError(f"initial_guess must contain {self.n_controls} arrays")
-            controls = []
-            for i in range(self.n_controls):
-                # time grid of the provided guess
-                t_initial_guess = np.linspace(0, self.T, len(initial_guess[i]))
-                # interpolate onto optimizer time grid
-                interpolated = np.interp(self.tlist, t_initial_guess, initial_guess[i])
-                controls.append(interpolated)
-
-
-       # Generate initial guess if not provided
+        # Generate initial guess if not provided
         if initial_guess is None:
             initial_guess = []
             for _ in range(self.n_controls):
@@ -279,7 +264,7 @@ class GRAPEOptimizer:
             method="L-BFGS-B",
             jac=True,
             bounds=bounds,
-            options={"maxiter": max_iter, "disp": True}
+            options={"maxiter": max_iter}
         )
 
         # Reconstruct optimized control pulses

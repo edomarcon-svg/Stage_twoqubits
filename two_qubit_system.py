@@ -152,22 +152,17 @@ def target_fock_2q(dim: int, n: int, trace_over_qubits: bool = True) -> Qobj:
     n : int
         Target photon number.
     trace_over_qubits : bool
-        If True, return the *reduced* cavity density matrix ρ_cav = |n⟩⟨n|
+        If True, return the *reduced* cavity density matrix/ket ρ_cav = |n⟩
         (useful for CRAB cost).
-        If False, return the *full* density matrix |n,g,g⟩⟨n,g,g|
-        (useful for GRAPE cost).
+        If False, return the target observable |n⟩⟨n| ⊗ I_2 ⊗ I_2
+        (useful for GRAPE cost, expectation value Tr[O ρ] ∈ [0, 1]).
     """
     if trace_over_qubits:
         # Pure cavity state only
         return basis(dim, n)   # ket
     else:
-        # Full system density matrix (traced over nothing)
-        rho = ket2dm(tensor(basis(dim, n), basis(2, 0), basis(2, 0)))
-        # Trace over qubit subspace → mixed cavity state
-        # Actually for GRAPE we need the full density matrix
-        full_dm = tensor(ket2dm(basis(dim, n)), qeye(2), qeye(2))
-        full_dm = full_dm / full_dm.tr()
-        return full_dm
+        # Target observable for the cavity subsystem (trace-preserving: Tr[O ρ] = ⟨n|ρ_cav|n⟩)
+        return tensor(ket2dm(basis(dim, n)), qeye(2), qeye(2))
 
 
 def target_squeezed_2q(dim: int, r: float, theta: float = 0.0,
@@ -185,16 +180,14 @@ def target_squeezed_2q(dim: int, r: float, theta: float = 0.0,
         Squeezing angle.
     trace_over_qubits : bool
         If True, return ket of cavity only.
-        If False, return full-system density matrix.
+        If False, return target observable for full system.
     """
     squeezed_ket = squeeze(dim, r * np.exp(1j * theta)) * basis(dim, 0)
     if trace_over_qubits:
         return squeezed_ket
     else:
         rho = ket2dm(squeezed_ket)
-        full_dm = tensor(rho, qeye(2), qeye(2))
-        full_dm = full_dm / full_dm.tr()
-        return full_dm
+        return tensor(rho, qeye(2), qeye(2))
 
 
 def target_cat_2q(dim: int, alpha: float = 2.0,
@@ -212,7 +205,7 @@ def target_cat_2q(dim: int, alpha: float = 2.0,
         Coherent-state amplitude.
     trace_over_qubits : bool
         If True, return ket of cavity only.
-        If False, return full-system density matrix.
+        If False, return target observable for full system.
     """
     cat_a = coherent(dim, alpha)
     cat_ma = coherent(dim, -alpha)
@@ -228,9 +221,7 @@ def target_cat_2q(dim: int, alpha: float = 2.0,
         return cat_state
     else:
         rho = ket2dm(cat_state)
-        full_dm = tensor(rho, qeye(2), qeye(2))
-        full_dm = full_dm / full_dm.tr()
-        return full_dm
+        return tensor(rho, qeye(2), qeye(2))
 
 
 def target_bell_2q(dim: int, n_cav: int = 0,
@@ -326,39 +317,58 @@ def make_crab_cost_qubits(target_qubit_dm: Qobj):
 # GRAPE target-state builders (density matrices in full Hilbert space)
 # ====================================================================
 
-def grape_target_fock_2q(dim: int, n: int) -> Qobj:
+def grape_target_fock_2q(dim: int, n: int, ground_qubits: bool = False) -> Qobj:
     """
-    GRAPE target: cavity Fock state |n⟩, qubits in identity
-    (trace-insensitive target).
+    GRAPE target operator for cavity Fock state |n⟩.
 
-    Returns ρ_target = |n⟩⟨n| ⊗ I_2 ⊗ I_2  (normalized).
+    Parameters
+    ----------
+    dim : int
+        Cavity truncation.
+    n : int
+        Target photon number.
+    ground_qubits : bool
+        If False (default, trace-insensitive), the target observable is:
+            O_target = |n⟩⟨n| ⊗ I_2 ⊗ I_2
+        Its expectation value Tr[O ρ] equals the cavity fidelity ⟨n|ρ_cav|n⟩ ∈ [0, 1].
+        If True, both qubits are required to be in |g, g⟩ at t=T:
+            ρ_target = |n,g,g⟩⟨n,g,g|
+        whose overlap with ρ(T) is ⟨n,g,g|ρ|n,g,g⟩ ∈ [0, 1].
     """
-    rho_cav = ket2dm(basis(dim, n))
-    full_dm = tensor(rho_cav, qeye(2), qeye(2))
-    full_dm = full_dm / full_dm.tr()
-    return full_dm
+    if ground_qubits:
+        target_ket = tensor(basis(dim, n), basis(2, 0), basis(2, 0))
+        return ket2dm(target_ket)
+    else:
+        rho_cav = ket2dm(basis(dim, n))
+        return tensor(rho_cav, qeye(2), qeye(2))
 
 
-def grape_target_squeezed_2q(dim: int, r: float, theta: float = 0.0) -> Qobj:
+def grape_target_squeezed_2q(dim: int, r: float, theta: float = 0.0,
+                             ground_qubits: bool = False) -> Qobj:
     """
-    GRAPE target: squeezed vacuum ⊗ I_2 ⊗ I_2  (normalized).
+    GRAPE target operator for cavity squeezed vacuum.
     """
     squeezed_ket = squeeze(dim, r * np.exp(1j * theta)) * basis(dim, 0)
-    rho = ket2dm(squeezed_ket)
-    full_dm = tensor(rho, qeye(2), qeye(2))
-    full_dm = full_dm / full_dm.tr()
-    return full_dm
+    if ground_qubits:
+        target_ket = tensor(squeezed_ket, basis(2, 0), basis(2, 0))
+        return ket2dm(target_ket)
+    else:
+        rho_cav = ket2dm(squeezed_ket)
+        return tensor(rho_cav, qeye(2), qeye(2))
 
 
-def grape_target_cat_2q(dim: int, alpha: float = 2.0) -> Qobj:
+def grape_target_cat_2q(dim: int, alpha: float = 2.0,
+                        ground_qubits: bool = False) -> Qobj:
     """
-    GRAPE target: cat-state superposition ⊗ I_2 ⊗ I_2  (normalized).
+    GRAPE target operator for cavity cat-state superposition.
     """
     cat_ket = target_cat_2q(dim, alpha, trace_over_qubits=True)
-    rho = ket2dm(cat_ket)
-    full_dm = tensor(rho, qeye(2), qeye(2))
-    full_dm = full_dm / full_dm.tr()
-    return full_dm
+    if ground_qubits:
+        target_ket = tensor(cat_ket, basis(2, 0), basis(2, 0))
+        return ket2dm(target_ket)
+    else:
+        rho_cav = ket2dm(cat_ket)
+        return tensor(rho_cav, qeye(2), qeye(2))
 
 
 # ====================================================================
