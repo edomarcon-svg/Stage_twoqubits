@@ -1,17 +1,16 @@
 """
-run_full_pipeline_2q.py
+run_full_pipeline_1q.py
 =======================
-Full hybrid optimal-control pipeline for the cavity + 2 qubit system:
+Full hybrid optimal-control pipeline for the cavity + 1 qubit system:
 
     CRAB (multi-seed, parallel) → best-pick → GRAPE refinement → Interpolation
 
-Reproduces the procedure described in the paper for the one-qubit case,
-now extended to two independently controlled qubits.
+Reproduces the procedure described in the paper for the one-qubit case.
 
 Supports cross-platform multiprocessing (Linux, Windows, macOS).
 
 Usage:
-    python run_full_pipeline_2q.py
+    python run_full_pipeline_1q.py
 """
 
 import sys
@@ -28,10 +27,10 @@ script_dir = os.path.dirname(os.path.abspath(__file__))
 if script_dir not in sys.path:
     sys.path.insert(0, script_dir)
 
-from two_qubit_system import (
-    build_two_qubit_system,
-    target_fock_2q,
-    grape_target_fock_2q,
+from one_qubit_system import (
+    build_one_qubit_system,
+    target_fock_1q,
+    grape_target_fock_1q,
     make_crab_cost_cavity,
     compute_control_cost,
 )
@@ -51,32 +50,31 @@ plt.rcParams.update({
 # --- Physics ---
 dim = 40
 omega_c = 1.0
-g1 = 0.3
-g2 = 0.3
-tau_s = np.pi / (2 * g1)
+g = 0.3
+tau_s = np.pi / (2 * g)
 T = 20 * tau_s
-omega_bases = [2.0, 2.0]
+omega_bases = [2.0]
 
 # --- CRAB stage ---
 CRAB_NUM_SEEDS = 10        # number of independent CRAB runs
 CRAB_NT = 400              # CRAB time slots
 CRAB_NUM_FREQS = 20        # Fourier components per control
-CRAB_MAX_ITER = None        # Nelder-Mead default (None = auto/unlimited)
+CRAB_MAX_ITER = None       # Nelder-Mead default (None = auto/unlimited)
 CRAB_METHOD = "Nelder-Mead"
 
 # --- GRAPE stage ---
-GRAPE_NT = 300              # GRAPE time slots
+GRAPE_NT = 300             # GRAPE time slots
 GRAPE_MAX_ITER = 500
 GRAPE_AMP_BOUND = (0.5, 3.0)
 
 # --- Interpolation stage ---
-INTERP_NT = 600             # fine time grid for final smoothing
+INTERP_NT = 600            # fine time grid for final smoothing
 
 # --- Target ---
 n_target = 10
 
 # --- Output ---
-output_dir = f"results_2q_pipeline_n{n_target}"
+output_dir = f"results_1q_pipeline_n{n_target}"
 
 
 # ====================================================================
@@ -88,24 +86,24 @@ def _crab_worker(args):
     Reconstructs the system locally to ensure 100% compatibility with
     the 'spawn' start method used on Windows and macOS.
     """
-    (seed, dim_, omega_c_, g1_, g2_, n_target_, T_, Nt_, num_freqs_, omega_bases_, max_iter_, method_) = args
+    (seed, dim_, omega_c_, g_, n_target_, T_, Nt_, num_freqs_, omega_bases_, max_iter_, method_) = args
 
     # Ensure project directory is in path inside spawned worker
     if script_dir not in sys.path:
         sys.path.insert(0, script_dir)
 
-    from two_qubit_system import build_two_qubit_system, target_fock_2q, make_crab_cost_cavity, compute_control_cost
+    from one_qubit_system import build_one_qubit_system, target_fock_1q, make_crab_cost_cavity, compute_control_cost
     from crab_optimizer import CRABOptimizer
     from qutip import ptrace, fidelity
 
     t0 = time.time()
-    sys2q_worker = build_two_qubit_system(dim=dim_, omega_c=omega_c_, g1=g1_, g2=g2_)
-    target_cav_worker = target_fock_2q(dim_, n_target_, trace_over_qubits=True)
+    sys1q_worker = build_one_qubit_system(dim=dim_, omega_c=omega_c_, g=g_)
+    target_cav_worker = target_fock_1q(dim_, n_target_, trace_over_qubit=True)
     cost_fn_worker = make_crab_cost_cavity(target_cav_worker)
 
     opt = CRABOptimizer(
-        H_drift=sys2q_worker.H0,
-        H_controls=sys2q_worker.H_controls,
+        H_drift=sys1q_worker.H0,
+        H_controls=sys1q_worker.H_controls,
         T=T_,
         num_tslots=Nt_,
         num_freqs=num_freqs_,
@@ -116,7 +114,7 @@ def _crab_worker(args):
     )
 
     res = opt.optimize(
-        psi0=sys2q_worker.psi0_ket,
+        psi0=sys1q_worker.psi0_ket,
         cost_function=cost_fn_worker,
         max_iter=max_iter_,
         method=method_,
@@ -143,17 +141,18 @@ def _crab_worker(args):
 # Main Workflow
 # ====================================================================
 def main():
+    t_pipeline_start = time.time()
     os.makedirs(output_dir, exist_ok=True)
 
     # Build system for main process
-    sys2q = build_two_qubit_system(dim=dim, omega_c=omega_c, g1=g1, g2=g2)
-    target_cav_ket = target_fock_2q(dim, n_target, trace_over_qubits=True)
-    target_dm = grape_target_fock_2q(dim, n_target, ground_qubits=False)
-    psi0_dm = sys2q.psi0_dm
+    sys1q = build_one_qubit_system(dim=dim, omega_c=omega_c, g=g)
+    target_cav_ket = target_fock_1q(dim, n_target, trace_over_qubit=True)
+    target_dm = grape_target_fock_1q(dim, n_target, ground_qubit=False)
+    psi0_dm = sys1q.psi0_dm
 
     print("=" * 65)
-    print(f"  FULL PIPELINE — target |n={n_target}⟩, 2 qubits")
-    print(f"  Hilbert space dimension: {sys2q.H0.shape[0]}")
+    print(f"  FULL PIPELINE — target |n={n_target}⟩, 1 qubit")
+    print(f"  Hilbert space dimension: {sys1q.H0.shape[0]} (dim={dim} × 2)")
     print(f"  T = {T:.2f}  ({T/tau_s:.1f} τ_s)")
     print("=" * 65)
 
@@ -173,7 +172,7 @@ def main():
     t_start_crab = time.time()
 
     task_args = [
-        (seed, dim, omega_c, g1, g2, n_target, T, CRAB_NT, CRAB_NUM_FREQS, omega_bases, CRAB_MAX_ITER, CRAB_METHOD)
+        (seed, dim, omega_c, g, n_target, T, CRAB_NT, CRAB_NUM_FREQS, omega_bases, CRAB_MAX_ITER, CRAB_METHOD)
         for seed in range(CRAB_NUM_SEEDS)
     ]
 
@@ -198,6 +197,7 @@ def main():
 
     fidelities = [r["fidelity"] for r in crab_results]
     costs = [r["cost"] for r in crab_results]
+
     print(f"\nCRAB Summary ({CRAB_NUM_SEEDS} seeds):")
     print(f"  Mean fidelity: {np.mean(fidelities):.6f} ± {np.std(fidelities):.6f}")
     print(f"  Mean cost C²:  {np.mean(costs):.2f} ± {np.std(costs):.2f}")
@@ -220,8 +220,8 @@ def main():
     dt_grape = tlist_grape[1] - tlist_grape[0]
 
     optimizer_grape = GRAPEOptimizer(
-        H_drift=sys2q.H0,
-        H_controls=sys2q.H_controls,
+        H_drift=sys1q.H0,
+        H_controls=sys1q.H_controls,
         T=T,
         num_tslots=GRAPE_NT,
         omega_bases=omega_bases,
@@ -260,41 +260,41 @@ def main():
     dt_fine = tlist_fine[1] - tlist_fine[0]
 
     ctrl_q1_grape = result_grape.control_pulses[0]
-    ctrl_q2_grape = result_grape.control_pulses[1]
 
     cs_q1 = PchipInterpolator(tlist_grape, ctrl_q1_grape)
-    cs_q2 = PchipInterpolator(tlist_grape, ctrl_q2_grape)
-
     ctrl_q1_smooth = cs_q1(tlist_fine)
-    ctrl_q2_smooth = cs_q2(tlist_fine)
 
     optimizer_fine = GRAPEOptimizer(
-        H_drift=sys2q.H0,
-        H_controls=sys2q.H_controls,
+        H_drift=sys1q.H0,
+        H_controls=sys1q.H_controls,
         T=T,
         num_tslots=INTERP_NT,
         omega_bases=omega_bases,
     )
 
-    states_smooth = optimizer_fine.forward_propagation([ctrl_q1_smooth, ctrl_q2_smooth], sys2q.psi0_dm)
+    states_smooth = optimizer_fine.forward_propagation([ctrl_q1_smooth], sys1q.psi0_dm)
     rho_cav_smooth = ptrace(states_smooth[-1], 0)
     F_smooth = float(fidelity(target_cav_ket, rho_cav_smooth))
-    C2_smooth = float(compute_control_cost([ctrl_q1_smooth, ctrl_q2_smooth], dt_fine))
+    C2_smooth = float(compute_control_cost([ctrl_q1_smooth], dt_fine))
 
     print(f"  Smoothed fidelity: {F_smooth:.6f}")
     print(f"  Smoothed cost C²:  {C2_smooth:.2f}")
+
+    total_pipeline_time = time.time() - t_pipeline_start
 
     # ----------------------------------------------------------------
     # Final Summary Table
     # ----------------------------------------------------------------
     print("\n" + "=" * 65)
-    print("  FINAL PIPELINE SUMMARY")
+    print("  FINAL PIPELINE SUMMARY (1 QUBIT)")
     print("=" * 65)
     print(f"  {'Stage':<25s}  {'Fidelity':>12s}  {'Cost C²':>12s}")
     print(f"  {'-'*25}  {'-'*12}  {'-'*12}")
     print(f"  {'CRAB (best seed)':<25s}  {best_crab['fidelity']:12.6f}  {best_crab['cost']:12.2f}")
     print(f"  {'GRAPE (L-BFGS-B)':<25s}  {F_grape:12.6f}  {C2_grape:12.2f}")
     print(f"  {'PCHIP Smoothed':<25s}  {F_smooth:12.6f}  {C2_smooth:12.2f}")
+    print("=" * 65)
+    print(f"  Total pipeline time: {total_pipeline_time:.1f}s (~{total_pipeline_time/60:.1f} min)")
     print("=" * 65)
 
     # ----------------------------------------------------------------
@@ -307,11 +307,11 @@ def main():
         tlist_grape=tlist_grape,
         tlist_fine=tlist_fine,
         ctrl_q1_crab=best_pulses_crab[0],
-        ctrl_q2_crab=best_pulses_crab[1],
         ctrl_q1_grape=ctrl_q1_grape,
-        ctrl_q2_grape=ctrl_q2_grape,
         ctrl_q1_smooth=ctrl_q1_smooth,
-        ctrl_q2_smooth=ctrl_q2_smooth,
+        ctrl_q_crab=best_pulses_crab[0],
+        ctrl_q_grape=ctrl_q1_grape,
+        ctrl_q_smooth=ctrl_q1_smooth,
         fidelity_crab=best_crab["fidelity"],
         fidelity_grape=F_grape,
         fidelity_smooth=F_smooth,
@@ -320,13 +320,16 @@ def main():
         cost_smooth=C2_smooth,
         all_fidelities=fidelities,
         all_costs=costs,
+        elapsed_crab=total_crab_time,
+        elapsed_grape=elapsed_grape,
+        elapsed_total=total_pipeline_time,
     )
     print(f"\nAll data saved to {results_path}")
 
     # ----------------------------------------------------------------
     # Plots Generation (PDFs)
     # ----------------------------------------------------------------
-    n_expect = [expect(sys2q.n_tot, rho) for rho in states_smooth]
+    n_expect = [expect(sys1q.n_tot, rho) for rho in states_smooth]
 
     # 1. Mean photon number
     plt.figure(figsize=(7, 4))
@@ -334,7 +337,7 @@ def main():
     plt.axhline(n_target, color="gray", ls="--", label=f"Target n={n_target}")
     plt.xlabel(r"$t / \tau_s$")
     plt.ylabel(r"$\langle n \rangle$")
-    plt.title(f"Pipeline — Mean photon number  (F = {F_smooth:.4f})")
+    plt.title(f"Pipeline 1Q — Mean photon number  (F = {F_smooth:.4f})")
     plt.legend()
     plt.grid(True, alpha=0.3)
     plt.tight_layout()
@@ -342,27 +345,19 @@ def main():
     plt.close()
 
     # 2. Control drives comparison
-    fig, axes = plt.subplots(2, 2, figsize=(14, 8))
+    fig, axes = plt.subplots(1, 2, figsize=(14, 5))
     # CRAB Q1
-    axes[0, 0].plot(tlist_crab / tau_s, best_pulses_crab[0], "darkgreen", lw=1.5)
-    axes[0, 0].set_title(f"CRAB — Q1  (F={best_crab['fidelity']:.4f})")
-    axes[0, 0].set_ylabel(r"$\Omega_{D1}/\omega_c$")
-    axes[0, 0].grid(True, alpha=0.3)
-    # CRAB Q2
-    axes[1, 0].plot(tlist_crab / tau_s, best_pulses_crab[1], "navy", lw=1.5)
-    axes[1, 0].set_title(f"CRAB — Q2")
-    axes[1, 0].set_xlabel(r"$t/\tau_s$")
-    axes[1, 0].set_ylabel(r"$\Omega_{D2}/\omega_c$")
-    axes[1, 0].grid(True, alpha=0.3)
+    axes[0].plot(tlist_crab / tau_s, best_pulses_crab[0], "darkgreen", lw=1.5)
+    axes[0].set_title(f"CRAB — Qubit 1  (F={best_crab['fidelity']:.4f})")
+    axes[0].set_xlabel(r"$t/\tau_s$")
+    axes[0].set_ylabel(r"$\Omega_D(t)/\omega_c$")
+    axes[0].grid(True, alpha=0.3)
     # Smoothed Q1
-    axes[0, 1].plot(tlist_fine / tau_s, ctrl_q1_smooth, "darkgreen", lw=1.8)
-    axes[0, 1].set_title(f"Smoothed — Q1  (F={F_smooth:.4f})")
-    axes[0, 1].grid(True, alpha=0.3)
-    # Smoothed Q2
-    axes[1, 1].plot(tlist_fine / tau_s, ctrl_q2_smooth, "navy", lw=1.8)
-    axes[1, 1].set_title(f"Smoothed — Q2")
-    axes[1, 1].set_xlabel(r"$t/\tau_s$")
-    axes[1, 1].grid(True, alpha=0.3)
+    axes[1].plot(tlist_fine / tau_s, ctrl_q1_smooth, "darkgreen", lw=1.8)
+    axes[1].set_title(f"Smoothed (GRAPE + PCHIP) — Qubit 1  (F={F_smooth:.4f})")
+    axes[1].set_xlabel(r"$t/\tau_s$")
+    axes[1].set_ylabel(r"$\Omega_D(t)/\omega_c$")
+    axes[1].grid(True, alpha=0.3)
     fig.tight_layout()
     plt.savefig(os.path.join(output_dir, "drives_comparison.pdf"), dpi=300)
     plt.close()
@@ -372,7 +367,7 @@ def main():
     fig, axes = plt.subplots(1, 2, figsize=(12, 5))
     w_target = wigner(target_cav_ket, xvec, xvec)
     axes[0].contourf(xvec, xvec, w_target, 100, cmap="RdBu_r")
-    axes[0].set_title("Target Wigner")
+    axes[0].set_title(f"Target Wigner (|n={n_target}⟩)")
     axes[0].set_xlabel("x")
     axes[0].set_ylabel("p")
 
@@ -386,19 +381,18 @@ def main():
     plt.close()
 
     # 4. FFT spectrum
-    fig, axes = plt.subplots(1, 2, figsize=(12, 4))
-    for ctrl, ax, label in zip([ctrl_q1_smooth, ctrl_q2_smooth], axes, ["Qubit 1", "Qubit 2"]):
-        ctrl_c = ctrl - np.mean(ctrl)
-        fft_v = np.fft.fft(ctrl_c)
-        freqs = np.fft.fftfreq(len(ctrl_c), d=dt_fine)
-        mask = freqs >= 0
-        ax.plot(freqs[mask] * (2 * np.pi), np.abs(fft_v[mask]))
-        ax.axvline(2 * omega_c, color="red", ls="--", label=r"$2\omega_c$")
-        ax.set_xlabel("Frequency")
-        ax.set_ylabel("Amplitude")
-        ax.set_title(f"FFT — {label}")
-        ax.legend()
-        ax.grid(True, alpha=0.3)
+    fig, ax = plt.subplots(figsize=(7, 4))
+    ctrl_c = ctrl_q1_smooth - np.mean(ctrl_q1_smooth)
+    fft_v = np.fft.fft(ctrl_c)
+    freqs = np.fft.fftfreq(len(ctrl_c), d=dt_fine)
+    mask = freqs >= 0
+    ax.plot(freqs[mask] * (2 * np.pi), np.abs(fft_v[mask]), "darkgreen", lw=1.5)
+    ax.axvline(2 * omega_c, color="red", ls="--", label=r"$2\omega_c$")
+    ax.set_xlabel("Frequency")
+    ax.set_ylabel("Amplitude")
+    ax.set_title("FFT — Qubit 1")
+    ax.legend()
+    ax.grid(True, alpha=0.3)
     fig.tight_layout()
     plt.savefig(os.path.join(output_dir, "fft.pdf"), dpi=300)
     plt.close()
