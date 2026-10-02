@@ -82,14 +82,16 @@ class GRAPEOptimizer:
         ]
 
     # --------------------------------------------------------
+    # --------------------------------------------------------
     # Forward propagation
     # --------------------------------------------------------
-    def forward_propagation(self, controls, psi0):
+    def forward_propagation(self, controls, psi0, return_unitaries: bool = False):
         """
         Propagates the system density matrix forward in time using the controls.
-        Returns the list of states at each timestep.
+        Returns the list of states at each timestep, and optionally the list of unitary propagators.
         """
         rho_list = [psi0]  # Start with initial state
+        U_list = [] if return_unitaries else None
         for t in range(self.num_tslots):
             H_total = self.H_drift
             # Add contributions from all control Hamiltonians at this time step
@@ -99,27 +101,38 @@ class GRAPEOptimizer:
             U = (-1j * H_total * self.dt).expm()
             # Propagate density matrix
             rho_list.append(U * rho_list[-1] * U.dag())
+            if return_unitaries:
+                U_list.append(U)
+        if return_unitaries:
+            return rho_list, U_list
         return rho_list
 
     # --------------------------------------------------------
     # Backward propagation
     # --------------------------------------------------------
-    def backward_propagation(self, controls, target_state):
+    def backward_propagation(self, controls, target_state, unitaries: list = None):
         """
         Backward propagates the target state in time for gradient calculation.
-        Returns the list of lambda states at each timestep.
+        If unitaries (precomputed U_list from forward_propagation) are provided,
+        they are reused directly instead of re-exponentiating the Hamiltonians,
+        cutting computation time nearly in half.
         """
         lambda_list = [None] * (self.num_tslots + 1)
         lambda_list[-1] = target_state   # Final condition is the target state
-        for t in reversed(range(self.num_tslots)):
-            H_total = self.H_drift
-            # Include all controls at this timestep
-            for k, Hc in enumerate(self.H_controls):
-                H_total += controls[k][t] * Hc
-            # Compute unitary for this step
-            U = (-1j * H_total * self.dt).expm()
-            # Backward propagation formula
-            lambda_list[t] = U.dag() * lambda_list[t + 1] * U
+        if unitaries is not None:
+            for t in reversed(range(self.num_tslots)):
+                U = unitaries[t]
+                lambda_list[t] = U.dag() * lambda_list[t + 1] * U
+        else:
+            for t in reversed(range(self.num_tslots)):
+                H_total = self.H_drift
+                # Include all controls at this timestep
+                for k, Hc in enumerate(self.H_controls):
+                    H_total += controls[k][t] * Hc
+                # Compute unitary for this step
+                U = (-1j * H_total * self.dt).expm()
+                # Backward propagation formula
+                lambda_list[t] = U.dag() * lambda_list[t + 1] * U
         return lambda_list
 
     # --------------------------------------------------------
@@ -167,9 +180,9 @@ class GRAPEOptimizer:
         F_prev = 0.0   # Previous fidelity for convergence check
 
         for it in range(1, max_iter + 1):
-            # Forward and backward propagation
-            rho_list = self.forward_propagation(controls, psi0)
-            lambda_list = self.backward_propagation(controls, target_state)
+            # Forward and backward propagation (caching unitaries for 2x speedup)
+            rho_list, U_list = self.forward_propagation(controls, psi0, return_unitaries=True)
+            lambda_list = self.backward_propagation(controls, target_state, unitaries=U_list)
             # Compute gradients
             gradients = self.compute_gradients(rho_list, lambda_list)
 
@@ -243,12 +256,12 @@ class GRAPEOptimizer:
                 ctrl[1:-1] = inner_controls_flat[start:end]  # inner time steps
                 inner_controls.append(ctrl)
 
-            # Forward propagation and fidelity
-            rho_list = self.forward_propagation(inner_controls, psi0)
+            # Forward propagation and fidelity (caching unitaries for 2x speedup)
+            rho_list, U_list = self.forward_propagation(inner_controls, psi0, return_unitaries=True)
             F = (target_state.dag() * rho_list[-1]).tr().real
 
-            # Backward propagation for gradients
-            lambda_list = self.backward_propagation(inner_controls, target_state)
+            # Backward propagation for gradients (reusing precomputed unitaries)
+            lambda_list = self.backward_propagation(inner_controls, target_state, unitaries=U_list)
             gradients = self.compute_gradients(rho_list, lambda_list)
 
             # Flatten gradients for optimizer (exclude boundaries)
