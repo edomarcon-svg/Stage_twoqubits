@@ -1,0 +1,301 @@
+<!DOCTYPE html>
+<html lang="it">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Report Simulazione 2Q — Cat(α=2.00)</title>
+<style>
+  :root {
+    --bg: #0f172a;
+    --card-bg: #1e293b;
+    --text: #f8fafc;
+    --text-muted: #94a3b8;
+    --accent: #38bdf8;
+    --border: #334155;
+    --success: #10b981;
+    --warning: #f59e0b;
+  }
+  body {
+    font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+    background-color: var(--bg);
+    color: var(--text);
+    margin: 0;
+    padding: 30px 20px;
+    line-height: 1.6;
+  }
+  .container {
+    max-width: 1200px;
+    margin: 0 auto;
+  }
+  header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    border-bottom: 1px solid var(--border);
+    padding-bottom: 20px;
+    margin-bottom: 30px;
+  }
+  h1 { margin: 0; font-size: 1.8rem; color: #fff; }
+  .tag {
+    display: inline-block;
+    padding: 6px 14px;
+    border-radius: 9999px;
+    font-weight: 600;
+    font-size: 0.9rem;
+    background-color: #f59e0b22;
+    color: #f59e0b;
+    border: 1px solid #f59e0b44;
+  }
+  .cards-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
+    gap: 20px;
+    margin-bottom: 30px;
+  }
+  .card {
+    background-color: var(--card-bg);
+    border: 1px solid var(--border);
+    border-radius: 12px;
+    padding: 20px;
+  }
+  .card-label { font-size: 0.85rem; color: var(--text-muted); text-transform: uppercase; letter-spacing: 0.05em; }
+  .card-val { font-size: 1.8rem; font-weight: 700; margin-top: 6px; color: #fff; }
+  .card-sub { font-size: 0.85rem; color: var(--accent); margin-top: 4px; }
+  
+  table {
+    width: 100%;
+    border-collapse: collapse;
+    margin-top: 12px;
+  }
+  th, td {
+    padding: 12px 16px;
+    text-align: left;
+    border-bottom: 1px solid var(--border);
+  }
+  th {
+    background-color: rgba(255, 255, 255, 0.03);
+    color: var(--text-muted);
+    font-size: 0.85rem;
+    text-transform: uppercase;
+  }
+  tr:hover { background-color: rgba(255, 255, 255, 0.02); }
+  
+  .section-title {
+    font-size: 1.3rem;
+    font-weight: 600;
+    margin-top: 40px;
+    margin-bottom: 15px;
+    color: var(--accent);
+    display: flex;
+    align-items: center;
+    gap: 8px;
+  }
+  .plots-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(540px, 1fr));
+    gap: 25px;
+    margin-top: 20px;
+  }
+  .plot-card {
+    background-color: var(--card-bg);
+    border: 1px solid var(--border);
+    border-radius: 12px;
+    overflow: hidden;
+  }
+  .plot-header {
+    padding: 14px 18px;
+    border-bottom: 1px solid var(--border);
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+  }
+  .plot-title { font-weight: 600; font-size: 1rem; color: #fff; }
+  .plot-link {
+    font-size: 0.8rem;
+    color: var(--accent);
+    text-decoration: none;
+    border: 1px solid var(--accent);
+    padding: 3px 8px;
+    border-radius: 6px;
+  }
+  .plot-link:hover { background-color: var(--accent); color: var(--bg); }
+  .plot-card img {
+    width: 100%;
+    display: block;
+    background-color: #fff;
+  }
+  footer {
+    margin-top: 50px;
+    border-top: 1px solid var(--border);
+    padding-top: 20px;
+    text-align: center;
+    color: var(--text-muted);
+    font-size: 0.85rem;
+  }
+</style>
+</head>
+<body>
+<div class="container">
+
+  <header>
+    <div>
+      <h1>Quantum Optimal Control — Sistema 2Q</h1>
+      <div style="color: var(--text-muted); font-size: 0.9rem; margin-top: 4px;">
+        Target: <strong style="color: #fff;">Cat(α=2.00)</strong> | Eseguito il: 2026-10-03 16:29:29
+      </div>
+    </div>
+    <div>
+      <span class="tag">Fedeltà Finale: 0.8989</span>
+    </div>
+  </header>
+
+  <div class="cards-grid">
+    <div class="card">
+      <div class="card-label">Fedeltà Finale (Smooth)</div>
+      <div class="card-val" style="color: #f59e0b;">0.898879</div>
+      <div class="card-sub">CRAB: 0.9935 &rarr; GRAPE: 0.9996</div>
+    </div>
+    <div class="card">
+      <div class="card-label">Costo Energetico Integrato (C²)</div>
+      <div class="card-val">654.18</div>
+      <div class="card-sub">&int; ||&Omega;<sub>D</sub>(t)||² dt</div>
+    </div>
+    <div class="card">
+      <div class="card-label">Durata Evoluzione (T)</div>
+      <div class="card-val">78.54 <span style="font-size: 1rem; color: var(--text-muted);">1/&omega;<sub>c</sub></span></div>
+      <div class="card-sub">15.0 &times; &tau;<sub>s</sub> (&tau;<sub>s</sub>=5.24)</div>
+    </div>
+    <div class="card">
+      <div class="card-label">Tempo di Calcolo</div>
+      <div class="card-val">3962.1s</div>
+      <div class="card-sub">66.04 minuti totali</div>
+    </div>
+  </div>
+
+  <div class="section-title">📊 Risultati e Fasi di Ottimizzazione</div>
+  <div class="card" style="padding: 0; overflow-x: auto;">
+    <table>
+      <thead>
+        <tr>
+          <th>Fase</th>
+          <th>Fedeltà (&Fscr;)</th>
+          <th>Costo C²</th>
+          <th>Tempo (s)</th>
+          <th>Dettagli / Convergenza</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr>
+          <td><strong>CRAB (Miglior Seed #3)</strong></td>
+          <td><code>0.993530</code></td>
+          <td><code>813.15</code></td>
+          <td>2891.9s</td>
+          <td>Media 0.9903 &plusmn; 0.0024 su 8 seeds</td>
+        </tr>
+        <tr>
+          <td><strong>GRAPE (L-BFGS-B)</strong></td>
+          <td><code>0.999557</code></td>
+          <td><code>666.65</code></td>
+          <td>1060.8s</td>
+          <td>150 iterazioni (bound (0.5, 3.0))</td>
+        </tr>
+        <tr>
+          <td><strong>PCHIP Smoothed (Finale)</strong></td>
+          <td><strong style="color: #f59e0b; font-size: 1.05rem;">0.898879</strong></td>
+          <td><strong>654.18</strong></td>
+          <td>5.7s</td>
+          <td>Interpolazione cubica lisciata (600 time slots)</td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
+
+  <div class="section-title">⚡ Metriche Fisiche dell'Attuatore (AWG / Elettronica di Controllo)</div>
+  <div class="card" style="padding: 0; overflow-x: auto;">
+    <table>
+      <thead>
+        <tr>
+          <th>Canale</th>
+          <th>Slew Rate Max (max |d&Omega;/dt|)</th>
+          <th>Slew Rate RMS</th>
+          <th>Costo Canale C<sub>k</sub>²</th>
+          <th>Banda Passante al 99% (&omega;<sub>99%</sub>)</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr>
+          <td><strong>Qubit 1</strong></td>
+          <td><code>5.116</code></td>
+          <td><code>1.523</code></td>
+          <td><code>328.65</code></td>
+          <td><code>5.43 &omega;<sub>c</sub></code></td>
+        </tr>
+        <tr>
+          <td><strong>Qubit 2</strong></td>
+          <td><code>6.241</code></td>
+          <td><code>1.664</code></td>
+          <td><code>325.53</code></td>
+          <td><code>7.03 &omega;<sub>c</sub></code></td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
+
+  <div class="section-title">⚙️ Parametri Completi della Simulazione</div>
+  <div class="card">
+    <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); gap: 15px; font-size: 0.95rem;">
+      <div>&bull; <strong>Stato Target:</strong> Cat(α=2.00)</div>
+      <div>&bull; <strong>Dimensione Fock Cavità:</strong> 40</div>
+      <div>&bull; <strong>Dimensione Spazio Totale:</strong> 160</div>
+      <div>&bull; <strong>Accoppiamento g<sub>1</sub>:</strong> 0.3 &omega;<sub>c</sub></div>
+      <div>&bull; <strong>Accoppiamento g<sub>2</sub>:</strong> 0.3 &omega;<sub>c</sub></div>
+      <div>&bull; <strong>Armoniche CRAB (N<sub>f</sub>):</strong> 20</div>
+      <div>&bull; <strong>Banda CRAB:</strong> [0, 3.0] &omega;<sub>c</sub></div>
+      <div>&bull; <strong>Time Slots GRAPE:</strong> 150 (&omega;<sub>Nyq</sub> = 5.96 &omega;<sub>c</sub>)</div>
+      <div>&bull; <strong>Vincoli Ampiezza GRAPE:</strong> (0.5, 3.0)</div>
+      <div>&bull; <strong>Punti Interpolazione Fine:</strong> 600</div>
+    </div>
+  </div>
+
+  <div class="section-title">📈 Grafici di Analisi</div>
+  <div class="plots-grid">
+    <div class="plot-card">
+      <div class="plot-header">
+        <span class="plot-title">Numero Medio di Fotoni &lang;n&rang;(t)</span>
+        <a class="plot-link" href="nmean.pdf" target="_blank">PDF Vettoriale</a>
+      </div>
+      <img src="nmean.png" alt="Numero medio fotoni">
+    </div>
+
+    <div class="plot-card">
+      <div class="plot-header">
+        <span class="plot-title">Forme d'Onda di Controllo &Omega;<sub>D</sub>(t)</span>
+        <a class="plot-link" href="drives_comparison.pdf" target="_blank">PDF Vettoriale</a>
+      </div>
+      <img src="drives_comparison.png" alt="Forme d'onda controlli">
+    </div>
+
+    <div class="plot-card">
+      <div class="plot-header">
+        <span class="plot-title">Funzioni di Wigner (Target vs Ottimizzato)</span>
+        <a class="plot-link" href="wigner.pdf" target="_blank">PDF Vettoriale</a>
+      </div>
+      <img src="wigner.png" alt="Funzioni di Wigner">
+    </div>
+
+    <div class="plot-card">
+      <div class="plot-header">
+        <span class="plot-title">Spettro di Fourier (FFT)</span>
+        <a class="plot-link" href="fft.pdf" target="_blank">PDF Vettoriale</a>
+      </div>
+      <img src="fft.png" alt="Spettro FFT">
+    </div>
+  </div>
+
+  <footer>
+    Report generato automaticamente da <code>run_simulation.py</code> | Stage Quantum Optimal Control
+  </footer>
+
+</div>
+</body>
+</html>

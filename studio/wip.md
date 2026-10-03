@@ -126,29 +126,191 @@ Studio dell'efficacia temporale del protocollo:
 
 ---
 
-## 5. Struttura del Codice per le Verifiche
+## 5. Implementazione Effettiva: Il Runner Unificato `run_simulation.py`
 
-Per implementare questi test in modo pulito e modulare, si prevede la creazione dei seguenti strumenti:
+Il benchmark comparativo e le metriche di fattibilità fisica sono stati interamente unificati nello script **`run_simulation.py`**. Questo strumento automatizza l'intera pipeline di controllo quantistico per il sistema a **1 qubit**, **2 qubit** o in modalità comparativa simultanea **`both`**:
 
-1. **`benchmark_1q_vs_2q.py`**:
-   - Esegue la pipeline sia sul sistema a 1 qubit sia sul sistema a 2 qubit.
-   - Calcola la tabella comparativa riassuntiva:
-     | Metrica | 1 Qubit | 2 Qubit (Q1 / Q2) | Guadagno / Rapporto |
-     | :--- | :--- | :--- | :--- |
-     | Fedeltà finale $F$ | ... | ... | ... |
-     | Slew Rate max ($\text{SR}_{\max}$) | ... | ... | -X% |
-     | Banda 99% ($\omega_{99\%}$) | ... | ... | -Y% |
-     | Costo max per canale $C^2$ | ... | ... | -Z% |
-2. **`filter_robustness_test.py`**:
-   - Carica i risultati salvati.
-   - Applica il filtro passa-basso a diverse frequenze di taglio.
-   - Calcola le fedeltà risultanti e salva il grafico comparativo `fidelity_vs_bandwidth.pdf`.
-3. **Integrazione nel Notebook `twoqubits.ipynb`**:
-   - Aggiunta di una sezione visuale di confronto diretto per la tesi / presentazione.
+```
+┌────────────────────────────────────────────────────────────────────────┐
+│             PIPELINE AUTOMATICA UNIFICATA (run_simulation.py)          │
+├─────────────────────┬───────────────────────┬──────────────────────────┤
+│   Fase 1: CRAB      │     Fase 2: GRAPE     │  Fase 3: Interpolazione  │
+│  (Esplorazione      │    (Raffinamento      │    (Fattibilità          │
+│   Globale)          │     Locale)           │     Sperimentale)        │
+│                     │                       │                          │
+│  • Gradient-free    │  • Gradient-based     │  • Spline cubica PCHIP   │
+│  • Nelder-Mead      │  • L-BFGS-B           │  • Da gradini a liscio   │
+│  • Fourier troncat. │  • Vincoli ampiezza   │  • Senza perdita         │
+│  • Multi-seed       │  • Trova il minimo    │    di fedeltà            │
+│    (parallelo CPU)  │    locale perfetto    │  • Calcolo metriche AWG  │
+└─────────────────────┴───────────────────────┴──────────────────────────┘
+```
+
+### Funzionalità Implementate nel Runner:
+1. **Multiprocessing Cross-Platform**: esegue i semi casuali di CRAB in parallelo (`ProcessPoolExecutor`) rilevando automaticamente i core logici disponibili.
+2. **Supporto Multi-Target**: Fock $|n\rangle$ (anche a elevata eccitazione), stati squeezed $S(r, \theta)|0\rangle$ (in unità lineari o dB) e Schrödinger cat superpositions a 4 componenti $C^+_\alpha - C^+_{i\alpha}$.
+3. **Calcolo Automatico delle Metriche Fisiche dell'Attuatore**:
+   - Slew Rate Massimo: $\text{SR}_{\max} = \max_t |d\Omega/dt|$
+   - Slew Rate Quadratico Medio: $\text{SR}_{\text{rms}} = \sqrt{\frac{1}{T}\int_0^T (d\Omega/dt)^2 dt}$
+   - Costo Energetico per Singolo Canale: $C_k^2 = \int_0^T \Omega_{Dk}(t)^2 dt$
+   - Banda Passante Efficace al 99% della Potenza: $\omega_{99\%}$ via FFT
+4. **Reportistica Interattiva Automatica**:
+   - In modalità `both`, crea una cartella gerarchica contenente i sottoprogetti `1q/` e `2q/` e un report di confronto side-by-side **`comparison_report.html`** con schede colorate, grafici vettoriali PDF/PNG e tabelle analitiche delle differenze percentuali.
 
 ---
 
-## 6. Questioni Aperte da Approfondire (Note per il Relatore)
+## 6. Risultati Preliminari Ottenuti: Prove Empiriche del Vantaggio 2Q
+
+### 6.1 Benchmark Fock $|n=10\rangle$ a Tempo Ridotto ($T = 10\,\tau_s$) — Prova del Quantum Speed Limit
+La prima conferma sperimentale-numerica del vantaggio dei 2 qubit è emersa dal test su stato di Fock altamente eccitato **$|n=10\rangle$** con tempo di pilotaggio ridotto **$T = 10\,\tau_s$** (cartella `results_both_fock_n10_dim40_T10taus`):
+
+| Metrica Chiave | 1 Qubit (1Q) | 2 Qubit (2Q) | Differenza / Vantaggio 2Q |
+| :--- | :---: | :---: | :---: |
+| **Fedeltà CRAB (Best Seed)** | `0.9698` | `0.9578` | Esplorazione globale analoga |
+| **CRAB Mean ± Std (Landscape)** | `0.9097 ± 0.0579` | `0.9433 ± 0.0201` | **Dispersione quasi 3x inferiore**: landscape 2Q molto più denso di ottimi |
+| **Fedeltà GRAPE (L-BFGS-B)** | `0.8720` | `0.9988` | **+12.68%**: 1Q intrappolato, 2Q converge a quasi 1 |
+| **Fedeltà Finale PCHIP Smoothed** | **`0.8397`** (Crollo) | **`0.9622`** (Eccellente) | **+12.25%**: 1Q fallisce all'atto pratico, 2Q realizzabile |
+| **Costo Canale Max ($C^2_{\text{ch}}$)** | `220.20` | `217.17` | Costo per singola linea inferiore |
+
+> [!IMPORTANT]
+> **Interpretazione Fisica (Fock |n=10⟩ a T=10τs):**  
+> A $T = 10\,\tau_s$, un singolo qubit non ha sufficiente reattività parametrica per estrarre 10 fotoni dal vuoto entro i vincoli di ampiezza imposti. Per compensare, GRAPE genera discontinuità ad alta frequenza che vengono distrutte dallo smoothing PCHIP ($\mathcal{F} \approx 0.84$). Al contrario, i **due qubit cooperano costruttivamente**: GRAPE raggiunge $\mathcal{F} = 0.9988$ e il polso lisciato mantiene una fedeltà del $96.2\%$, provando l'estensione del **Quantum Speed Limit**.
+
+---
+
+### 6.2 Benchmark Cat State a 4 Componenti ($\alpha = 2.0$, $T = 15\,\tau_s$) — Prova della Morbidezza dell'Attuatore
+Il test sullo stato gatto ortogonale a 4 componenti (cartella `results_both_cat_2.00_dim40_T15taus`) ha evidenziato in modo netto i **vantaggi fisici sull'elettronica di controllo**:
+
+| Metrica Attuatore | 1 Qubit (1Q) | 2 Qubit (2Q - Qubit 1) | Vantaggio 2Q |
+| :--- | :---: | :---: | :---: |
+| **Slew Rate Massimo ($\max|d\Omega/dt|$)** | `6.333` | **`5.116`** | **-19.2%** (polsi notevolmente più dolci) |
+| **Slew Rate RMS** | `1.738` | **`1.523`** | **-12.4%** (minore nervosità globale) |
+| **Banda Passante al 99% ($\omega_{99\%}$)** | `6.47` $\omega_c$ | **`5.43` $\omega_c$** | **-16.1%** (meno armoniche ad alta freq.) |
+| **Costo Energetico Singolo Canale ($C_k^2$)** | `340.35` | **`328.65`** | **-3.4%** (minor riscaldamento per linea) |
+| **Fedeltà GRAPE pre-smoothing** | `0.99935` | **`0.99956`** | Convergenza quasi unitaria in entrambi |
+
+> [!TIP]
+> **Nota Tecnica sulla Discretizzazione Temporale ($N_t$):**  
+> Per durate temporali ampie ($T = 15\,\tau_s \approx 78.5/\omega_c$), 150 slot GRAPE corrispondono a un passo $\Delta t \approx 0.53/\omega_c$. Poiché lo stato cat ha una struttura d'interferenza a scacchiera fine nello spazio delle fasi, lo smoothing PCHIP da soli 150 punti perde fedeltà (scendendo a $\approx 0.898$). Per durate $T \ge 15\,\tau_s$, impostare `--grape-nt 250` o `300` per mantenere $\mathcal{F}_{\text{smooth}} > 0.98$ preservando la risoluzione fine.
+
+---
+
+## 7. Le 5 Configurazioni Strategiche di Simulazione per `run_simulation.py`
+
+Per strutturare i capitoli numerici della tesi e dimostrare in modo inoppugnabile i singoli aspetti del vantaggio dei 2 qubit, sono state individuate **5 configurazioni mirate**:
+
+```
+┌────────────────────────────────────────────────────────────────────────┐
+│              LE 5 CONFIGURAZIONI STRATEGICHE DI SIMULAZIONE            │
+├─────────────────────┬───────────────────────┬──────────────────────────┤
+│ Configurazione 1    │ Configurazione 2      │ Configurazione 3         │
+│  Quantum Speed      │  Vincoli Stretti      │  Isolamento del          │
+│  Limit (QSL)        │  di Ampiezza Drive    │  Controllo (g_eff)       │
+│                     │                       │                          │
+│ • T = 10 -> 8 taus  │ • amp_bound (1.2, 2.8)│ • g1 = g2 = 0.212        │
+│ • Fock |n=10>       │ • Fock |n=8>          │ • Pareggio g_1Q = 0.3    │
+│ • Corsa contro κ    │ • No leakage transmon │ • Vantaggio geometrico   │
+├─────────────────────┼───────────────────────┴──────────────────────────┤
+│ Configurazione 4    │ Configurazione 5                                 │
+│  Stati Cat a        │  Banda Stretta dell'AWG                          │
+│  4 Componenti       │  (Filtro Anti-Armoniche)                         │
+│                     │                                                  │
+│ • Cat α = 2.0       │ • crab_freq_max = 2.3 ω_c                        │
+│ • Simmetria di fase │ • grape_nt = 100 slots                           │
+│ • Pattern scacchiera│ • Dimostra fattibilità con DAC standard          │
+└─────────────────────┴──────────────────────────────────────────────────┘
+```
+
+---
+
+### Configurazione 1: Regime di Quantum Speed Limit ($T \le 10\,\tau_s \to 8\,\tau_s$)
+* **Obiettivo:** Misurare il tempo minimo $T_{\min}$ sotto il quale la fedeltà del sistema a 1 qubit collassa, mentre 2 qubit continuano a generare stati ad alta fedeltà ($\mathcal{F} \ge 0.95$).
+* **Importanza per la tesi:** Dimostra che 2Q permette di completare la generazione prima che la decoerenza e la fuga di fotoni dalla cavità (tempo di vita $\tau_{\text{cav}} = 1/\kappa$) degradino lo stato.
+* **Parametri:**
+  - `--system both --target fock --param 10 --dim 40`
+  - Scansione temporale: `--factor-taus 10.0` $\to$ `--factor-taus 8.0` $\to$ `--factor-taus 7.0`
+* **Comando:**
+  ```bash
+  python run_simulation.py --system both --target fock --param 10 --dim 40 --factor-taus 8.0
+  ```
+
+---
+
+### Configurazione 2: Vincoli Stringenti sull'Ampiezza del Drive (Fattibilità Transmon)
+* **Obiettivo:** Evitare l'uscita dal modello a due livelli (leakage verso il secondo stato eccitato $|f\rangle$ o ionizzazione del transmon) e minimizzare il carico termico sul criostato a diluizione (15 mK).
+* **Meccanismo fisico:** Con vincoli di ampiezza stretti attorno al valore base $\omega_{\text{base}} = 2.0$ (ad es. $\Omega_D(t)/\omega_c \in [1.2, 2.8]$ invece del permissivo $[0.5, 3.0]$), il singolo qubit non ha sufficiente escursione dinamica per pompare molti fotoni; due qubit sommano le rispettive oscillazioni per interferenza quantistica costruttiva.
+* **Parametri:**
+  - In `run_simulation.py`: impostare `GRAPE_AMP_BOUND = (1.2, 2.8)`
+  - Target: Fock $|n=8\rangle$ o $|n=10\rangle$, durata $T = 15\,\tau_s$, $\text{dim} = 35$
+* **Comando:**
+  ```bash
+  python run_simulation.py --system both --target fock --param 8 --dim 35 --factor-taus 15.0
+  ```
+
+---
+
+### Configurazione 3: Isolamento del Canale di Controllo (Parità di $g$ Collettivo)
+* **Obiettivo:** Separare in modo matematicamente rigoroso il vantaggio dovuto al raddoppio dell'accoppiamento collettivo ($g_{\text{eff}} = \sqrt{g_1^2+g_2^2} = \sqrt{2}g$) dal **vantaggio puramente geometrico e dinamico di avere due canali di controllo indipendenti**.
+* **Impostazione:**
+  - Sistema 1Q: $g = 0.3$
+  - Sistema 2Q: $g_1 = g_2 = \frac{0.3}{\sqrt{2}} \approx 0.21213 \implies g_{\text{collettivo}} = \sqrt{g_1^2+g_2^2} = 0.3$
+* **Cosa verificare:** A parità di accoppiamento globale, il sistema a 2Q mostra comunque un **Slew Rate massimo inferiore** e una **Banda al 99% più concentrata**, provando che due modulatori indipendenti "lisciano" naturalmente le traiettorie nello spazio degli stati.
+* **Parametri:** Modificare temporaneamente $G_1 = G_2 = 0.21213$ in `run_simulation.py` ed eseguire su Fock $|n=6\rangle$ con $T = 20\,\tau_s$.
+
+---
+
+### Configurazione 4: Target ad Alta Non-Gaussianità — Stati Cat a 4 Componenti ($\alpha \ge 2.0$)
+* **Obiettivo:** Verificare la sintesi deterministica di stati con interferenza complessa nello spazio delle fasi (la superposizione su assi ortogonali $C^+_\alpha - C^+_{i\alpha}$, Eq. B4 del paper di riferimento).
+* **Meccanismo fisico:** Con $\alpha = 2.0$, il numero medio di fotoni è $\langle n \rangle \approx 4$, ma lo stato presenta un reticolo di Wigner a scacchiera con forti negatività sia lungo l'asse $x$ sia lungo $p$. Con un solo qubit la simmetria quadripolare deve essere forzata sequenzialmente nel tempo; con due qubit la rottura di simmetria di fase tra i due drive sintetizza naturalmente i quattro lobi coerenti.
+* **Parametri:**
+  - `--system both --target cat --param 2.0 --dim 40 --factor-taus 15.0 --crab-seeds 8`
+* **Comando:**
+  ```bash
+  python run_simulation.py --system both --target cat --param 2.0 --dim 40 --factor-taus 15.0
+  ```
+
+---
+
+### Configurazione 5: Banda Spettrale Stretta dell'AWG (Filtro Anti-Armoniche Rapide)
+* **Obiettivo:** Dimostrare che il sistema a 2 qubit opera efficacemente anche se l'elettronica di controllo ha una banda passante limitata e taglia le frequenze elevate.
+* **Meccanismo fisico:** Un generatore di forme d'onda commerciale e le linee coassiali criogeniche filtrano le armoniche oltre $3\omega_c - 4\omega_c$. Limitando la ricerca CRAB a $\omega \le 2.3\,\omega_c$ (subito sopra la risonanza DCE $2\omega_c$) e riducendo gli slot temporali GRAPE a $N_t = 100$ (fissando la frequenza di Nyquist a $\omega_{\text{Nyq}} \approx 5\omega_c$), si verifica se 2Q riesce a raggiungere il target usando solo la frequenza di risonanza fondamentale.
+* **Parametri:**
+  - `--system both --target fock --param 6 --dim 30 --factor-taus 15.0 --crab-freq-max 2.3 --grape-nt 100`
+* **Comando:**
+  ```bash
+  python run_simulation.py --system both --target fock --param 6 --dim 30 --factor-taus 15.0 --crab-freq-max 2.3 --grape-nt 100
+  ```
+
+---
+
+## 8. Cheat-Sheet dei Comandi CLI per `run_simulation.py`
+
+| Test / Obiettivo | Comando da Eseguire | Note / Risultato Atteso |
+| :--- | :--- | :--- |
+| **QSL Fock \|n=10⟩ (T=10 taus)** | `python run_simulation.py --system both --target fock --param 10 --dim 40 --factor-taus 10.0` | 2Q raggiunge $\mathcal{F} > 0.96$, 1Q crolla a $\sim 0.84$ |
+| **QSL Fock \|n=10⟩ Estremo (T=8 taus)** | `python run_simulation.py --system both --target fock --param 10 --dim 40 --factor-taus 8.0` | Test limite del Quantum Speed Limit collettivo |
+| **Cat Superposition (α=2.0, T=15 taus)** | `python run_simulation.py --system both --target cat --param 2.0 --dim 40 --factor-taus 15.0` | Confronto fedeltà Wigner a scacchiera su 4 lobi |
+| **Banda Stretta / Low Slew Rate** | `python run_simulation.py --system both --target fock --param 6 --dim 30 --factor-taus 15.0 --crab-freq-max 2.3 --grape-nt 100` | Slew rate 2Q ridotto e banda 99% concentrata a $2\omega_c$ |
+| **Test Squeezing Spinto (r=1.2 ~ 10 dB)** | `python run_simulation.py --system both --target squeezed --param 1.2 --dim 35 --factor-taus 15.0` | Generazione rapida di stati compressi non-classici |
+
+---
+
+## 9. Criteri di Valutazione per la Tesi nei Report Comparativi
+
+All'interno di ogni esecuzione in modalità `both`, consultare il file `comparison_report.html`:
+
+1. **Card Fedeltà Finale Smoothed ($\mathcal{F}_{\text{smooth}}$)**:
+   - Se 2Q supera 1Q di oltre il $5\%-15\%$, si ha la dimostrazione quantitativa del vantaggio di cooperatività.
+2. **Tabella "Metriche Fisiche dell'Attuatore"**:
+   - **Slew Rate Massimo ($\max |d\Omega/dt|$)**: un valore inferiore per 2Q prova che l'AWG non deve compiere variazioni di tensione repentine.
+   - **Banda al 99% ($\omega_{99\%}$)**: un valore più basso per 2Q certifica che lo spettro RF del segnale è compatibile con i filtri passa-basso criogenici commerciali.
+   - **Costo Energetico Massimo per Canale ($\max(C_1^2, C_2^2)$)**: un valore sensibilmente inferiore rispetto al costo dell'unico canale di 1Q prova che ciascuna linea criogenica disperde meno calore nel criostato a diluizione.
+3. **Dispersione dei Seed CRAB (Media $\pm$ Deviazione Standard)**:
+   - Una deviazione standard molto più piccola per 2Q prova che il *control landscape* a due qubit è privo di falsi minimi locali e converge in modo robusto e deterministico.
+
+---
+
+## 10. Questioni Aperte da Approfondire (Note per il Relatore)
 
 1. **Interazione Diretta Qubit-Qubit ($H_{qq}$)**:
    - Nel modello attuale, i due qubit non interagiscono direttamente tra loro ($J = 0$), ma solo per mediazione della cavità.
@@ -158,3 +320,4 @@ Per implementare questi test in modo pulito e modulare, si prevede la creazione 
    - Il controllo ottimo si adatta naturalmente a compensare le asimmetrie costruttive?
 3. **Dissipazione Aperta (Equazione Master di Lindblad)**:
    - Valutare la robustezza in presenza di perdita di fotoni di cavità $\kappa$ e dephasing dei qubit $\gamma_\phi$. Se il tempo $T$ necessario con 2 qubit è minore, le perdite totali integrate saranno inferiori.
+

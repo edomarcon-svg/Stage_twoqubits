@@ -99,13 +99,13 @@ SYSTEM_TYPE = "both"
 #   "fock"     -> Stato di Fock |n⟩ (numero fotoni definito)
 #   "squeezed" -> Stato di vuoto compresso / squeezed S(r, θ)|0⟩
 #   "cat"      -> Stato gatto di Schrödinger (superposizione C+_α - C+_iα)
-TARGET_TYPE = "fock"
+TARGET_TYPE = "cat"
 
 # Parametro caratteristico (associato all'energia media dei fotoni nella cavità):
 #   - Se TARGET_TYPE = "fock"     : n (numero intero di fotoni, es. 6 o 10; E = n * ħω_c)
 #   - Se TARGET_TYPE = "squeezed" : r (parametro di squeezing, es. 0.8; <n>=sinh²(r))
 #   - Se TARGET_TYPE = "cat"      : alpha (ampiezza coerente α, es. 2.0; <n>≈|α|²)
-TARGET_PARAM = 10
+TARGET_PARAM = 2.0
 
 # Parametri opzionali dello stato target:
 TARGET_THETA = 0.0          # Angolo di fase dello squeezing (usato solo se squeezed)
@@ -120,14 +120,14 @@ DIM = 40
 # 4. DURATA TOTALE DELL'EVOLUZIONE (T)
 # ------------------------------------------------------------------------------
 # Può essere espressa come multiplo del tempo tipico di Rabi τ_s = π / (2*g):
-T_FACTOR_TAUS = 10.0        # T = 20 * τ_s (benchmark tipico del paper)
+T_FACTOR_TAUS = 15.0        # T = 20 * τ_s (benchmark tipico del paper)
 # Oppure, se vuoi fissare direttamente il valore numerico di T in unità 1/ω_c:
 T_FIXED = None              # Es: 104.72 oppure None per usare (T_FACTOR_TAUS * τ_s)
 
 # 5. ITERAZIONI DI CRAB E GRAPE
 # ------------------------------------------------------------------------------
 # CRAB (ricerca globale con Nelder-Mead):
-CRAB_NUM_SEEDS = 6         # Numero di seed indipendenti eseguiti in parallelo
+CRAB_NUM_SEEDS = 8         # Numero di seed indipendenti eseguiti in parallelo
 CRAB_MAX_ITER = None        # Massimo numero di iterazioni Nelder-Mead (None = default auto)
 CRAB_METHOD = "Nelder-Mead"
 
