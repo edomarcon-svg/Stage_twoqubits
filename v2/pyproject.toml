@@ -1,0 +1,13 @@
+[build-system]
+requires = ["setuptools>=68"]
+build-backend = "setuptools.build_meta"
+
+[project]
+name = "cavity-twoqubits-v2"
+version = "2.0.0"
+description = "Validated quantum optimal control for one or two qubits in a cavity"
+requires-python = ">=3.10"
+dependencies = ["numpy>=2.0,<3", "scipy>=1.13,<2", "qutip>=5.0,<6", "matplotlib>=3.8,<4", "threadpoolctl>=3.1,<4"]
+
+[tool.setuptools.packages.find]
+include = ["qoc*"]

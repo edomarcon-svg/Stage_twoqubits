@@ -1,0 +1,116 @@
+{
+  "name": "fock10_slew_limited",
+  "dimension": 40,
+  "duration": 52.35987755982989,
+  "intervals": 1200,
+  "cases": [
+    {
+      "name": "1q",
+      "couplings": [
+        0.3
+      ],
+      "qubit_frequencies": [
+        2.0
+      ],
+      "control": "independent"
+    },
+    {
+      "name": "2q_common",
+      "couplings": [
+        0.3,
+        0.3
+      ],
+      "qubit_frequencies": [
+        2.0,
+        2.0
+      ],
+      "control": "common"
+    },
+    {
+      "name": "2q_independent",
+      "couplings": [
+        0.3,
+        0.3
+      ],
+      "qubit_frequencies": [
+        2.0,
+        2.0
+      ],
+      "control": "independent"
+    },
+    {
+      "name": "2q_normalized_common",
+      "couplings": [
+        0.21213203435596423,
+        0.21213203435596423
+      ],
+      "qubit_frequencies": [
+        2.0,
+        2.0
+      ],
+      "control": "common"
+    },
+    {
+      "name": "2q_normalized_independent",
+      "couplings": [
+        0.21213203435596423,
+        0.21213203435596423
+      ],
+      "qubit_frequencies": [
+        2.0,
+        2.0
+      ],
+      "control": "independent"
+    }
+  ],
+  "target": {
+    "kind": "fock",
+    "value": 10
+  },
+  "control": {
+    "nodes": 121,
+    "filter_cutoff": 3.0,
+    "total_frequency_bounds": [
+      0.5,
+      3.0
+    ],
+    "max_slew": 1.0,
+    "fluence_weight": 0.001,
+    "slew_weight": 0.001
+  },
+  "optimization": {
+    "seeds": [
+      0,
+      1,
+      2,
+      3,
+      4,
+      5,
+      6,
+      7
+    ],
+    "frequencies": 20,
+    "frequency_range": [
+      0.05,
+      3.0
+    ],
+    "crab_max_evaluations": 1600,
+    "grape_max_iterations": 200,
+    "grape_max_evaluations": 1600,
+    "refine_top": null,
+    "workers": 2,
+    "blas_threads": 1
+  },
+  "validation": {
+    "dimension_increment": 20,
+    "trajectory_points": 601,
+    "atol": 1e-10,
+    "rtol": 1e-10,
+    "fidelity_tolerance": 0.001,
+    "truncation_tolerance": 1e-05,
+    "edge_tolerance": 1e-05,
+    "edge_levels": 5,
+    "hold_time": 5.0,
+    "phase_grid_points": 161
+  }
+}
