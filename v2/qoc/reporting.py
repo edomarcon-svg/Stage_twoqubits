@@ -98,6 +98,11 @@ def seed_figures(folder):
 def write_reports(root, make_figures=True):
     root = Path(root)
     summary = json.loads((root/"summary.json").read_text())
+    config = json.loads((root/"config.json").read_text())
+    timing = f"Durata fisica T = {config['duration']:.10g}."
+    if config.get("factor_taus") is not None:
+        tau_s = np.pi/(2*config["tau_s_coupling"])
+        timing += f" T = {config['factor_taus']} × tau_s; tau_s = pi/(2*g_ref) = {tau_s:.10g}, g_ref = {config['tau_s_coupling']:.10g}."
     rows = []
     for case in summary["cases"]:
         for item in case["seeds"]:
@@ -114,7 +119,7 @@ def write_reports(root, make_figures=True):
         w = csv.DictWriter(f,fieldnames=columns)
         w.writeheader()
         w.writerows(rows)
-    text = ["# Risultati v2", "", "Ogni riga usa la propagazione continua del controllo con il filtro configurato.",
+    text = ["# Risultati v2", "", timing, "", "Ogni riga usa la propagazione continua del controllo con il filtro configurato.",
         "P_target è la probabilità target; F_root = sqrt(P_target). Il reset dei qubit, se richiesto, entra in P_target.",
         "Una soluzione non validata non è evidenza di vantaggio fisico. La convergenza dell'ottimizzatore è distinta dalla validazione numerica.",
         "La banda 99% è una diagnostica del segnale finito, non un limite spettrale imposto. Le fluenze non sono calore dissipato.","",
@@ -136,6 +141,7 @@ def write_reports(root, make_figures=True):
                     text.append(f"![{figure}]({item['folder']}/{figure}.png)")
     (root/"report.md").write_text("\n".join(text)+"\n",encoding="utf-8")
     body = ["<h1>Risultati v2</h1><p>Propagazione continua indipendente. P = probabilità target; F = √P.</p>",
+            f"<p>{html.escape(timing)}</p>",
             "<p>Validazione numerica, raggiungimento del target e convergenza dell'ottimizzatore sono criteri distinti. Nessun risultato implica da solo un quantum speed limit.</p>",
             "<p><a href='summary.csv'>Tabella CSV</a> · <a href='config.json'>Configurazione</a> · <a href='provenance.json'>Provenienza</a></p>",
             "<table><tr>"+"".join(f"<th>{html.escape(c)}</th>" for c in columns if c!="cartella")+"</tr>"]

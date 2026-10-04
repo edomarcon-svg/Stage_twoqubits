@@ -115,7 +115,35 @@ Modificare la copia, darle un `name` descrittivo e controllarla con `--validate-
 
 ## 3. Configurazione completa
 
-I file sono JSON: non ammettono commenti, `null` indica assenza di un limite/opzione, i booleani sono `true` e `false`. I nomi sconosciuti vengono rifiutati, evitando che un refuso ignori silenziosamente un parametro. I campi omessi assumono i valori delle dataclass: **i default nelle tabelle non sono necessariamente i valori dei preset**.
+### Un unico file da modificare
+
+Aprire [configurazione.jsonc](configurazione.jsonc): contiene **tutti i campi configurabili dell'esperimento**, con spiegazione, unità, opzioni ammesse e vincoli accanto ai valori. Modificare direttamente questo file per scegliere modello, casi 1Q/2Q, target, controlli, filtro, penalità, budget, seed e validazione. La durata iniziale è `20*tau_s`, come nella versione precedente; gli altri valori sono quelli del collaudo smoke e vanno adeguati alla durata per una ricerca accurata. Per il collaudo breve usare `configs/smoke.json`.
+
+```bash
+.venv/bin/python run_simulation.py --config configurazione.jsonc --validate-config
+.venv/bin/python -u run_simulation.py --config configurazione.jsonc
+```
+
+Il primo comando controlla i parametri senza ottimizzare; il secondo avvia tutti i casi elencati in `cases`. Per eseguirne uno solo, eliminare dal file gli altri oggetti sistemando le virgole. Per conservarne diverse versioni, copiare il file con un altro nome mantenendo l'estensione `.jsonc` e passarlo a `--config`. Lo stesso formato funziona con `run_sweep.py --config`: durate e cutoff della campagna restano selezionabili dalle opzioni dello sweep. Le analisi successive di rumore e bagno usano invece le opzioni di `analyze_run.py` descritte nella sezione 7: non sono parametri dell'ottimizzazione unitaria.
+
+I commenti `// ...` e `/* ... */` sono ammessi nei file `.jsonc`; i `.json` restano JSON standard senza commenti. Entrambi usano `null` per assenza di un limite/opzione e `true`/`false` per i booleani. Non sono ammesse virgole finali o espressioni Python. Le run salvano sempre un `config.json` standard con i valori risolti, senza commenti; il resume rilegge questo snapshot, non le modifiche successive al file di lavoro. Senza `--config`, lo script continua a usare il preset smoke.
+
+I nomi sconosciuti vengono rifiutati, evitando che un refuso ignori silenziosamente un parametro. I campi omessi assumono i valori delle dataclass: **i default nelle tabelle non sono necessariamente i valori dei preset**.
+
+### Durata come multiplo intero di tau_s
+
+Nel file `configurazione.jsonc` modifica `factor_taus`, ad esempio 10, 15 o 20. Il codice calcola automaticamente:
+
+```text
+tau_s = pi / (2 * tau_s_coupling)
+T = factor_taus * tau_s
+```
+
+Con `tau_s_coupling = 0.3`, 10 corrisponde a T ≈ 52.36 e 20 a T ≈ 104.72. Il riferimento è esplicito e comune a tutti i casi: nella v1 era g del sistema 1Q o g1 del sistema 2Q. Per legarlo a un accoppiamento modificato, aggiornare anche `tau_s_coupling`. Non viene ricalcolato dalla lista dei casi, quindi selezionare un altro caso o confrontare accoppiamenti normalizzati non cambia la durata fisica.
+
+Nel file `configurazione.jsonc` il campo `duration` è assente: per scegliere la durata si modifica soltanto `factor_taus`. Il codice calcola T e le run salvano sia il fattore e l'accoppiamento di riferimento sia `duration` effettivo; i report mostrano la conversione. I vecchi JSON che specificano soltanto `duration` continuano a usare quel valore. Per una configurazione alternativa a tempo esplicito è possibile aggiungere `duration` e impostare `factor_taus: null`. Hold e array temporali restano nelle unità di tempo del modello, non in multipli di tau_s.
+
+Cambiare T non adatta automaticamente `intervals` o `control.nodes` in una singola run: verificare la risoluzione temporale, soprattutto passando dal collaudo breve a 20 tau_s. Gli sweep adattano invece queste griglie secondo la politica descritta nella sezione 6.
 
 ### Parametri generali
 
@@ -124,7 +152,9 @@ I file sono JSON: non ammettono commenti, `null` indica assenza di un limite/opz
 | `name` | `"fock6"` | Nome dell'esperimento; identifica la directory dei risultati. |
 | `dimension` | `40` | Numero di livelli Fock della cavità, da 0 a `dimension-1`. Aumentarlo estende lo spazio fisico simulato e costa memoria/tempo. |
 | `omega_c` | `1.0` | Frequenza angolare della cavità, positiva. |
-| `duration` | `104.71975511965978` | Tempo fisico simulato T; non è il tempo di calcolo. |
+| `duration` | `104.71975511965978` | Tempo fisico T; usato direttamente solo con `factor_taus: null`, altrimenti derivato. |
+| `factor_taus` | `null` | Intero positivo: T = fattore × tau_s. Nel file commentato è impostato a 20. |
+| `tau_s_coupling` | `0.3` | Accoppiamento di riferimento positivo: tau_s = pi/(2*g_ref), comune a tutti i casi. |
 | `intervals` | `800` | Numero N di intervalli del propagatore usato nell'ottimizzazione. Il passo è T/N. |
 | `initial_state` | `"bare"` | `bare`: vuoto della cavità e qubit in g; `ground`: stato fondamentale del sistema interagente. |
 | `parity_reduction` | `true` | Usa il settore di parità iniziale per ridurre le matrici. Disattivabile per controlli incrociati. |
@@ -235,7 +265,9 @@ Per un pilot con un solo caso:
 | `--config FILE` | Configurazione; senza opzione né resume usa `configs/smoke.json`. |
 | `--output DIRECTORY` | Directory base per nuove run; viene creata una sottocartella unica. |
 | `--case NOME` | Seleziona un caso; ripetere per più casi. |
-| `--duration T` | Sostituisce la durata, senza adattare automaticamente intervalli e nodi. |
+| `--duration T` | Imposta T esplicito e disattiva `factor_taus`; non adatta intervalli o nodi. |
+| `--factor-taus K` | Imposta T = K*tau_s con K intero positivo; alternativo a `--duration`. |
+| `--tau-s-coupling G` | Cambia g di riferimento per tau_s; non cambia gli accoppiamenti fisici. |
 | `--intervals N` | Sostituisce il numero di intervalli. |
 | `--workers W` | Sostituisce il numero di processi. |
 | `--validate-config` | Verifica configurazione e costruzione dei modelli, stampa il JSON risolto ed esce. |
@@ -272,6 +304,8 @@ RUN="results/NOME_RUN"
 ```
 
 Non occorre ripassare il JSON: viene letto quello risolto dentro la run. La ripresa verifica identità della configurazione, hash del codice e versioni delle dipendenze. Anche cambiare seed, budget o worker cambia la configurazione e impedisce il resume. Per un esperimento diverso creare una nuova run. Una modifica al solo README non cambia gli hash del codice scientifico.
+
+L'aggiunta del supporto JSONC modifica il codice del lettore di configurazione: le run create prima di questo aggiornamento richiedono il loro codice originale per il resume. I loro dati e report restano leggibili; non modificare gli hash salvati per aggirare il controllo.
 
 Non avviare due processi di ripresa sulla stessa directory: non è implementato un lock per scritture concorrenti alla medesima run. Un arresto forzato può lasciare `status.json` su `running`; il resume si basa sui checkpoint verificati, non soltanto su questa etichetta. Un checkpoint con hash errato viene rifiutato, senza essere sostituito silenziosamente.
 
@@ -360,6 +394,15 @@ La media, la mediana e la deviazione standard della probabilità sono calcolate 
 ## 6. Scansioni e confronto tra sistemi
 
 ### Durata e filtro
+
+Per scegliere le durate con multipli interi, usare per esempio:
+
+```bash
+.venv/bin/python -u run_sweep.py --config configurazione.jsonc --factors-taus 10 15 20 --no-plots
+```
+
+`--factors-taus` e `--durations` sono alternativi. Il primo usa il `tau_s_coupling` della configurazione; il secondo impone tempi espliciti e disattiva il fattore in ogni sottorun, anche se attivo nel file di partenza.
+
 
 ```bash
 .venv/bin/python -u run_sweep.py --config configs/fock10_comparison.json --durations 40 52.3598775598 65 --cutoffs 1.5 3 6 --output results --no-plots
@@ -481,11 +524,11 @@ Gli stati sono vettori complessi e le Hamiltoniane matrici dense nel nucleo di o
 
 Le dataclass `Case`, `Target`, `Control`, `Optimization`, `Validation` ed `Experiment` raccolgono rispettivamente sistema fisico, target, attuatore, ricerca, verifiche ed esperimento completo. Separare questi gruppi rende esplicito quale parte del problema viene modificata.
 
-- `load_config(path)` legge il JSON e chiama `from_dict`.
+- `load_config(path)` legge JSON o JSONC e chiama `from_dict`. Per `.jsonc`, `_without_json_comments` elimina i commenti preservando stringhe, numeri di riga e colonne degli errori; il file non viene eseguito come codice.
 - `_strict(cls, data)` rifiuta le chiavi non appartenenti alla dataclass richiesta.
 - `from_dict(data)` costruisce anche gli oggetti annidati e applica i default ai campi assenti.
 - `Experiment.to_dict()` produce un dizionario serializzabile, includendo i valori risolti.
-- `Experiment.validate()` controlla tipi, intervalli, relazioni tra dimensioni e parametri, univocità dei seed e dei casi, vincoli sul target e assenza di NaN/infinito.
+- `Experiment.validate()` risolve prima T dal fattore intero e dall’accoppiamento di riferimento, quando richiesto, poi controlla tipi, intervalli, relazioni tra dimensioni e parametri, univocità dei seed e dei casi, vincoli sul target e assenza di NaN/infinito.
 
 La validazione sintattica non basta a garantire un obiettivo fisico possibile: `build_model` controlla anche il supporto del target nel settore di parità iniziale. Questo avviene prima dell'ottimizzazione.
 
@@ -868,6 +911,10 @@ I nodi, la durata e il filtro sono mantenuti: si sta verificando il medesimo imp
 `qoc/__init__.py` definisce la versione del pacchetto. `pyproject.toml` contiene metadati, versione minima di Python, dipendenze e configurazione del packaging. I due file dei requisiti distinguono intervalli supportati e ambiente verificato. `.gitignore` esclude artefatti locali come ambiente e risultati secondo le regole del progetto. I documenti `CAMBIAMENTI.md` e `VERIFICA.md` mantengono rispettivamente motivazioni delle modifiche e resoconto delle verifiche pregresse.
 
 ### Cosa verificano i test
+
+`tests/test_time_config.py` verifica conversione fattore–tempo, riferimento comune tra casi, valori non ammessi, roundtrip e override da CLI e sweep. Il test di run/ripresa del file commentato usa anche il tempo derivato da tau_s.
+
+`tests/test_commented_config.py` verifica che il file modificabile esponga tutti i campi delle dataclass, che i commenti non alterino stringhe o posizioni degli errori, che i JSON standard restino rigorosi e che una run da JSONC possa essere salvata e ripresa. Il controllo di completezza segnala anche futuri parametri aggiunti al codice ma dimenticati nel file commentato.
 
 `tests/test_numerics.py` copre configurazione, costruzione dei modelli, parità, riduzione dello spazio, target, filtro analitico, derivate del segnale, vincoli, gradiente contro differenze finite e confronti con esponenziali di matrice. Comprende casi 1Q/2Q, controlli comuni, penalità e degenerazioni, oltre a test di ottimizzazione, validazione, rumore nullo e bagno.
 

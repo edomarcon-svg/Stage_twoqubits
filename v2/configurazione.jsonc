@@ -1,0 +1,399 @@
+// ==============================================================================
+// CONFIGURAZIONE COMPLETA DELLA SIMULAZIONE (v2)
+// ==============================================================================
+// Questo file contiene tutti i parametri configurabili per l'ottimizzazione e la
+// validazione quantistica. Modifica i valori in base allo studio da svolgere.
+// I commenti (preceduti da // o racchiusi tra /* ... */) descrivono il ruolo fisico
+// e matematico di ciascun parametro e offrono parallelismi diretti con i programmi
+// della versione precedente (non-v2).
+//
+// COMANDI DA TERMINALE (dalla cartella v2/):
+// 1. Verifica sintassi e consistenza fisica senza avviare l'ottimizzazione:
+//      .venv/bin/python run_simulation.py --config configurazione.jsonc --validate-config
+// 2. Avvia la simulazione completa:
+//      .venv/bin/python -u run_simulation.py --config configurazione.jsonc
+// 3. Esegui sweep o scansioni su durate/filtri:
+//      .venv/bin/python run_sweep.py --config configurazione.jsonc --factors-taus 10 20
+//
+// REGOLE DI SINTASSI JSONC:
+// - Valori testuali tra doppi apici ("..."); decimali con punto; booleani true/false minuscoli.
+// - "null" indica un'opzione o un vincolo disattivato.
+// - Non inserire virgole dopo l'ultimo campo di un oggetto o dopo l'ultimo elemento di una lista.
+// - Non sono ammesse espressioni matematiche valutate (es. pi/4): inserire il valore numerico
+//   decimale esplicito (es. 0.7853981633974483).
+// - Unità: frequenze espresse come frequenze angolari (rad/s o adimensionali rispetto a omega_c);
+//   tempi nell'unità inversa (1/omega_c).
+//
+// NOTA SUI VALORI INIZIALI:
+// La durata è impostata a 20*tau_s come nella v1. Gli altri valori restano quelli
+// del test smoke: per uno studio quantitativo adegua intervals, dimensione e budget
+// alla durata scelta e verifica la convergenza (vedere README e preset in configs/).
+// Per il collaudo breve originale usa invece configs/smoke.json.
+// ==============================================================================
+{
+  // ----------------------------------------------------------------------------
+  // 1. ESPERIMENTO E RISOLUZIONE
+  // ----------------------------------------------------------------------------
+
+  // [name] Identificativo dell'esperimento.
+  // Definisce il nome della cartella dei risultati: results/<name>_<timestamp>/.
+  // Parallelismo v1: Nella v1 il percorso era spesso codificato a mano negli script
+  // (es. output_dir = f"results_2q_pipeline_n{n_target}" in run_full_pipeline_2q.py).
+  // In v2 funge da etichetta centrale per organizzare run e metadati.
+  "name": "both_fock_n10_t20",
+
+  // [dimension] Dimensione di troncamento dello spazio di Fock della cavità (N_cav).
+  // Livelli considerati: 0, 1, ..., dimension - 1. Intero >= 3.
+  // Deve essere sufficientemente grande da contenere sia lo stato target (es. Fock n),
+  // sia le eccitazioni fotoniche transitorie durante il drive, evitando errori di troncamento.
+  // Parallelismo v1: Corrisponde esattamente a "dim" in one_qubit_system.py, two_qubit_system.py
+  // e nei notebook (es. dim = 30 o dim = 40).
+  "dimension": 40,
+
+  // [omega_c] Frequenza angolare propria della cavità (omega_c > 0).
+  // Fissa la scala di energia di riferimento (con hbar = 1). Impostando omega_c = 1.0,
+  // tutte le frequenze e gli accoppiamenti sono normalizzati rispetto ad omega_c, e la durata
+  // simulata T è espressa in unità di 1/omega_c (per il tempo fisico: t_fisico = T / omega_c_fisica).
+  // Parallelismo v1: Identico al parametro "omega_c = 1.0" dei vecchi costruttori build_*_system.
+  "omega_c": 1.0,
+
+  // [factor_taus] Durata come nella v1: T = intero * tau_s.
+  // Cambia questo intero positivo per scegliere il tempo (es. 10, 15, 20).
+  // Con g di riferimento 0.3: 10 -> T circa 52.36; 20 -> T circa 104.72.
+  // Modifica solo factor_taus per scegliere la durata: T viene calcolato automaticamente.
+  "factor_taus": 20,
+
+  // [tau_s_coupling] Accoppiamento di riferimento g > 0: tau_s = pi/(2*g).
+  // Nella v1 era g per 1Q, g1 per 2Q. Qui è esplicito e comune a tutti i casi,
+  // per confrontarli allo stesso tempo fisico anche con couplings differenti.
+  // Se vuoi legare tau_s al tuo g/g1, aggiorna anche questo valore quando cambi g.
+  // Non modifica gli accoppiamenti fisici, che si impostano nella lista cases.
+  "tau_s_coupling": 0.3,
+
+  // [intervals] Numero di intervalli temporali N per la propagazione durante l'ottimizzazione (N >= 2).
+  // L'evoluzione usa un passo costante dt = T / N campionando l'impulso al punto medio dell'intervallo.
+  // Aumentare N migliora la precisione numerica e riduce l'errore dell'integratore (O(dt^2)).
+  // Parallelismo v1: Corrisponde concettualmente a "num_tslots" / "CRAB_NT" / "GRAPE_NT" della v1
+  // (es. CRAB_NT = 400, GRAPE_NT = 300).
+  // IMPORTANTE: Nella v1 num_tslots determinava sia il passo dell'integratore sia il numero di gradi
+  // di libertà dell'impulso. In v2 c'è una netta separazione: "intervals" regola solo la precisione
+  // dell'integratore, mentre i parametri liberi del controllo sono definiti da "control.nodes".
+  // Inoltre, v1 usava un passo T/(N-1) che sfasava la durata, corretto in v2 esattamente con T/N.
+  "intervals": 2000,
+
+  // [initial_state] Stato quantistico del sistema complessivo al tempo t = 0.
+  // Valori ammessi:
+  // - "bare": stato disaccoppiato |0, g, ..., g> (vuoto di fotoni nella cavità e tutti i qubit a riposo).
+  // - "ground": vero stato fondamentale interagente ("dressed") dell'Hamiltoniana di Rabi a drive spento.
+  // Parallelismo v1: Nella v1 si usava esclusivamente lo stato bare (psi0_ket = |0,g> o |0,g,g>).
+  // Tuttavia, nel regime di Ultra-Strong Coupling (USC), a causa dei termini contro-rotanti, il vuoto bare
+  // non è stazionario e può evolvere spontaneamente anche a controllo nullo. L'opzione "ground" consente
+  // di studiare la preparazione a partire dal vero stato di equilibrio interagente.
+  "initial_state": "bare",
+
+  // [parity_reduction] Riduzione dello spazio di Hilbert tramite simmetria di parità.
+  // Booleano (true / false).
+  // - true: proietta e calcola l'evoluzione solo nel settore di parità (pari o dispari) dello stato iniziale.
+  // - false: propaga l'intero spazio di Hilbert (dimensione = dimension * 2^nqubits).
+  // Parallelismo v1: Assente nella v1, dove si simulava sempre l'intera matrice densità o ket.
+  // Poiché l'Hamiltoniana di Rabi commuta con la parità totale [H, Pi] = 0, la parità è rigorosamente
+  // conservata: riducendo lo spazio, la dimensione si dimezza, velocizzando le diagonalizzazioni
+  // O(D^3) di un fattore ~8 ed eliminando possibili leakage numerici tra settori disconnessi.
+  "parity_reduction": true,
+
+  // [target_probability_goal] Soglia di successo fisico dell'ottimizzazione (0 < soglia <= 1).
+  // Misura la probabilità di transizione nello stato desiderato: P = |<target|psi(T)>|^2 = Tr(rho_target * rho(T)).
+  // Parallelismo v1: Nei vecchi script c'era spesso ambiguità tra fedeltà radice sqrt(P) e probabilità P.
+  // In v2 entrambe le metriche sono salvate esplicitamente (target_probability vs fidelity_root)
+  // e la soglia di successo è definita chiaramente sulla probabilità P.
+  "target_probability_goal": 0.99,
+
+  // ----------------------------------------------------------------------------
+  // 2. SISTEMI DA CONFRONTARE (cases)
+  // ----------------------------------------------------------------------------
+  // Ogni oggetto della lista definisce un modello fisico autonomo da simulare all'interno
+  // della stessa run, condividendo target e durata per un confronto diretto.
+  // Parallelismo v1: Nella v1 bisognava alternare script differenti (run_full_pipeline_1q.py vs
+  // run_full_pipeline_2q.py) o notebook separati. In v2 il confronto è centralizzato.
+  // Tutti i casi elencati vengono eseguiti sequenzialmente nella medesima run.
+  "cases": [
+    {
+      // [name] Nome identificativo univoco del caso (es. "1q", "2q_common", "2q_independent").
+      // Usare solo caratteri alfanumerici, trattino o underscore.
+      "name": "1q",
+
+      // [couplings] Costanti di accoppiamento luce-materia g_j per il termine (a + a†)*sigma_x,j.
+      // La lunghezza della lista definisce il numero di qubit del sistema (1 o 2).
+      // Parallelismo v1: Corrisponde esattamente al parametro "g" (es. g = 0.3) in one_qubit_system.py.
+      "couplings": [0.3],
+
+      // [qubit_frequencies] Frequenze angolari bare dei qubit a riposo (senza modulazione di controllo).
+      // Devono trovarsi strettamente all'interno dell'intervallo total_frequency_bounds.
+      // Parallelismo v1: Corrisponde a "omega_bases = [2.0]" in one_qubit_system.py e nei vecchi runner.
+      "qubit_frequencies": [2.0],
+
+      // [control] Architettura del controllo per i qubit: "independent" oppure "common".
+      // - "independent": ciascun qubit riceve un segnale di modulazione proprio e indipendente.
+      // - "common": tutti i qubit condividono lo stesso identico segnale di modulazione delta(t).
+      // Per un singolo qubit le due modalità sono logicamente identiche.
+      "control": "independent",
+
+      // [direct_exchange] Accoppiamento diretto di scambio tra qubit J*(sigma_x1*sigma_x2 + sigma_y1*sigma_y2).
+      // Valore 0.0 disattiva lo scambio diretto. Ammesso solo per sistemi a 2 qubit (per 1Q DEVE essere 0.0).
+      // Parallelismo v1: Non presente nella v1 (era sempre implicitamente posto a zero).
+      "direct_exchange": 0.0
+    },
+    {
+      // Caso a 2 qubit con controllo comune (un solo segnale di modulazione condiviso per entrambi i qubit).
+      // Permette di isolare se un eventuale vantaggio a 2 qubit derivi dal raddoppio dei canali
+      // di attuazione indipendenti oppure dalla sola presenza fisica del secondo qubit accoppiato.
+      "name": "2q_independent_normalized",
+
+      // NOTA SUI CONFRONTI EQUIVALENTI: Se si desidera confrontare il sistema a 2 qubit con quello a 1 qubit
+      // a parità di risorsa totale di accoppiamento (sum g_j^2 = g_1Q^2 = 0.3^2), impostare:
+      // "couplings": [0.21213203435596423, 0.21213203435596423]  (cioè 0.3 / sqrt(2)).
+      // Parallelismo v1: Corrisponde a "g1 = 0.3, g2 = 0.3" in two_qubit_system.py.
+      "couplings": [0.21213203435596423, 0.21213203435596423],
+
+      // Frequenze bare dei due qubit. Anche con frequenze bare distinte, la modalità "common"
+      // applica la stessa identica modulazione delta(t) a entrambi.
+      // Parallelismo v1: Corrisponde a "omega_bases = [2.0, 2.0]" in two_qubit_system.py.
+      "qubit_frequencies": [2.0, 2.0],
+
+      "control": "independent",
+      "direct_exchange": 0.0
+    },
+    {
+      // Caso a 2 qubit con due canali di controllo indipendenti (ciascun qubit ha la sua forma d'onda).
+      // È la configurazione standard studiata in run_full_pipeline_2q.py.
+      "name": "2q_independent",
+      "couplings": [0.3, 0.3],
+      "qubit_frequencies": [2.0, 2.0],
+      "control": "independent",
+      "direct_exchange": 0.0
+    },
+        {
+      // Caso a 2 qubit con due canali di controllo indipendenti (ciascun qubit ha la sua forma d'onda).
+      // È la configurazione standard studiata in run_full_pipeline_2q.py.
+      "name": "2q_common",
+      "couplings": [0.3, 0.3],
+      "qubit_frequencies": [2.0, 2.0],
+      "control": "common",
+      "direct_exchange": 0.0
+    }
+  ],
+
+
+  // ----------------------------------------------------------------------------
+  // 3. STATO TARGET (target)
+  // ----------------------------------------------------------------------------
+  "target": {
+    // [kind] Geometria dello stato quantistico della cavità desiderato:
+    // - "fock": stato a numero di fotoni ben definito |n>.
+    // - "squeezed": stato di vuoto compresso / strizzato S(z)|0>.
+    // - "cat": gatto di Schrödinger a 4 componenti (stati coerenti sovrapposti con supporto sui livelli n = 2 mod 4).
+    // Parallelismo v1: Corrisponde alle funzioni costruttrici target_fock_*, target_squeezed_* e target_cat_* di v1.
+    "kind": "fock",
+
+    // [value] Parametro principale dello stato target:
+    // - Per "fock": numero di fotoni n (intero, con 0 <= n < dimension).
+    // - Per "squeezed": ampiezza dello squeezing (in unità "r" o "dB", vedi sotto).
+    // - Per "cat": ampiezza coerente alpha (reale > 0, es. alpha = 2.0).
+    // Parallelismo v1: Corrisponde a "n_target = 10" (o 6) per Fock, "alpha = 2.0" per Cat, ecc.
+    "value": 10,
+
+    // [theta] Fase dello squeezing in radianti (definita in z = r * exp(i * theta)).
+    // Usata solo per kind = "squeezed"; ignorata per "fock" e "cat".
+    // Esempio: pi/4 = 0.7853981633974483.
+    // Parallelismo v1: Corrispondeva all'argomento di fase passato a target_squeezed in v1.
+    "theta": 0.0,
+
+    // [squeezing_unit] Unità di misura del valore di squeezing ("r" oppure "dB").
+    // Ammesso SOLO quando kind = "squeezed".
+    // Relazione: r = value * ln(10) / 20  (es. 3 dB equivalgono a r ~= 0.3454).
+    // Parallelismo v1: Nella v1 la conversione dB_to_r veniva spesso dimenticata o aggirata nel codice;
+    // in v2 la conversione è gestita in modo coerente e automatico.
+    "squeezing_unit": "r",
+
+    // [reset_qubits] Requisito sullo stato finale dei qubit al tempo T:
+    // - false: ottimizza la sola matrice densità ridotta della cavità rho_cav = Tr_qubits(rho_totale).
+    //          I qubit possono terminare in qualunque stato arbitrario.
+    // - true: richiede che a fine impulso tutti i qubit siano tornati nel rispettivo stato fondamentale |g>.
+    // Parallelismo v1: Corrisponde all'opzione "trace_over_qubits = True" presente in target_fock_2q di v1.
+    // Se nella v1 si tracciavano via i qubit, equivale a reset_qubits = false.
+    // ATTENZIONE FISICA: Con initial_state = "bare" (parità pari +1) e target Fock dispari (parità dispari -1),
+    // richiedere il reset dei qubit (parità pari) è rigorosamente vietato dalla simmetria di parità.
+    // Con reset_qubits = true, v2 intercetta l'impossibilità fisica ed evita di sprecare calcoli inutili.
+    "reset_qubits": false
+  },
+
+  // ----------------------------------------------------------------------------
+  // 4. COMANDI, FILTRO E COSTO (control)
+  // ----------------------------------------------------------------------------
+  "control": {
+    // [nodes] Numero di nodi temporali M della modulazione lineare a tratti (3 <= M <= intervals + 1).
+    // I nodi iniziale (t = 0) e finale (t = T) sono vincolati a 0 per garantire continuità a riposo.
+    // Gli M - 2 nodi interni costituiscono le variabili libere ottimizzate da CRAB e GRAPE.
+    // Parallelismo v1: Concetto fondamentale introdotto in v2. Nella v1, GRAPE ottimizzava ogni singolo
+    // time-step come gradino indipendente (300 o 400 parametri liberi non correlati).
+    // In v2 i nodi di comando sono disaccoppiati dalla griglia dell'integratore, permettendo di definire
+    // impulsi fisicamente realizzabili senza perdere risoluzione nella propagazione.
+    "nodes": 201,
+
+    // [total_frequency_bounds] Limiti rigidi [min, max] sulla FREQUENZA TOTALE del qubit:
+    // omega_q,j(t) = omega_q,bare,j + delta_j(t).
+    // Valgono per ogni qubit: 0 < min < max. Il comando delta_j(t) viene limitato di conseguenza.
+    // Parallelismo v1: Corrisponde a "GRAPE_AMP_BOUND = (0.5, 3.0)" in run_full_pipeline_2q.py.
+    // In v2 il significato è chiarito: si riferisce alla frequenza complessiva, non alla sola modulazione.
+    "total_frequency_bounds": [0.5, 3.0],
+
+    // [filter_cutoff] Frequenza di taglio angolare omega_cut del filtro hardware passa-basso causale del 1° ordine:
+    // y'(t) = filter_cutoff * (u(t) - y(t)), dove u(t) è il comando e y(t) è il segnale che arriva al qubit.
+    // Se "null", il filtro è disattivato e il segnale applicato è direttamente la spezzata lineare dei nodi.
+    // Parallelismo v1: Nella v1, per evitare gradini non fisici, dopo l'ottimizzazione GRAPE si applicava
+    // un lisciamento a posteriori con spline PCHIP (PchipInterpolator su INTERP_NT = 600).
+    // Tuttavia, quel lisciamento post-hoc modificava la forma d'onda e degradava pesantemente la fedeltà reale!
+    // In v2 il filtro dell'attuatore è inserito ANALITICAMENTE dentro il loop di ottimizzazione e nel gradiente:
+    // GRAPE ottimizza direttamente il segnale continuo e filtrato che agirà sul sistema sperimentale.
+    "filter_cutoff": 3.0,
+
+    // [max_slew] Limite massimo rigido (hard constraint) sullo slew rate del comando: |d(delta)/dt| <= max_slew.
+    // Se impostato a un valore reale (es. 1.0), GRAPE attiva l'ottimizzatore vincolato SLSQP con vincoli lineari.
+    // Se "null", non viene imposto alcun limite rigido e GRAPE usa L-BFGS-B (più rapido ed efficiente).
+    // Parallelismo v1: Assente nella v1 (non c'era controllo sulla velocità massima di variazione dell'impulso).
+    "max_slew": null,
+
+    // [fluence_weight] Peso della penalità di fluenza (energia del controllo) nella funzione di costo:
+    // penalità = fluence_weight * media_temporale( sum_j delta_j(t)^2 ).
+    // Valore 0.0 disattiva la penalità. Pesi > 0 favoriscono impulsi con modulazioni di frequenza più contenute.
+    // Parallelismo v1: Nella v1 il costo del controllo veniva solo monitorato a posteriori con compute_control_cost,
+    // ma non compariva nel funzionale minimizzato dall'algoritmo.
+    "fluence_weight": 0.0,
+
+    // [slew_weight] Peso della penalità "morbida" (soft penalty) sulla derivata temporale del segnale:
+    // penalità = slew_weight * media_temporale( sum_j (d(delta_j)/dt)^2 ).
+    // A differenza di max_slew (che è un vincolo rigido), favorisce impulsi dolci e regolari mantenendo L-BFGS-B.
+    // Parallelismo v1: Assente nella v1.
+    "slew_weight": 0.0
+  },
+
+
+  // ----------------------------------------------------------------------------
+  // 5. RICERCA CRAB E RAFFINAMENTO GRAPE (optimization)
+  // ----------------------------------------------------------------------------
+  "optimization": {
+    // [seeds] Lista dei semi casuali per le inizializzazioni indipendenti di CRAB.
+    // Ogni seed avvia una ricerca a partire da frequenze e ampiezze casuali diverse.
+    // Parallelismo v1: Corrisponde a "CRAB_NUM_SEEDS = 10" in run_full_pipeline_2q.py (che generava range(10)).
+    // In v2 si specifica esplicitamente la lista dei seed (es. [0, 1, 2, 3, 4, 5, 6, 7] per uno studio completo).
+    "seeds": [0, 1, 2, 3, 4, 5, 6, 7],
+
+    // [frequencies] Numero di componenti di Fourier casuali per canale nel metodo CRAB (Chopped Random Basis).
+    // Per ogni frequenza vengono ottimizzati due coefficienti (uno per il seno e uno per il coseno).
+    // Parallelismo v1: Corrisponde a "CRAB_NUM_FREQS = 20" (o "num_freqs = 5" in crab_optimizer.py).
+    "frequencies": 20,
+
+    // [frequency_range] Intervallo [min, max] di estrazione casuale uniforme delle frequenze CRAB.
+    // Parallelismo v1: Corrisponde a "freq_range = (0.1, 10.0)" di CRABOptimizer.
+    "frequency_range": [0.05, 3.0],
+
+    // [crab_max_evaluations] Budget massimo di valutazioni della funzione di costo per l'algoritmo Nelder-Mead in CRAB.
+    // Nel preset smoke è 40 per rapidità; nelle simulazioni di ricerca complete si imposta a 1600.
+    // Parallelismo v1: Corrisponde a "CRAB_MAX_ITER" o alle opzioni passate a scipy.optimize.minimize.
+    "crab_max_evaluations": 1600,
+
+    // [grape_max_iterations] Numero massimo di iterazioni del metodo di discesa a gradiente di GRAPE (L-BFGS-B o SLSQP).
+    // Nel preset smoke è 8; nei preset scientifici definitivi è 200.
+    // Parallelismo v1: Corrisponde a "GRAPE_MAX_ITER = 500" in run_full_pipeline_2q.py.
+    "grape_max_iterations": 200,
+
+    // [grape_max_evaluations] Budget massimo complessivo di valutazioni (costo + gradiente) consentite a GRAPE.
+    // Include tutte le chiamate interne del line-search (che possono essere molteplici per ciascuna iterazione).
+    // Parallelismo v1: Assente nella v1, dove un line-search ostico poteva prolungare indefinitamente i tempi.
+    // In v2 questo limite previene blocchi e assicura il rispetto dei budget computazionali prefissati.
+    "grape_max_evaluations": 1600,
+
+    // [refine_top] Selezione dei seed CRAB da raffinare con GRAPE:
+    // - null: raffina TUTTI i seed completati da CRAB (approccio raccomandato: fornisce una statistica
+    //         imparziale e priva di bias di selezione sulla convergenza di GRAPE).
+    // - intero k (es. 1): ordina i seed in base al costo CRAB e raffina solo i k migliori.
+    // Parallelismo v1: Nella v1 la pipeline implementava rigidamente la logica "best-pick": prendeva
+    // sempre e solo il singolo miglior seed di CRAB ("best-pick -> GRAPE refinement") e scartava tutti gli altri.
+    // Impostare refine_top = 1 riproduce quel comportamento; lasciarlo null fornisce un quadro statistico completo.
+    "refine_top": null,
+
+    // [workers] Numero di processi CPU paralleli per lanciare i seed dello stesso caso in contemporanea.
+    // Parallelismo v1: Corrisponde a "ProcessPoolExecutor(max_workers=...)" in run_full_pipeline_2q.py.
+    "workers": 8,
+
+    // [blas_threads] Numero di thread dedicati all'algebra lineare (OpenBLAS/MKL) per ciascun processo worker.
+    // Parallelismo v1: Innovazione fondamentale di v2 rispetto a v1. Nella v1, ciascun processo del pool
+    // tentava di usare tutti i core per il BLAS interno, causando un collasso delle prestazioni per oversubscription.
+    // In v2, l'uso di threadpoolctl con blas_threads = 1 garantisce che ogni processo utilizzi esattamente un core.
+    "blas_threads": 1,
+
+    // [ftol] Tolleranza di arresto sulla funzione obiettivo per gli ottimizzatori (fatol in Nelder-Mead, ftol in L-BFGS-B).
+    "ftol": 1e-12,
+
+    // [gtol] Tolleranza di arresto sulla norma del gradiente proiettato per L-BFGS-B (non impiegata da SLSQP).
+    "gtol": 1e-7
+  },
+
+  // ----------------------------------------------------------------------------
+  // 6. VERIFICA NUMERICA E OSSERVABILI (validation)
+  // ----------------------------------------------------------------------------
+  // A differenza della v1, dove la fedeltà dell'ottimizzatore veniva accettata senza verifiche incrociate,
+  // v2 sottopone ogni risultato a una rigorosa batteria di test continui e indipendenti per certificare
+  // l'assenza di artefatti numerici o troncamenti non fisici.
+  "validation": {
+    // [dimension_increment] Incremento di livelli Fock della cavità per la verifica di troncamento (intero >= 2).
+    // La simulazione continua viene rieseguita in uno spazio allargato (dimensione = dimension + dimension_increment).
+    // Se la fedeltà o la matrice densità ridotta cambiano sensibilmente, l'impulso viene marcato come NON validato.
+    // Parallelismo v1: Assente nella v1 (non c'era controllo sulla sufficienza della dimensione dello spazio di Fock).
+    "dimension_increment": 20,
+
+    // [trajectory_points] Numero di istanti equispaziati su [0, T] in cui campionare e salvare lo stato.
+    // Usato per calcolare e plottare l'evoluzione temporale di fotoni medi, purezza, popolazioni dei qubit ed entropia.
+    // Parallelismo v1: Corrisponde a "len(tlist)" passato a qutip.sesolve in v1 (es. INTERP_NT = 600).
+    "trajectory_points": 601,
+
+    // [atol, rtol] Tolleranze assoluta e relativa per il solutore continuo indipendente (qutip.sesolve / scipy).
+    // Parallelismo v1: Spesso lasciate ai valori di default di QuTiP; in v2 sono rigorose ed esplicite.
+    "atol": 1e-10,
+    "rtol": 1e-10,
+
+    // [fidelity_tolerance] Tolleranza massima ammessa sull'errore di fedeltà radice sqrt(P).
+    // Misura la discrepanza tra la propagazione discretizzata a gradini (midpoint) di GRAPE e la vera evoluzione
+    // continua ODE calcolata con sesolve. Garantisce che il numero di "intervals" scelto fosse adeguato.
+    // Parallelismo v1: Assente nella v1 (non veniva quantificato l'errore commesso dalla discretizzazione temporale).
+    "fidelity_tolerance": 0.001,
+
+    // [truncation_tolerance] Soglia massima ammessa per l'errore di troncamento dello spazio di Hilbert.
+    // Controlla sia la variazione della fedeltà, sia la distanza di traccia della matrice densità della cavità:
+    // D_tr(rho, rho_large) = 0.5 * Tr|rho - rho_large| <= truncation_tolerance.
+    // Parallelismo v1: Assente nella v1.
+    "truncation_tolerance": 0.00001,
+
+    // [edge_tolerance] Massima popolazione cumulativa ammessa negli ultimi livelli superiori della cavità (edge_levels).
+    // Se durante l'evoluzione lo stato occupa i livelli più alti oltre questa soglia, significa che la funzione d'onda
+    // sta risentendo del bordo artificiale dello spazio di Hilbert e la validazione fallisce.
+    // Parallelismo v1: Assente nella v1.
+    "edge_tolerance": 0.00001,
+
+    // [edge_levels] Numero di livelli Fock superiori della cavità monitorati per il controllo di edge_tolerance
+    // (gli ultimi livelli da dimension - edge_levels fino a dimension - 1).
+    "edge_levels": 5,
+
+    // [hold_time] Tempo supplementare di evoluzione libera dopo il termine dell'impulso (da t = T a t = T + hold_time)
+    // a comando spento (delta = 0).
+    // Permette di verificare la stabilità dello stato generato, l'effetto dell'interazione residua USC e
+    // la presenza di code transitorie dovute alla risposta del filtro passa-basso. Impostare 0.0 per disattivarlo.
+    // Parallelismo v1: Assente nella v1 (la simulazione terminava tassativamente a t = T).
+    "hold_time": 5,
+
+    // [phase_grid_points] Risoluzione per asse della griglia di quadratura (x, p) per la funzione di Wigner W(x, p).
+    // Determina la nitidezza e il dettaglio dei grafici nello spazio delle fasi nel report finale.
+    // Parallelismo v1: Corrispondeva alla lunghezza dei vettori di quadratura xvec usati in qutip.wigner.
+    "phase_grid_points": 161
+  }
+}

@@ -1,7 +1,9 @@
 """Strict, serializable experiment configuration; frequencies are angular frequencies."""
 from dataclasses import asdict, dataclass, field, fields
 import json
+import math
 from pathlib import Path
+import re
 
 
 @dataclass
@@ -67,6 +69,8 @@ class Experiment:
     dimension: int = 40
     omega_c: float = 1.0
     duration: float = 104.71975511965978
+    factor_taus: int | None = None
+    tau_s_coupling: float = 0.3
     intervals: int = 800
     initial_state: str = "bare"
     parity_reduction: bool = True
@@ -80,7 +84,19 @@ class Experiment:
     def to_dict(self):
         return asdict(self)
 
+    @property
+    def tau_s(self):
+        return math.pi / (2 * self.tau_s_coupling)
+
     def validate(self):
+        if (isinstance(self.tau_s_coupling, bool)
+                or not isinstance(self.tau_s_coupling, (int, float))
+                or not math.isfinite(self.tau_s_coupling) or self.tau_s_coupling <= 0):
+            raise ValueError("tau_s_coupling must be finite and positive")
+        if self.factor_taus is not None:
+            if isinstance(self.factor_taus, bool) or not isinstance(self.factor_taus, int) or self.factor_taus < 1:
+                raise ValueError("factor_taus must be a positive integer or null")
+            self.duration = self.factor_taus * self.tau_s
         integer_fields = [(self, ["dimension", "intervals"]), (self.control,["nodes"]),
             (self.optimization,["frequencies","crab_max_evaluations","grape_max_iterations","grape_max_evaluations","workers","blas_threads"]),
             (self.validation,["dimension_increment","trajectory_points","edge_levels","phase_grid_points"])]
@@ -178,5 +194,24 @@ def from_dict(data):
     return _strict(Experiment, d).validate()
 
 
+def _without_json_comments(text):
+    """Remove JSONC comments, preserving strings and diagnostic line/column positions."""
+    tokens = re.compile(r'"(?:\\.|[^"\\])*"|//[^\r\n]*|/\*[\s\S]*?(?:\*/|\Z)')
+
+    def replace(match):
+        token = match.group()
+        if token.startswith('"'):
+            return token
+        if token.startswith("/*") and not token.endswith("*/"):
+            raise json.JSONDecodeError("Unterminated JSONC block comment", text, match.start())
+        return "".join(c if c in "\r\n" else " " for c in token)
+
+    return tokens.sub(replace, text)
+
+
 def load_config(path):
-    return from_dict(json.loads(Path(path).read_text(encoding="utf-8")))
+    path = Path(path)
+    text = path.read_text(encoding="utf-8")
+    if path.suffix.lower() == ".jsonc":
+        text = _without_json_comments(text)
+    return from_dict(json.loads(text))

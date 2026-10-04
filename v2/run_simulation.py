@@ -10,12 +10,15 @@ from qoc.reporting import write_reports
 
 def main():
     parser = argparse.ArgumentParser(description="Cavità + 1/2 qubit: CRAB, GRAPE esatto, attuatore e validazione")
-    parser.add_argument("--config",type=Path,help="Configurazione JSON; default configs/smoke.json")
+    parser.add_argument("--config",type=Path,help="Configurazione JSON o JSONC commentato; default configs/smoke.json")
     parser.add_argument("--output",type=Path,help="Directory BASE per una nuova run; mai sovrascrive run precedenti")
     parser.add_argument("--resume",type=Path,help="Riprende una run compatibile, verificando codice, dipendenze e config")
     parser.add_argument("--report-only",type=Path,help="Rigenera i report di una run senza ottimizzare")
     parser.add_argument("--case",action="append",help="Seleziona uno o più nomi di caso presenti nella configurazione")
-    parser.add_argument("--duration",type=float,help="Tempo T esplicito, stessa unità 1/frequenza per tutti i casi")
+    timing = parser.add_mutually_exclusive_group()
+    timing.add_argument("--duration",type=float,help="Tempo T esplicito; disattiva factor_taus")
+    timing.add_argument("--factor-taus",type=int,help="Intero positivo: T = fattore * tau_s")
+    parser.add_argument("--tau-s-coupling",type=float,help="Accoppiamento di riferimento g > 0: tau_s = pi/(2*g)")
     parser.add_argument("--intervals",type=int,help="Numero di intervalli di propagazione (dt=T/N)")
     parser.add_argument("--workers",type=int,help="Numero massimo di processi per i seed")
     parser.add_argument("--no-plots",action="store_true",help="Salva dati e tabelle; figure rigenerabili con --report-only")
@@ -27,6 +30,12 @@ def main():
         return
     config_path = args.config or ((args.resume/"config.json") if args.resume else Path(__file__).resolve().parent/"configs"/"smoke.json")
     cfg = load_config(config_path)
+    if args.duration is not None:
+        cfg.factor_taus = None
+    if args.factor_taus is not None:
+        cfg.factor_taus = args.factor_taus
+    if args.tau_s_coupling is not None:
+        cfg.tau_s_coupling = args.tau_s_coupling
     if args.case:
         if set(args.case)-{x.name for x in cfg.cases}:
             parser.error("Nome caso inesistente")
