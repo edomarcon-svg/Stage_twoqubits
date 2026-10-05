@@ -10,7 +10,8 @@ Questa guida riassume tutti i passaggi, i comandi e le best practice per eseguir
 3. [Fase 2: Setup Iniziale del Server (Macchina Nuova)](#fase-2-setup-iniziale-del-server-macchina-nuova)
 4. [Fase 3: Esecuzione della Simulazione (v2)](#fase-3-esecuzione-della-simulazione-v2)
    - [Opzione A: Modalità Interattiva con tmux](#opzione-a-modalità-interattiva-con-tmux)
-   - [Opzione B: Modalità Automatica (Discord + Auto-distruzione)](#opzione-b-modalità-automatica-discord--auto-distruzione)
+   - [Opzione B: Modalità Automatica (Email + Failsafe + Auto-distruzione - Consigliata)](#opzione-b-modalità-automatica-email--failsafe--auto-distruzione---consigliata)
+   - [Opzione C: Modalità Alternativa (Discord o Telegram con Failsafe)](#opzione-c-modalità-alternativa-discord-o-telegram-con-failsafe)
 5. [Fase 4: Cheat Sheet Comandi Veloci dal PC Locale (PowerShell)](#fase-4-cheat-sheet-comandi-veloci-dal-pc-locale-powershell)
 6. [Fase 5: Scaricamento Manuale dei Risultati](#fase-5-scaricamento-manuale-dei-risultati)
 7. [Note Importanti sulla Fatturazione Hetzner](#note-importanti-sulla-fatturazione-hetzner)
@@ -111,69 +112,72 @@ python -u run_simulation.py --config configurazione.jsonc --workers 8 2>&1 | tee
 
 ---
 
-### Opzione B: Modalità Automatica (Discord + Auto-distruzione)
-Ideale per il pattern *"Fire-and-Forget"*: lanci la simulazione, spegni subito il PC, ricevi l'archivio ZIP su Discord appena finisce e il server si auto-elimina da solo per azzerare la spesa.
+### Opzione B: Modalità Automatica (Email + Failsafe + Auto-distruzione - Consigliata)
+Ideale per il pattern *"Fire-and-Forget"*: lanci la simulazione, spegni subito il PC, ricevi l'archivio ZIP con i risultati e il codice via **Email** al termine del calcolo e il server si auto-elimina da solo per azzerare la spesa.
 
-1. **Crea lo script di automazione sul server**:
-   ```bash
-   nano ~/Stage_twoqubits/v2/auto_v2.sh
-   ```
+> [!IMPORTANT]
+> **Perché ieri Discord non ha recapitato nulla ma il server si è cancellato?**
+> 1. **Limite allegati Discord**: I webhook gratuiti di Discord impongono un limite rigido di **10 MB** (in passato 25 MB). Se lo zip della simulazione superava anche di pochi byte i 10 MB, Discord ha respinto la richiesta restituendo `413 Request Entity Too Large`.
+> 2. **Assenza di Failsafe**: Il vecchio comando `curl` restituiva exit code 0 anche a fronte di un rifiuto HTTP, quindi lo script passava subito all'auto-distruzione del server, cancellando tutti i dati!
+> 
+> **La Nuova Architettura di Sicurezza (Failsafe)**:
+> Lo script ora verifica rigorosamente il codice di successo dell'invio. **Se l'invio via email o upload fallisce per qualsiasi motivo, IL SERVER NON VIENE CANCELLATO!** La macchina esegue semplicemente `poweroff` (ferma il consumo di CPU preservando il disco), consentendoti di riaccenderla dalla console Hetzner e scaricare i risultati a mano via `scp`.
 
-2. **Incolla il seguente contenuto** (sostituisci il token Hetzner e il webhook Discord):
-   ```bash
-   #!/bin/bash
-   # ==============================================================================
-   # PIPELINE AUTOMATICA v2: CALCOLO -> ZIP -> DISCORD -> AUTO-DISTRUZIONE
-   # ==============================================================================
-   HCLOUD_TOKEN="<TUO_API_TOKEN_HETZNER>"
-   DISCORD_WEBHOOK="<TUO_WEBHOOK_DISCORD>"
+---
 
-   cd ~/Stage_twoqubits/v2
-   source ~/stage_env/bin/activate
+#### Step 1: Configurare una "Password per le app" di Gmail (1 minuto)
+Per consentire al server di inviare l'email senza restrizioni:
+1. Accedi al tuo account Google: [myaccount.google.com/apppasswords](https://myaccount.google.com/apppasswords)
+2. Se richiesto, inserisci la password o autorizza con 2FA.
+3. Inserisci un nome descrittivo (es. `Hetzner QOC`) e clicca su **Crea**.
+4. Copia la password generata a **16 lettere** (es. `abcd efgh ijkl mnop`).
 
-   echo "=== [1/4] Avvio simulazione v2: $(date) ==="
-   python -u run_simulation.py --config configurazione.jsonc --workers 8
+---
 
-   EXIT_CODE=$?
-   if [ $EXIT_CODE -ne 0 ]; then
-       curl -F "content=❌ **ERRORE:** La simulazione v2 è fallita! Il server non è stato eliminato per permetterti di controllare i log." \
-            "$DISCORD_WEBHOOK"
-       exit 1
-   fi
+#### Step 2: Utilizzare lo script di automazione `auto_v2.sh`
+Lo script e il modulo Python `send_results_email.py` sono già inclusi nella cartella `v2`.
 
-   echo "=== [2/4] Creazione archivio ZIP della run più recente ==="
-   LATEST_RUN=$(ls -td results/* | head -1)
-   RUN_NAME=$(basename "$LATEST_RUN")
-   ZIP_PATH="/root/${RUN_NAME}.zip"
+Sul server Hetzner, modifica i parametri in `auto_v2.sh`:
+```bash
+nano ~/Stage_twoqubits/v2/auto_v2.sh
+```
 
-   zip -r "$ZIP_PATH" "$LATEST_RUN"
+Inserisci le tue credenziali nelle prime righe:
+```bash
+HCLOUD_TOKEN="<TUO_API_TOKEN_HETZNER>"
+EMAIL_TO="tua_email@dominio.com"
+SMTP_USER="tua_email_gmail@gmail.com"
+SMTP_PASSWORD="la_tua_password_app_di_16_lettere"
+```
 
-   echo "=== [3/4] Invio file su Discord ==="
-   curl -F "file=@$ZIP_PATH" \
-        -F "content=🚀 **Simulazione v2 completata!** Ecco i risultati: \`$RUN_NAME\`" \
-        "$DISCORD_WEBHOOK"
+> [!NOTE]
+> Lo script zippa automaticamente **la run dei risultati appena completata** insieme ai sorgenti `v2`, escludendo `.venv` e le cartelle temporanee. Il pacchetto risultante pesa tipicamente tra 5 e 10 MB, rientrando perfettamente nel limite di sicurezza di 22 MB per gli allegati email.
 
-   echo "=== [4/4] Auto-distruzione del server Hetzner ==="
-   # Ottiene l'ID del server dai metadati interni di Hetzner
-   SERVER_ID=$(curl -s http://169.254.169.254/hetzner/v1/metadata/instance-id)
+---
 
-   # Chiama le API Hetzner per cancellare definitivamente il server
-   curl -s -X DELETE \
-        -H "Authorization: Bearer $HCLOUD_TOKEN" \
-        "https://api.hetzner.cloud/v1/servers/$SERVER_ID"
-   ```
+#### Step 3: Avviare il calcolo in background e spegnere il PC
+```bash
+nohup ~/Stage_twoqubits/v2/auto_v2.sh > ~/v2_execution.log 2>&1 &
+exit
+```
+Ora puoi spegnere il computer:
+- Appena finisce la simulazione, riceverai l'email con l'archivio ZIP contenente figure, report HTML, matrici numeriche `.npz` e codice.
+- Solo se l'email è stata spedita con successo al 100%, il server si cancellerà automaticamente per azzerare i costi.
+- Se l'email fallisce, il server non viene cancellato e si spegne in sicurezza.
 
-3. **Rendi lo script eseguibile**:
-   ```bash
-   chmod +x ~/Stage_twoqubits/v2/auto_v2.sh
-   ```
+---
 
-4. **Avvia il processo in background ed esci**:
-   ```bash
-   nohup ~/Stage_twoqubits/v2/auto_v2.sh > ~/v2_execution.log 2>&1 &
-   exit
-   ```
-   *Puoi spegnere il computer: riceverai i risultati direttamente sul tuo canale Discord.*
+### Opzione C: Modalità Alternativa (Discord o Telegram con Failsafe)
+Se preferisci la messaggistica istantanea anziché l'email:
+- **Telegram Bot (Consigliato per file fino a 50 MB)**:
+  Telegram permette di inviare file fino a 50 MB via bot API (5 volte più capiente di Discord free).
+  Basta creare un bot con `@BotFather` e un comando curl con `--fail`:
+  ```bash
+  curl --fail -F "chat_id=<TUO_CHAT_ID>" -F "document=@$ZIP_PATH" \
+       "https://api.telegram.org/bot<TUO_TOKEN>/sendDocument"
+  ```
+- **Discord con Controllo di Errore**:
+  Se usi Discord, usa sempre il flag `--fail` in curl e verifica che lo zip sia `< 10 MB`. Se superi i 10 MB, l'upload fallirà sempre.
 
 ---
 
