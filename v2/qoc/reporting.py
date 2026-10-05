@@ -59,7 +59,7 @@ def seed_figures(folder):
         axs[0].plot(data["crab_history"],label="CRAB")
         if "grape_history" in data:
             axs[0].plot(data["grape_history"],label="GRAPE")
-        axs[0].set(xlabel="Valutazione obiettivo",ylabel="Costo (1-P + penalità)")
+        axs[0].set(xlabel="Valutazione obiettivo",ylabel="Costo configurato (vedi config.json)")
         axs[0].legend()
         ns = np.arange(len(target))
         axs[1].bar(ns,abs(target)**2,alpha=.5,label="Target")
@@ -92,6 +92,17 @@ def seed_figures(folder):
             ax.legend(fontsize=8)
             ax.grid(alpha=.2)
         _save(fig,folder/"actuator")
+        if "photon_populations" in data:
+            fig,axs = plt.subplots(2,1,figsize=(10,7),sharex=True)
+            im = axs[0].pcolormesh(t,np.arange(data["photon_populations"].shape[1]),
+                data["photon_populations"].T,shading="auto",cmap="viridis")
+            fig.colorbar(im,ax=axs[0],label="Popolazione")
+            axs[0].set_ylabel("Numero fotoni")
+            axs[1].plot(t,data["target_probability_trajectory"],label="P target (include eventuale reset)")
+            axs[1].axvline(signal.duration,ls=":",color="gray")
+            axs[1].set(xlabel="Tempo",ylabel="Probabilità",ylim=(-.02,1.02))
+            axs[1].legend()
+            _save(fig,folder/"populations")
     return meta
 
 
@@ -105,15 +116,25 @@ def write_reports(root, make_figures=True):
         timing += f" T = {config['factor_taus']} × tau_s; tau_s = pi/(2*g_ref) = {tau_s:.10g}, g_ref = {config['tau_s_coupling']:.10g}."
     rows = []
     for case in summary["cases"]:
-        for item in case["seeds"]:
+        for item in case["seeds"] + case.get("warm_starts",[]):
             folder = root/item["folder"]
             if make_figures:
                 seed_figures(folder)
-            rows.append({"case":case["name"],"seed":item["seed"],"P_target":item["metrics"]["target_probability"],
+            rows.append({"case":case["name"],"seed":item["seed"],"cohort":item.get("cohort","random"),"P_target":item["metrics"]["target_probability"],
                 "F_root":item["metrics"]["fidelity_root"],"purezza":item["metrics"]["purity"],
                 "validato":item["validation"]["passed"],"obiettivo_raggiunto":item["metrics"]["goal_reached"],
                 "fluence_modulazione":item["actuator"]["modulation_fluence_total"],
-                "banda99_peggiore":item["actuator"]["omega_99_worst_channel"],"cartella":item["folder"]})
+                "banda99_peggiore":item["actuator"]["omega_99_worst_channel"],
+                "potenza_sopra_soglia":item["actuator"].get("ac_power_fraction_above_threshold_worst"),
+                "P_iniziale":item["crab"].get("initial_probability"),
+                "P_CRAB":item["crab"]["target_probability"],
+                "guadagno_GRAPE":item["grape"].get("probability_gain"),
+                "iterazioni_GRAPE":item["grape"]["iterations"],
+                "gradiente_proiettato_iniziale":item["grape"].get("initial_gradient",{}).get("projected_gradient_max"),
+                "gradiente_proiettato_finale":item["grape"].get("final_gradient",{}).get("projected_gradient_max"),
+                "max_fotoni":item["metrics"].get("max_mean_photons_preparation"),
+                "P_hold_min":(item.get("hold_summary") or {}).get("minimum_target_probability"),
+                "cartella":item["folder"]})
     columns = list(rows[0]) if rows else ["case","seed"]
     with (root/"summary.csv").open("w",newline="",encoding="utf-8") as f:
         w = csv.DictWriter(f,fieldnames=columns)
@@ -122,6 +143,7 @@ def write_reports(root, make_figures=True):
     text = ["# Risultati v2", "", timing, "", "Ogni riga usa la propagazione continua del controllo con il filtro configurato.",
         "P_target è la probabilità target; F_root = sqrt(P_target). Il reset dei qubit, se richiesto, entra in P_target.",
         "Una soluzione non validata non è evidenza di vantaggio fisico. La convergenza dell'ottimizzatore è distinta dalla validazione numerica.",
+        "Le statistiche e il seed selezionato riguardano solo partenze casuali; i warm start sono separati.",
         "La banda 99% è una diagnostica del segnale finito, non un limite spettrale imposto. Le fluenze non sono calore dissipato.","",
         "| Caso | Seed | P target | F radice | Purezza | Validato | Soglia raggiunta |", "|---|---:|---:|---:|---:|---|---|"]
     for row in rows:
@@ -131,12 +153,12 @@ def write_reports(root, make_figures=True):
                  f"Seed selezionato: {case['selected_seed']}. Selezione per costo continuo, dando precedenza alle soluzioni validate."]
         if "baseline" in case:
             text.append(f"Probabilità target senza modulazione: {case['baseline']['metrics']['target_probability']:.8f}.")
-        for item in case["seeds"]:
+        for item in case["seeds"] + case.get("warm_starts",[]):
             failed = [k for k,ok in item["validation"]["checks"].items() if not ok]
-            text += ["",f"### Seed {item['seed']}",f"Controlli numerici falliti: {', '.join(failed) or 'nessuno'}.",
+            text += ["",f"### {item.get('cohort','random')} — {item['seed']}",f"Controlli numerici falliti: {', '.join(failed) or 'nessuno'}.",
                      f"CRAB: {item['crab']['message']}. GRAPE: {item['grape']['message']}.",
                      f"[Metadati completi]({item['folder']}/result.json)"]
-            for figure in ["dynamics","wigner","actuator"]:
+            for figure in ["dynamics","wigner","actuator","populations"]:
                 if (root/item["folder"]/(figure+".png")).exists():
                     text.append(f"![{figure}]({item['folder']}/{figure}.png)")
     (root/"report.md").write_text("\n".join(text)+"\n",encoding="utf-8")
@@ -152,12 +174,12 @@ def write_reports(root, make_figures=True):
         body.append(f"<h2>{html.escape(case['name'])}</h2><p>Statistiche: {html.escape(json.dumps(case['statistics'],ensure_ascii=False))}</p>")
         if "baseline" in case:
             body.append(f"<p>Probabilità target senza modulazione: {case['baseline']['metrics']['target_probability']:.8f}.</p>")
-        for item in case["seeds"]:
+        for item in case["seeds"] + case.get("warm_starts",[]):
             path = html.escape(item["folder"],quote=True)
             failures = [k for k,ok in item["validation"]["checks"].items() if not ok]
             body.append(f"<h3>Seed {item['seed']}</h3><p>Controlli falliti: {html.escape(', '.join(failures) or 'nessuno')}</p><a href='{path}/result.json'>Dettagli</a>")
             body.append(f"<p>{html.escape(item['crab']['message'])}; {html.escape(item['grape']['message'])}</p>")
-            for figure in ["dynamics","wigner","optimization","actuator"]:
+            for figure in ["dynamics","wigner","optimization","actuator","populations"]:
                 if (root/item["folder"]/(figure+".png")).exists():
                     body.append(f"<a href='{path}/{figure}.pdf'><img src='{path}/{figure}.png' alt='{figure}'></a>")
     document = "<!doctype html><html lang='it'><meta charset='utf-8'><title>Simulazioni v2</title><style>body{font:16px system-ui;max-width:1200px;margin:30px auto;padding:20px;color:#172033}table{border-collapse:collapse;width:100%;font-size:14px}td,th{padding:8px;border:1px solid #ccc}th{background:#eef3fa}img{max-width:100%;height:auto}a{color:#165aa7}</style><body>"+"\n".join(body)+"</body></html>"

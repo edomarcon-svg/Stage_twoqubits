@@ -1,7 +1,7 @@
 """Every reported final result is checked with independent continuous dynamics."""
 import numpy as np
 from .models import build_model
-from .propagation import continuous_evolution, propagate_midpoint
+from .propagation import continuous_evolution, propagate_midpoint, fidelity_loss
 from .metrics import state_metrics, actuator_metrics, phase_space
 from .controls import logical_bounds
 
@@ -10,16 +10,19 @@ def validate_waveform(cfg, case, model, signal, nodes):
     v = cfg.validation
     times = np.linspace(0,cfg.duration,v.trajectory_points)
     if v.hold_time:
-        times = np.r_[times,np.linspace(cfg.duration,cfg.duration+v.hold_time,101)[1:]]
+        times = np.r_[times,np.linspace(cfg.duration,cfg.duration+v.hold_time,v.hold_points)[1:]]
     states = continuous_evolution(model,signal,nodes,times,v.atol,v.rtol)
     final = states[v.trajectory_points-1]
     metrics = state_metrics(model,final)
-    act = actuator_metrics(model,signal,nodes)
+    act = actuator_metrics(model,signal,nodes,spectral_threshold=v.spectral_threshold)
     ntraj, purity, edges, cavity_fidelity, qpop, singlet = [], [], [], [], [], []
+    photon_populations, target_probabilities = [], []
     for state in states:
         full = model.expand(state).reshape(model.dimension,-1)
         rho = full@full.conj().T
         pops = np.diag(rho).real
+        photon_populations.append(pops)
+        target_probabilities.append(float(np.vdot(state,model.target_operator@state).real))
         ntraj.append(float(pops@np.arange(model.dimension)))
         edges.append(float(sum(pops[-v.edge_levels:])))
         purity.append(float(np.trace(rho@rho).real))
@@ -85,9 +88,24 @@ def validate_waveform(cfg, case, model, signal, nodes):
     metrics["continuous_objective"] = float(1-metrics["target_probability"] +
         cfg.control.fluence_weight*act["modulation_fluence_total"]/cfg.duration +
         cfg.control.slew_weight*sum(x["slew_rms"]**2 for x in act["channels"]))
+    metrics["continuous_optimization_objective"] = float(fidelity_loss(metrics["target_probability"], cfg.optimization)[0] +
+        cfg.optimization.objective_scale * (cfg.control.fluence_weight*act["modulation_fluence_total"]/cfg.duration +
+        cfg.control.slew_weight*sum(x["slew_rms"]**2 for x in act["channels"])))
+    metrics["max_mean_photons_preparation"] = max(ntraj[:v.trajectory_points])
+    metrics["max_mean_photons_with_hold"] = max(ntraj)
     metrics["goal_reached"] = bool(metrics["target_probability"]>=cfg.target_probability_goal)
     hold = state_metrics(model,states[-1]) if v.hold_time else None
-    arrays = {"command_times":signal.times,"command_modulation":nodes,
+    hold_summary = None
+    if v.hold_time:
+        hp = np.asarray(target_probabilities[v.trajectory_points-1:])
+        ht = times[v.trajectory_points-1:]
+        below = np.flatnonzero(hp < cfg.target_probability_goal)
+        hold_summary = {"minimum_target_probability":float(hp.min()),
+            "mean_target_probability":float(np.trapezoid(hp,ht)/v.hold_time),
+            "first_sample_below_goal_after_T":float(ht[below[0]]-cfg.duration) if len(below) else None,
+            "sampling_step":float(v.hold_time/(v.hold_points-1))}
+    arrays = {"photon_populations":np.asarray(photon_populations),
+        "target_probability_trajectory":np.asarray(target_probabilities),"command_times":signal.times,"command_modulation":nodes,
         "physical_command_modulation":model.physical_map@nodes,
         "times":times,"delivered_modulation":signal.values(nodes,times),
         "physical_delivered_modulation":model.physical_map@signal.values(nodes,times),
@@ -98,4 +116,4 @@ def validate_waveform(cfg, case, model, signal, nodes):
         "cavity_fidelity_root":np.asarray(cavity_fidelity),"qubit_basis_populations":np.asarray(qpop),
         "wigner_grid":grid,"wigner_final":wigner,"photon_distribution":np.diag(rho).real,
         "singlet_population":np.asarray(singlet)}
-    return {"metrics":metrics,"actuator":act,"validation":diagnostics,"hold_metrics":hold},arrays
+    return {"metrics":metrics,"actuator":act,"validation":diagnostics,"hold_metrics":hold,"hold_summary":hold_summary},arrays

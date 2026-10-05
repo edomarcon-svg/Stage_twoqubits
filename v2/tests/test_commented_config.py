@@ -15,7 +15,7 @@ ROOT = Path(__file__).resolve().parents[1]
 
 
 class CommentedConfigTests(unittest.TestCase):
-    def test_editable_file_covers_every_field_and_matches_smoke(self):
+    def test_editable_file_covers_every_field_and_roundtrips(self):
         path = ROOT / "configurazione.jsonc"
         raw = json.loads(_without_json_comments(path.read_text()))
         # Duration is derived from factor_taus, not a second editable time input.
@@ -28,11 +28,9 @@ class CommentedConfigTests(unittest.TestCase):
         for case in raw["cases"]:
             self.assertEqual(set(case), {f.name for f in fields(Case)})
         editable = load_config(path).to_dict()
-        smoke = load_config(ROOT / "configs" / "smoke.json").to_dict()
-        editable["name"] = smoke["name"]
-        editable["duration"] = smoke["duration"]
-        editable["factor_taus"] = smoke["factor_taus"]
-        self.assertEqual(editable, smoke)
+        # This is a user-editable production config, not a copy of the smoke preset.
+        from qoc.config import from_dict
+        self.assertEqual(editable, from_dict(editable).to_dict())
 
     def test_comments_preserve_strings_and_positions(self):
         value = 'https://example.org/a/*b*/\\escaped"//still-a-string'

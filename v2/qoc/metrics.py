@@ -44,7 +44,7 @@ def state_metrics(model, state):
     return out
 
 
-def actuator_metrics(model, signal, nodes, points=4001):
+def actuator_metrics(model, signal, nodes, points=4001, spectral_threshold=3.0):
     ts = np.linspace(0,signal.duration,points)
     modulation = model.physical_map @ signal.values(nodes,ts)
     rates = model.physical_map @ nodes @ signal.matrix(ts,derivative=True).T
@@ -58,20 +58,22 @@ def actuator_metrics(model, signal, nodes, points=4001):
         if len(power)>2:
             power[1:-1] *= 2
         omega = 2*np.pi*np.fft.rfftfreq(len(sampled),d=ts[1]-ts[0])
+        power_above = float(power[omega > spectral_threshold].sum()/power.sum()) if power.sum() > 1e-24 else 0.
         omega99 = 0. if power.sum()<1e-24 else float(omega[min(np.searchsorted(np.cumsum(power)/power.sum(),.99),len(omega)-1)])
         metrics.append({"modulation_fluence":float(np.trapezoid(delta**2,ts)),
                         "total_frequency_fluence":float(np.trapezoid(u**2,ts)),
                         "slew_max_sampled":float(np.max(abs(rates[j]))),
                         "slew_rms":float(np.sqrt(np.trapezoid(rates[j]**2,ts)/signal.duration)),
                         "command_slew_max":float(np.max(abs(np.diff(command[j])))/signal.h),
-                        "omega_99_ac":omega99,"total_frequency_min":float(u.min()),
+                        "omega_99_ac":omega99,"ac_power_fraction_above_threshold":power_above,"spectral_threshold":spectral_threshold,"total_frequency_min":float(u.min()),
                         "total_frequency_max":float(u.max()),"terminal_modulation":float(delta[-1])})
     return {"channels":metrics,"modulation_fluence_total":sum(m["modulation_fluence"] for m in metrics),
             "normalized_hilbert_schmidt_control_cost":sum(m["modulation_fluence"] for m in metrics)/4,
             "modulation_fluence_max_channel":max(m["modulation_fluence"] for m in metrics),
             "total_frequency_fluence_total":sum(m["total_frequency_fluence"] for m in metrics),
             "omega_99_worst_channel":max(m["omega_99_ac"] for m in metrics),
-            "slew_worst_channel":max(m["slew_max_sampled"] for m in metrics)}
+            "slew_worst_channel":max(m["slew_max_sampled"] for m in metrics),
+            "ac_power_fraction_above_threshold_worst":max(m["ac_power_fraction_above_threshold"] for m in metrics)}
 
 
 def phase_space(model, rho, points):

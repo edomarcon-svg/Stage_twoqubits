@@ -47,6 +47,11 @@ class Optimization:
     blas_threads: int = 1
     ftol: float = 1e-12
     gtol: float = 1e-7
+    objective: str = "probability"
+    objective_scale: float = 1.0
+    root_epsilon: float = 1e-12
+    crab_initial_std: float | None = None
+    warm_starts: list[dict] = field(default_factory=list)
 
 
 @dataclass
@@ -61,6 +66,8 @@ class Validation:
     edge_levels: int = 5
     hold_time: float = 0.0
     phase_grid_points: int = 121
+    hold_points: int = 201
+    spectral_threshold: float = 3.0
 
 
 @dataclass
@@ -99,7 +106,7 @@ class Experiment:
             self.duration = self.factor_taus * self.tau_s
         integer_fields = [(self, ["dimension", "intervals"]), (self.control,["nodes"]),
             (self.optimization,["frequencies","crab_max_evaluations","grape_max_iterations","grape_max_evaluations","workers","blas_threads"]),
-            (self.validation,["dimension_increment","trajectory_points","edge_levels","phase_grid_points"])]
+            (self.validation,["dimension_increment","trajectory_points","edge_levels","phase_grid_points","hold_points"])]
         for obj,names in integer_fields:
             for name in names:
                 value = getattr(obj,name)
@@ -166,7 +173,27 @@ class Experiment:
             raise ValueError("refine_top must be null or between 1 and number of seeds")
         if min(o.ftol, o.gtol) <= 0:
             raise ValueError("optimizer tolerances must be positive")
+        if o.objective not in {"probability", "root"}:
+            raise ValueError("objective must be probability or root")
+        if min(o.objective_scale, o.root_epsilon) <= 0 or (o.crab_initial_std is not None and o.crab_initial_std <= 0):
+            raise ValueError("objective scale, root epsilon and initial std must be positive")
+        names = set()
+        for warm in o.warm_starts:
+            if set(warm)-{"name","case","path","format","rescale_time"} or not {"name","case","path","format"} <= set(warm):
+                raise ValueError("Invalid warm_start fields")
+            name = warm["name"]
+            if not isinstance(name,str) or not name or any(c not in "abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789_-" for c in name) or name in names:
+                raise ValueError("warm_start names must be unique safe names")
+            names.add(name)
+            if warm["case"] not in {c.name for c in self.cases} or not isinstance(warm["path"],str) or not warm["path"]:
+                raise ValueError("warm_start requires an existing case and a path")
+            if warm["format"] not in {"v2", "legacy_crab", "legacy_grape", "legacy_smooth"}:
+                raise ValueError("Unsupported warm_start format")
+            if not isinstance(warm.get("rescale_time",False),bool):
+                raise ValueError("rescale_time must be boolean")
         v = self.validation
+        if v.hold_points < 2 or v.spectral_threshold <= 0:
+            raise ValueError("hold_points >= 2 and spectral_threshold > 0 required")
         if v.dimension_increment < 2 or v.trajectory_points < 3 or not 1 <= v.edge_levels < self.dimension or v.phase_grid_points < 21:
             raise ValueError("invalid validation grids or edge_levels")
         if min(v.atol, v.rtol, v.fidelity_tolerance, v.truncation_tolerance, v.edge_tolerance) <= 0 or v.hold_time < 0:
@@ -214,4 +241,7 @@ def load_config(path):
     text = path.read_text(encoding="utf-8")
     if path.suffix.lower() == ".jsonc":
         text = _without_json_comments(text)
-    return from_dict(json.loads(text))
+    raw = json.loads(text)
+    for warm in raw.get("optimization", {}).get("warm_starts", []):
+        warm["path"] = str((path.parent / warm["path"]).resolve())
+    return from_dict(raw)

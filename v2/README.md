@@ -4,6 +4,14 @@ Questa cartella è un progetto autonomo per ottimizzare la preparazione di stati
 
 Il manuale è diviso in due parti: **come usare e gestire le simulazioni** e **come funziona il codice**. Le istruzioni descrivono il comportamento implementato, comprese le verifiche che restano a carico di chi conduce lo studio. Una run completata non implica né precisione numerica sufficiente né raggiungimento del target.
 
+## Nuova campagna multi-target
+
+La configurazione [configurazione_campagna.jsonc](configurazione_campagna.jsonc) esegue un collaudo di 16 tentativi e, se efficace, le 320 pipeline Fock proposte. Usare `run_campaign.py`, con supporto per `--validate-config`, `--pilot-only` e `--resume`. Costi, inizializzazione, diagnostiche, target opzionali e ripartenze da impulsi salvati sono descritti in [CAMPAGNA.md](CAMPAGNA.md).
+
+## Archivio esterno e email
+
+`auto_v2.sh` usa ora un archivio S3 privato verificato tramite lettura remota e SHA-256, inviando soltanto un riepilogo e il link via email. Creazione del bucket, configurazione `archive.env`, recupero delle vecchie run e cancellazione opzionale del server sono descritti in [ARCHIVIAZIONE.md](ARCHIVIAZIONE.md). Il nuovo default conserva il server; la cancellazione richiede `DELETE_SERVER_AFTER_DELIVERY=true` e una consegna verificata.
+
 ## Indice
 
 **Parte I — Guida operativa**

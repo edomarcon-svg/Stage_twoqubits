@@ -282,6 +282,14 @@
   // 5. RICERCA CRAB E RAFFINAMENTO GRAPE (optimization)
   // ----------------------------------------------------------------------------
   "optimization": {
+    // Costo: probability conserva il comportamento precedente; root usa sqrt(P+epsilon).
+    "objective": "probability",
+    "objective_scale": 1.0,
+    "root_epsilon": 1e-12,
+    // null conserva la scala precedente 0.15/sqrt(frequencies); valore esplicito = std dei coefficienti.
+    "crab_initial_std": null,
+    // Ripartenze esterne separate dai seed casuali. Vedere CAMPAGNA.md.
+    "warm_starts": [],
     // [seeds] Lista dei semi casuali per le inizializzazioni indipendenti di CRAB.
     // Ogni seed avvia una ricerca a partire da frequenze e ampiezze casuali diverse.
     // Parallelismo v1: Corrisponde a "CRAB_NUM_SEEDS = 10" in run_full_pipeline_2q.py (che generava range(10)).
@@ -346,6 +354,9 @@
   // v2 sottopone ogni risultato a una rigorosa batteria di test continui e indipendenti per certificare
   // l'assenza di artefatti numerici o troncamenti non fisici.
   "validation": {
+    "hold_points": 201,
+    // Soglia diagnostica FFT; non impone un limite spettrale.
+    "spectral_threshold": 3.0,
     // [dimension_increment] Incremento di livelli Fock della cavità per la verifica di troncamento (intero >= 2).
     // La simulazione continua viene rieseguita in uno spazio allargato (dimensione = dimension + dimension_increment).
     // Se la fedeltà o la matrice densità ridotta cambiano sensibilmente, l'impulso viene marcato come NON validato.

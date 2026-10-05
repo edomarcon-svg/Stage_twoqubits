@@ -4,6 +4,7 @@ import hashlib
 import json
 import multiprocessing
 import os
+import shutil
 from pathlib import Path
 import time
 import numpy as np
@@ -17,6 +18,7 @@ from .optimizers import crab, grape
 from .validation import validate_waveform
 from .storage import SCHEMA_VERSION, prepare_run, save_json
 from .reporting import write_reports
+from .warm_start import import_nodes
 
 
 def save_arrays(path, **arrays):
@@ -77,14 +79,38 @@ def _refine_worker(args):
     arrays.update(crab_arrays)
     arrays["grape_history"] = result.history
     arrays["grape_midpoint_state"] = result.state
+    if result.diagnostics:
+        columns = list(result.diagnostics[0])
+        arrays["grape_diagnostic_columns"] = np.asarray(columns)
+        arrays["grape_diagnostics"] = np.array([[row[k] for k in columns] for row in result.diagnostics])
     digest = save_arrays(path/"arrays.npz",**arrays)
     data = {"schema_version":SCHEMA_VERSION,"case":case.name,"seed":seed,
-        "crab":source,"grape":result.metadata,**checked,"array_file":"arrays.npz","array_sha256":digest,
+        "cohort":source.get("cohort","random"),"crab":source,"grape":result.metadata,**checked,"array_file":"arrays.npz","array_sha256":digest,
         "elapsed_refinement_validation_seconds":time.perf_counter()-t0,
         "hilbert_dimension_full":model.dimension*2**model.nqubits,
         "hilbert_dimension_used":len(model.initial),"initial_parity":model.initial_parity}
     save_json(path/"result.json",data)
     return data
+
+
+def _warm_worker(args):
+    raw, index, spec, folder = args
+    cfg = from_dict(raw)
+    path = Path(folder)
+    path.mkdir(parents=True,exist_ok=True)
+    if load_checkpoint(path,"crab") is None:
+        with threadpool_limits(limits=cfg.optimization.blas_threads):
+            model = build_model(cfg,cfg.cases[index])
+            signal = Signal(cfg.duration,cfg.control.nodes,cfg.control.filter_cutoff)
+            nodes, details = import_nodes(spec,model,signal,cfg.control)
+            cost, prob, state = Objective(model,signal,cfg).evaluate_nodes(nodes)
+        digest = save_arrays(path/"crab.npz",nodes=nodes,history=np.array([cost]),state=state)
+        save_json(path/"crab.json",{"schema_version":SCHEMA_VERSION,"algorithm":"saved_command",
+            "seed":spec["name"],"cohort":"warm_start","cost":cost,"target_probability":prob,
+            "initial_probability":prob,"probability_gain":0.,"message":"Imported saved command; CRAB skipped",
+            "success":True,"iterations":0,"evaluations":1,"elapsed_seconds":0.,
+            "array_file":"crab.npz","array_sha256":digest,"import":details})
+    return _refine_worker((raw,index,spec["name"],folder))
 
 
 def _dispatch(worker, jobs, workers):
@@ -105,6 +131,27 @@ def run_experiment(cfg, destination=None, resume=None, plots=True):
     for case in cfg.cases:
         build_model(cfg,case)
     root = prepare_run(cfg,destination,resume)
+    # Snapshot external inputs once. Resume uses these copies, not mutable originals.
+    warm_specs = []
+    for spec in cfg.optimization.warm_starts:
+        spec = dict(spec)
+        target = root/"warm_inputs"/(spec["name"]+".npz")
+        if not target.exists():
+            target.parent.mkdir(exist_ok=True)
+            tmp = target.with_suffix(".tmp")
+            shutil.copyfile(spec["path"],tmp)
+            save_json(target.with_suffix(".json"),{"sha256":hashlib.sha256(tmp.read_bytes()).hexdigest()})
+            os.replace(tmp,target)
+        expected = json.loads(target.with_suffix(".json").read_text())["sha256"]
+        if hashlib.sha256(target.read_bytes()).hexdigest() != expected:
+            raise ValueError("Corrupt warm-start snapshot")
+        spec["path"] = str(target)
+        # Reject incompatible inputs before spending any optimization budget.
+        case = next(c for c in cfg.cases if c.name == spec["case"])
+        model = build_model(cfg,case)
+        signal = Signal(cfg.duration,cfg.control.nodes,cfg.control.filter_cutoff)
+        import_nodes(spec,model,signal,cfg.control)
+        warm_specs.append(spec)
     print(f"Run: {root}",flush=True)
     summary = {"schema_version":SCHEMA_VERSION,"experiment":cfg.name,"cases":[],"complete":False}
     save_json(root/"status.json",{"state":"running"})
@@ -160,16 +207,28 @@ def run_experiment(cfg, destination=None, resume=None, plots=True):
                 item["folder"] = str(folders[seed].relative_to(root))
                 items.append(item)
             eligible = [x for x in items if x["validation"]["passed"]]
-            selected = min(eligible or items,key=lambda x:(x["metrics"]["continuous_objective"],x["seed"]))
+            selected = min(eligible or items,key=lambda x:(x["metrics"].get("continuous_optimization_objective",x["metrics"]["continuous_objective"]),x["seed"]))
             probabilities = np.array([x["metrics"]["target_probability"] for x in items])
             stats = {"count":len(items),"probability_mean":float(np.mean(probabilities)),
                 "probability_std_population":float(np.std(probabilities)),"probability_median":float(np.median(probabilities)),
                 "probability_min":float(np.min(probabilities)),"probability_max":float(np.max(probabilities)),
                 "numerically_valid_count":len(eligible),
                 "validated_goal_count":sum(x["metrics"]["goal_reached"] for x in eligible),
+                "validated_goal_fraction":sum(x["metrics"]["goal_reached"] for x in eligible)/len(items),
+                "probability_q25":float(np.quantile(probabilities,.25)),
+                "probability_q75":float(np.quantile(probabilities,.75)),
                 "selection_bias_top_only":cfg.optimization.refine_top is not None and cfg.optimization.refine_top<len(seeds)}
+            warm_items = []
+            for spec in [w for w in warm_specs if w["case"] == case.name]:
+                folder = case_folder/("warm_"+spec["name"])
+                item = load_checkpoint(folder,"result")
+                if item is None:
+                    item = _warm_worker((cfg.to_dict(),index,spec,str(folder)))
+                item = dict(item)
+                item["folder"] = str(folder.relative_to(root))
+                warm_items.append(item)
             summary["cases"].append({"name":case.name,"statistics":stats,"selected_seed":selected["seed"],
-                "baseline":baseline,"all_crab":[crab_results[s] for s in seeds],"seeds":items})
+                "warm_starts":warm_items,"baseline":baseline,"all_crab":[crab_results[s] for s in seeds],"seeds":items})
             save_json(root/"summary.json",summary)
         summary["complete"] = True
         save_json(root/"summary.json",summary)

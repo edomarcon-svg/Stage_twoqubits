@@ -1,143 +1,62 @@
-#!/bin/bash
-# ==============================================================================
-# PIPELINE AUTOMATICA v2 CON INVIO RISULTATI VIA EMAIL + FAILSAFE
-# ==============================================================================
-# ISTRUZIONI:
-# 1. Configura le variabili qui sotto (o passale tramite variabili d'ambiente).
-# 2. Per Gmail, genera una "Password per le app" da: https://myaccount.google.com/apppasswords
-# ==============================================================================
-
-# --- CONFIGURAZIONE CREDENZIALI ---
-HCLOUD_TOKEN="${HCLOUD_TOKEN:-oMf48CoCOQ6QYjvS1tGeEboK1ZCUm4Gyd5w6zbneOSwSlPVYcQG9YrksiErPius6}"
-
-# Configurazione Email
-EMAIL_TO="${EMAIL_TO:-edo.marcon@gmail.com}"
-SMTP_USER="${SMTP_USER:-edo.marcon@gmail.com}"
-SMTP_PASSWORD="${SMTP_PASSWORD:-dofc uauy saic saqa}"
-SMTP_HOST="${SMTP_HOST:-smtp.gmail.com}"
-SMTP_PORT="${SMTP_PORT:-587}"
-
-# Opzionale: Webhook Discord (se vuoi notifica o doppio canale)
-DISCORD_WEBHOOK="${DISCORD_WEBHOOK:-}"
-
-# Cartelle
-REPO_DIR="/root/Stage_twoqubits"
-V2_DIR="$REPO_DIR/v2"
-
-cd "$V2_DIR" || exit 1
-source /root/stage_env/bin/activate
-
-echo "================================================================="
-echo "=== [1/4] Avvio simulazione v2: $(date) ==="
-echo "================================================================="
-python -u run_simulation.py --config configurazione.jsonc --workers 8
-
-SIM_EXIT=$?
-if [ $SIM_EXIT -ne 0 ]; then
-    echo "❌ ERRORE: La simulazione e' fallita con codice $SIM_EXIT."
-    if [ -n "$DISCORD_WEBHOOK" ]; then
-        curl -s -F "content=❌ **ERRORE CRITICO:** La simulazione v2 su Hetzner e' fallita. Il server rimane intatto per il debug." "$DISCORD_WEBHOOK"
-    fi
-    echo "Il server NON verra' cancellato per permetterti di analizzare i log."
-    exit 1
+#!/usr/bin/env bash
+# Simulation -> verified external archive -> summary email -> optional cleanup.
+# Configure archive.env (ignored by Git), see ARCHIVIAZIONE.md.
+set -euo pipefail
+umask 077
+V2_DIR="$(cd -- "$(dirname -- "${BASH_SOURCE[0]}")" && pwd)"
+ENV_FILE="${QOC_ARCHIVE_ENV_FILE:-$V2_DIR/archive.env}"
+if [[ -f "$ENV_FILE" ]]; then
+    set -a
+    # Local, user-maintained shell assignments. Never add this file to the archive.
+    source "$ENV_FILE"
+    set +a
 fi
-
-echo "================================================================="
-echo "=== [2/4] Creazione pacchetto ZIP (Run + Sorgenti puliti) ==="
-echo "================================================================="
-# Trova la cartella della run appena completata
-LATEST_RUN=$(ls -td "$V2_DIR"/results/* | head -1)
-if [ -z "$LATEST_RUN" ] || [ ! -d "$LATEST_RUN" ]; then
-    echo "❌ ERRORE: Cartella dei risultati non trovata in $V2_DIR/results/"
-    exit 1
-fi
-
-RUN_NAME=$(basename "$LATEST_RUN")
-ZIP_NAME="${RUN_NAME}_bundle.zip"
-ZIP_PATH="/root/${ZIP_NAME}"
-
-# Rimuovi eventuale zip precedente con stesso nome
-rm -f "$ZIP_PATH"
-
-# Zippa la run dei risultati E l'intero codice sorgente v2 (escludendo .venv, git e cache per non superare il limite mail)
-echo "Compressione in corso escludendo ambienti virtuali e file temporanei..."
-cd "$REPO_DIR" || exit 1
-zip -r "$ZIP_PATH" \
-    "v2/results/$RUN_NAME" \
-    "v2/qoc" \
-    "v2/configs" \
-    "v2/run_simulation.py" \
-    "v2/analyze_run.py" \
-    "v2/configurazione.jsonc" \
-    -x "*/.venv/*" "*__pycache__/*" "*.pyc"
-
-ZIP_SIZE_MB=$(du -m "$ZIP_PATH" | cut -f1)
-echo "Archivio creato: $ZIP_PATH (Dimensione: ~${ZIP_SIZE_MB} MB)"
-
-echo "================================================================="
-echo "=== [3/4] Invio risultati via Email ==="
-echo "================================================================="
-cd "$V2_DIR" || exit 1
-
-SUBJECT="🚀 Simulazione Completata: ${RUN_NAME}"
-BODY="Ciao,
-
-La simulazione v2 su Hetzner Cloud e' terminata con successo!
-
-- Run: ${RUN_NAME}
-- Data di fine: $(date)
-- Archivio allegato: ${ZIP_NAME} (~${ZIP_SIZE_MB} MB)
-
-L'archivio contiene tutti i grafici (dynamics, wigner), i report interattivi html, i dati numerici e il codice sorgente associato.
-
-Saluti,
-Stage Twoqubits Automation"
-
-python send_results_email.py \
-    --to "$EMAIL_TO" \
-    --from-email "$SMTP_USER" \
-    --password "$SMTP_PASSWORD" \
-    --host "$SMTP_HOST" \
-    --port "$SMTP_PORT" \
-    --subject "$SUBJECT" \
-    --body "$BODY" \
-    --file "$ZIP_PATH"
-
-EMAIL_EXIT=$?
-
-# Invio opzionale notifica su Discord se configurato
-if [ -n "$DISCORD_WEBHOOK" ]; then
-    if [ "$ZIP_SIZE_MB" -lt 10 ]; then
-        curl -s -F "file=@$ZIP_PATH" \
-             -F "content=🚀 **Simulazione completata con successo:** \`$RUN_NAME\`" \
-             "$DISCORD_WEBHOOK"
-    else
-        curl -s -F "content=🚀 **Simulazione completata!** Archivio spedito via email (file > 10MB per Discord)." \
-             "$DISCORD_WEBHOOK"
-    fi
-fi
-
-echo "================================================================="
-echo "=== [4/4] Verifica invio e gestione ciclo di vita del server ==="
-echo "================================================================="
-if [ $EMAIL_EXIT -eq 0 ]; then
-    echo "✅ Email inviata e confermata con successo!"
-    echo "Procedo con l'auto-distruzione del server Hetzner per azzerare i costi..."
-    
-    SERVER_ID=$(curl -s http://169.254.169.254/hetzner/v1/metadata/instance-id)
-    if [ -n "$SERVER_ID" ] && [ "$HCLOUD_TOKEN" != "<TUO_API_TOKEN_HETZNER>" ]; then
-        curl -s -X DELETE \
-             -H "Authorization: Bearer $HCLOUD_TOKEN" \
-             "https://api.hetzner.cloud/v1/servers/$SERVER_ID"
-        echo "Richiesta di cancellazione server inviata."
-    else
-        echo "⚠️ Impossibile ricavare SERVER_ID o Token mancante. Eseguo arresto di sicurezza (poweroff)..."
-        poweroff
-    fi
+if [[ -n "${QOC_PYTHON:-}" ]]; then
+    PYTHON_BIN="$QOC_PYTHON"
+elif [[ -x "/root/stage_env/bin/python" ]]; then
+    PYTHON_BIN="/root/stage_env/bin/python"
+elif [[ -x "$HOME/stage_env/bin/python" ]]; then
+    PYTHON_BIN="$HOME/stage_env/bin/python"
+elif [[ -x "$V2_DIR/.venv/bin/python" ]]; then
+    PYTHON_BIN="$V2_DIR/.venv/bin/python"
+elif [[ -x "$V2_DIR/../.venv/bin/python" ]]; then
+    PYTHON_BIN="$V2_DIR/../.venv/bin/python"
 else
-    echo "❌ ATTENZIONE CRITICA: L'invio dell'email e' FALLITO (codice $EMAIL_EXIT)!"
-    echo "Per salvaguardare i tuoi dati, IL SERVER NON VIENE CANCELLATO."
-    echo "Eseguo spegnimento della macchina (poweroff) per fermare l'uso della CPU."
-    echo "Potrai riaccendere la macchina dalla console Hetzner e scaricare i file con SCP."
-    poweroff
+    PYTHON_BIN="python3"
 fi
+MODE="${QOC_RUN_MODE:-campaign}"
+CONFIG="${QOC_CONFIG:-$V2_DIR/configurazione_campagna.jsonc}"
+DELETE_SERVER_AFTER_DELIVERY="${DELETE_SERVER_AFTER_DELIVERY:-false}"
+case "$DELETE_SERVER_AFTER_DELIVERY" in true|false) ;; *) echo 'DELETE_SERVER_AFTER_DELIVERY must be true or false' >&2; exit 1;; esac
+if [[ "$DELETE_SERVER_AFTER_DELIVERY" == true ]]; then
+    : "${HCLOUD_TOKEN:?Set HCLOUD_TOKEN for optional server deletion}"
+fi
+mkdir -p "$V2_DIR/exports"
+RECEIPT="$(mktemp "$V2_DIR/exports/delivery.XXXXXXXX.json")"
+args=(--mode "$MODE" --receipt "$RECEIPT")
+if [[ -n "${QOC_RESUME:-}" ]]; then
+    args+=(--resume "$QOC_RESUME")
+else
+    args+=(--config "$CONFIG")
+fi
+if [[ "${QOC_NO_PLOTS:-false}" == true ]]; then args+=(--no-plots); fi
+if ! "$PYTHON_BIN" -u "$V2_DIR/run_and_archive.py" "${args[@]}"; then
+    echo 'Simulazione/archiviazione/email non completata. Server e risultati conservati.' >&2
+    echo 'Per una run già completa, riprovare publish_results.py --run <cartella>.' >&2
+    exit 1
+fi
+"$PYTHON_BIN" "$V2_DIR/publish_results.py" --check-cleanup "$RECEIPT"
+if [[ "$DELETE_SERVER_AFTER_DELIVERY" != true ]]; then
+    echo "Backup verificato ed email accettata. Server conservato; ricevuta: $RECEIPT"
+    exit 0
+fi
+# Only reached after this invocation's verified full backup AND accepted email.
+SERVER_ID="$(curl --fail --silent --show-error --max-time 10 http://169.254.169.254/hetzner/v1/metadata/instance-id)"
+if [[ ! "$SERVER_ID" =~ ^[0-9]+$ ]]; then
+    echo 'SERVER_ID non valido: cancellazione annullata.' >&2
+    exit 1
+fi
+curl --fail --silent --show-error --max-time 60 --request DELETE \
+    --header "Authorization: Bearer $HCLOUD_TOKEN" \
+    "https://api.hetzner.cloud/v1/servers/$SERVER_ID" > /dev/null
+printf '%s\n' 'Richiesta di cancellazione del server accettata dopo backup verificato ed email.'

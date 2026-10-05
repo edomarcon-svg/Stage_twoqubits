@@ -59,6 +59,14 @@ def continuous_evolution(model, signal, nodes, times, atol=1e-10, rtol=1e-10, ma
     return np.array([x.full().ravel() for x in result.states])
 
 
+def fidelity_loss(probability, opt):
+    """Smooth root loss with exact chain rule; P is always reported untransformed."""
+    if opt.objective == "root":
+        root = np.sqrt(max(0., probability) + opt.root_epsilon)
+        return opt.objective_scale * (np.sqrt(1 + opt.root_epsilon) - root), -opt.objective_scale / (2 * root)
+    return opt.objective_scale * (1 - probability), -opt.objective_scale
+
+
 class Objective:
     def __init__(self, model, signal, cfg):
         self.model = model
@@ -83,12 +91,14 @@ class Objective:
         u = self.cfg.control
         # Time-averaged square modulation and slew, summed over PHYSICAL channels.
         penalty = u.fluence_weight*np.mean(np.sum(physical**2,axis=0)) + u.slew_weight*np.mean(np.sum(rates**2,axis=0))
-        cost = 1-probability+penalty
+        loss, slope = fidelity_loss(probability, self.cfg.optimization)
+        cost = loss + self.cfg.optimization.objective_scale * penalty
+        self.last_probability = probability
         if not gradient:
             return float(cost), probability, state
-        grad_nodes = -out[2] @ self.transfer
-        grad_nodes += 2*u.fluence_weight/self.cfg.intervals * (self.model.physical_map.T @ physical) @ self.transfer
-        grad_nodes += 2*u.slew_weight/self.cfg.intervals * (self.model.physical_map.T @ rates) @ self.derivative_transfer
+        grad_nodes = slope * out[2] @ self.transfer
+        grad_nodes += 2*self.cfg.optimization.objective_scale*u.fluence_weight/self.cfg.intervals * (self.model.physical_map.T @ physical) @ self.transfer
+        grad_nodes += 2*self.cfg.optimization.objective_scale*u.slew_weight/self.cfg.intervals * (self.model.physical_map.T @ rates) @ self.derivative_transfer
         return float(cost), grad_nodes[:,1:-1].ravel()
 
     def __call__(self, flat):

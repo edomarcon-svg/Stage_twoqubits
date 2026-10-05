@@ -27,7 +27,7 @@ def config_digest(cfg):
 
 
 def source_hashes():
-    paths = list((ROOT/"qoc").glob("*.py")) + list(ROOT.glob("*.py")) + [ROOT/"requirements.txt",ROOT/"requirements-tested.txt",ROOT/"pyproject.toml"]
+    paths = list((ROOT/"qoc").glob("*.py")) + list(ROOT.glob("*.py")) + [ROOT/"requirements.txt",ROOT/"requirements-tested.txt",ROOT/"requirements-archive.txt",ROOT/"pyproject.toml"]
     return {str(p.relative_to(ROOT)):hashlib.sha256(p.read_bytes()).hexdigest() for p in sorted(paths) if p.is_file()}
 
 
