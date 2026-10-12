@@ -1,0 +1,272 @@
+// Campagna proposta: 320 pipeline principali + 16 pipeline di collaudo.
+// Avvio dalla radice del progetto:
+// .venv/bin/python v2/run_campaign.py --config v2/configurazione_campagna.jsonc
+// Prima si può eseguire --validate-config oppure --pilot-only.
+// Il collaudo confronta 4 profili su 2 sistemi e 2 seed riservati.
+// Seleziona UN profilo comune a tutti i casi, senza usare i seed principali.
+// Se nessun profilo produce progressi validati in entrambi i sistemi, si ferma
+// con stato pilot_failed prima delle 320 pipeline: consultare pilot_selection.json.
+// La scelta è empirica sul collaudo, non una garanzia di ottimo globale.
+// Limiti di frequenza totale [0.5,3]; cutoff=3 è un polo, non una banda rigida.
+// null nel blocco senza filtro significa controllo lineare senza risposta hardware.
+// Cat/squeezed sono disponibili nel terzo blocco, disattivato (aggiunge 160 pipeline).
+// warm_starts è opzionale: mantenere separato dalle statistiche casuali.
+// Il tempo di hold è espresso in unità fisiche, qui 2*tau_s(g_ref=0.3).
+{
+  "name": "campagna_fock_completa",
+  "base": {
+    "name": "fock_campaign_base",
+    "dimension": 60,
+    "intervals": 2000,
+    "cases": [
+      {
+        "name": "1q",
+        "couplings": [
+          0.3
+        ],
+        "qubit_frequencies": [
+          2.0
+        ],
+        "control": "independent"
+      },
+      {
+        "name": "2q_common",
+        "couplings": [
+          0.3,
+          0.3
+        ],
+        "qubit_frequencies": [
+          2.0,
+          2.0
+        ],
+        "control": "common"
+      },
+      {
+        "name": "2q_independent",
+        "couplings": [
+          0.3,
+          0.3
+        ],
+        "qubit_frequencies": [
+          2.0,
+          2.0
+        ],
+        "control": "independent"
+      },
+      {
+        "name": "2q_normalized_common",
+        "couplings": [
+          0.21213203435596423,
+          0.21213203435596423
+        ],
+        "qubit_frequencies": [
+          2.0,
+          2.0
+        ],
+        "control": "common"
+      },
+      {
+        "name": "2q_normalized_independent",
+        "couplings": [
+          0.21213203435596423,
+          0.21213203435596423
+        ],
+        "qubit_frequencies": [
+          2.0,
+          2.0
+        ],
+        "control": "independent"
+      }
+    ],
+    "target": {
+      "kind": "fock",
+      "value": 10
+    },
+    "control": {
+      "nodes": 201,
+      "filter_cutoff": 3.0,
+      "total_frequency_bounds": [
+        0.5,
+        3.0
+      ],
+      "max_slew": null,
+      "fluence_weight": 0.0,
+      "slew_weight": 0.0
+    },
+    "optimization": {
+      "seeds": [
+        0,
+        1,
+        2,
+        3,
+        4,
+        5,
+        6,
+        7
+      ],
+      "frequencies": 20,
+      "frequency_range": [
+        0.05,
+        3.0
+      ],
+      "crab_max_evaluations": 6000,
+      "grape_max_iterations": 600,
+      "grape_max_evaluations": 6000,
+      "refine_top": null,
+      "workers": 8,
+      "blas_threads": 1,
+      "ftol": 1e-14,
+      "gtol": 1e-10,
+      "objective": "root",
+      "objective_scale": 1.0,
+      "root_epsilon": 1e-12,
+      "crab_initial_std": 0.3,
+      "warm_starts": []
+    },
+    "validation": {
+      "dimension_increment": 20,
+      "trajectory_points": 601,
+      "atol": 1e-12,
+      "rtol": 1e-12,
+      "fidelity_tolerance": 0.0001,
+      "truncation_tolerance": 1e-05,
+      "edge_tolerance": 1e-05,
+      "edge_levels": 5,
+      "hold_time": 10.471975511965978,
+      "phase_grid_points": 161,
+      "hold_points": 401,
+      "spectral_threshold": 3.0
+    },
+    "factor_taus": 20,
+    "tau_s_coupling": 0.3,
+    "initial_state": "bare",
+    "parity_reduction": true,
+    "target_probability_goal": 0.99
+  },
+  "pilot": {
+    "enabled": true,
+    "cases": [
+      "1q",
+      "2q_normalized_independent"
+    ],
+    "target": {
+      "kind": "fock",
+      "value": 10
+    },
+    "factor_taus": 20,
+    "filter_cutoff": 3.0,
+    "seeds": [
+      100,
+      101
+    ],
+    "profiles": [
+      {
+        "name": "probability_std0.1",
+        "optimization": {
+          "objective": "probability",
+          "crab_initial_std": 0.1,
+          "ftol": 1e-14,
+          "gtol": 1e-10
+        }
+      },
+      {
+        "name": "probability_std0.3",
+        "optimization": {
+          "objective": "probability",
+          "crab_initial_std": 0.3,
+          "ftol": 1e-14,
+          "gtol": 1e-10
+        }
+      },
+      {
+        "name": "root_std0.1",
+        "optimization": {
+          "objective": "root",
+          "crab_initial_std": 0.1,
+          "ftol": 1e-14,
+          "gtol": 1e-10
+        }
+      },
+      {
+        "name": "root_std0.3",
+        "optimization": {
+          "objective": "root",
+          "crab_initial_std": 0.3,
+          "ftol": 1e-14,
+          "gtol": 1e-10
+        }
+      }
+    ],
+    "budgets": {
+      "crab_max_evaluations": 1200,
+      "grape_max_iterations": 80,
+      "grape_max_evaluations": 800
+    },
+    "minimum_probability_gain": 1e-06
+  },
+  "blocks": [
+    {
+      "name": "fock_filtered",
+      "targets": [
+        {
+          "kind": "fock",
+          "value": 2
+        },
+        {
+          "kind": "fock",
+          "value": 6
+        },
+        {
+          "kind": "fock",
+          "value": 10
+        }
+      ],
+      "factors_taus": [
+        10,
+        20
+      ],
+      "cutoffs": [
+        3.0
+      ]
+    },
+    {
+      "name": "fock10_without_filter",
+      "targets": [
+        {
+          "kind": "fock",
+          "value": 10
+        }
+      ],
+      "factors_taus": [
+        10,
+        20
+      ],
+      "cutoffs": [
+        null
+      ]
+    },
+    {
+      "name": "optional_cat_squeezed",
+      "enabled": false,
+      "targets": [
+        {
+          "kind": "cat",
+          "value": 2
+        },
+        {
+          "kind": "squeezed",
+          "value": 3,
+          "squeezing_unit": "dB",
+          "theta": 0.7853981633974483
+        }
+      ],
+      "factors_taus": [
+        10,
+        20
+      ],
+      "cutoffs": [
+        3.0
+      ]
+    }
+  ]
+}

@@ -1,0 +1,76 @@
+{
+  "name": "smoke",
+  "dimension": 14,
+  "duration": 3.0,
+  "intervals": 80,
+  "cases": [
+    {
+      "name": "1q",
+      "couplings": [
+        0.3
+      ],
+      "qubit_frequencies": [
+        2.0
+      ],
+      "control": "independent"
+    },
+    {
+      "name": "2q_common",
+      "couplings": [
+        0.3,
+        0.3
+      ],
+      "qubit_frequencies": [
+        2.0,
+        2.0
+      ],
+      "control": "common"
+    },
+    {
+      "name": "2q_independent",
+      "couplings": [
+        0.3,
+        0.3
+      ],
+      "qubit_frequencies": [
+        2.0,
+        2.0
+      ],
+      "control": "independent"
+    }
+  ],
+  "target": {
+    "kind": "fock",
+    "value": 2
+  },
+  "control": {
+    "nodes": 9,
+    "filter_cutoff": 3.0,
+    "total_frequency_bounds": [
+      0.5,
+      3.0
+    ]
+  },
+  "optimization": {
+    "seeds": [
+      0,
+      1
+    ],
+    "frequencies": 2,
+    "crab_max_evaluations": 40,
+    "grape_max_iterations": 8,
+    "grape_max_evaluations": 20,
+    "workers": 1,
+    "blas_threads": 1
+  },
+  "validation": {
+    "dimension_increment": 6,
+    "trajectory_points": 81,
+    "phase_grid_points": 61,
+    "edge_levels": 2,
+    "fidelity_tolerance": 0.002,
+    "truncation_tolerance": 0.0001,
+    "edge_tolerance": 0.0001,
+    "hold_time": 0.5
+  }
+}
