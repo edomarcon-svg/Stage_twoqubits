@@ -1,0 +1,42 @@
+<!doctype html><html lang='it'><meta charset='utf-8'><title>Simulazioni v2</title><style>body{font:16px system-ui;max-width:1200px;margin:30px auto;padding:20px;color:#172033}table{border-collapse:collapse;width:100%;font-size:14px}td,th{padding:8px;border:1px solid #ccc}th{background:#eef3fa}img{max-width:100%;height:auto}a{color:#165aa7}</style><body><h1>Risultati v2</h1><p>Propagazione continua indipendente. P = probabilità target; F = √P.</p>
+<p>Durata fisica T = 104.7197551. T = 20 × tau_s; tau_s = pi/(2*g_ref) = 5.235987756, g_ref = 0.3.</p>
+<p>Validazione numerica, raggiungimento del target e convergenza dell'ottimizzatore sono criteri distinti. Nessun risultato implica da solo un quantum speed limit.</p>
+<p><a href='summary.csv'>Tabella CSV</a> · <a href='config.json'>Configurazione</a> · <a href='provenance.json'>Provenienza</a></p>
+<table><tr><th>case</th><th>seed</th><th>cohort</th><th>P_target</th><th>F_root</th><th>purezza</th><th>validato</th><th>obiettivo_raggiunto</th><th>fluence_modulazione</th><th>banda99_peggiore</th><th>potenza_sopra_soglia</th><th>P_iniziale</th><th>P_CRAB</th><th>guadagno_GRAPE</th><th>iterazioni_GRAPE</th><th>gradiente_proiettato_iniziale</th><th>gradiente_proiettato_finale</th><th>max_fotoni</th><th>P_hold_min</th></tr>
+<tr><td>1q</td><td>100</td><td>random</td><td>0.999361</td><td>0.999681</td><td>0.999353</td><td>True</td><td>True</td><td>50.2419</td><td>4.68</td><td>0.171338</td><td>1.5335e-06</td><td>1.54502e-05</td><td>0.999343</td><td>80</td><td>0.00261353</td><td>0.000399289</td><td>10.0039</td><td>0.0621667</td></tr>
+<tr><td>1q</td><td>101</td><td>random</td><td>0.999318</td><td>0.999659</td><td>0.999275</td><td>True</td><td>True</td><td>49.8845</td><td>4.68</td><td>0.218156</td><td>1.55554e-07</td><td>3.99737e-06</td><td>0.999321</td><td>80</td><td>0.00131208</td><td>0.000568084</td><td>10.0061</td><td>0.0615547</td></tr>
+<tr><td>2q_normalized_independent</td><td>100</td><td>random</td><td>0.997861</td><td>0.99893</td><td>0.996809</td><td>True</td><td>True</td><td>105.492</td><td>4.8</td><td>0.18893</td><td>2.8478e-08</td><td>3.95836e-08</td><td>0.997808</td><td>80</td><td>0.000130204</td><td>0.00132878</td><td>10.0074</td><td>0.0701851</td></tr>
+<tr><td>2q_normalized_independent</td><td>101</td><td>random</td><td>0.999056</td><td>0.999528</td><td>0.998563</td><td>True</td><td>True</td><td>99.2376</td><td>4.68</td><td>0.119103</td><td>5.68053e-09</td><td>1.67095e-08</td><td>0.999061</td><td>80</td><td>0.000131665</td><td>0.000434202</td><td>10.0095</td><td>0.053268</td></tr>
+</table>
+<h2>1q</h2><p>Statistiche: {&quot;count&quot;: 2, &quot;probability_mean&quot;: 0.9993398506030495, &quot;probability_std_population&quot;: 2.1363468251489603e-05, &quot;probability_median&quot;: 0.9993398506030495, &quot;probability_min&quot;: 0.9993184871347981, &quot;probability_max&quot;: 0.9993612140713011, &quot;numerically_valid_count&quot;: 2, &quot;validated_goal_count&quot;: 2, &quot;validated_goal_fraction&quot;: 1.0, &quot;probability_q25&quot;: 0.9993291688689239, &quot;probability_q75&quot;: 0.9993505323371753, &quot;selection_bias_top_only&quot;: false}</p>
+<p>Probabilità target senza modulazione: 0.00000000.</p>
+<h3>Seed 100</h3><p>Controlli falliti: nessuno</p><a href='1q/seed_100/result.json'>Dettagli</a>
+<p>Maximum number of function evaluations has been exceeded.; STOP: TOTAL NO. OF ITERATIONS REACHED LIMIT</p>
+<a href='1q/seed_100/dynamics.png'><img src='1q/seed_100/dynamics.png' alt='dynamics'></a>
+<a href='1q/seed_100/wigner.png'><img src='1q/seed_100/wigner.png' alt='wigner'></a>
+<a href='1q/seed_100/optimization.png'><img src='1q/seed_100/optimization.png' alt='optimization'></a>
+<a href='1q/seed_100/actuator.png'><img src='1q/seed_100/actuator.png' alt='actuator'></a>
+<a href='1q/seed_100/populations.png'><img src='1q/seed_100/populations.png' alt='populations'></a>
+<h3>Seed 101</h3><p>Controlli falliti: nessuno</p><a href='1q/seed_101/result.json'>Dettagli</a>
+<p>Maximum number of function evaluations has been exceeded.; STOP: TOTAL NO. OF ITERATIONS REACHED LIMIT</p>
+<a href='1q/seed_101/dynamics.png'><img src='1q/seed_101/dynamics.png' alt='dynamics'></a>
+<a href='1q/seed_101/wigner.png'><img src='1q/seed_101/wigner.png' alt='wigner'></a>
+<a href='1q/seed_101/optimization.png'><img src='1q/seed_101/optimization.png' alt='optimization'></a>
+<a href='1q/seed_101/actuator.png'><img src='1q/seed_101/actuator.png' alt='actuator'></a>
+<a href='1q/seed_101/populations.png'><img src='1q/seed_101/populations.png' alt='populations'></a>
+<h2>2q_normalized_independent</h2><p>Statistiche: {&quot;count&quot;: 2, &quot;probability_mean&quot;: 0.9984586648691898, &quot;probability_std_population&quot;: 0.0005978034920757769, &quot;probability_median&quot;: 0.9984586648691898, &quot;probability_min&quot;: 0.9978608613771139, &quot;probability_max&quot;: 0.9990564683612655, &quot;numerically_valid_count&quot;: 2, &quot;validated_goal_count&quot;: 2, &quot;validated_goal_fraction&quot;: 1.0, &quot;probability_q25&quot;: 0.9981597631231518, &quot;probability_q75&quot;: 0.9987575666152276, &quot;selection_bias_top_only&quot;: false}</p>
+<p>Probabilità target senza modulazione: 0.00000000.</p>
+<h3>Seed 100</h3><p>Controlli falliti: nessuno</p><a href='2q_normalized_independent/seed_100/result.json'>Dettagli</a>
+<p>Maximum number of function evaluations has been exceeded.; STOP: TOTAL NO. OF ITERATIONS REACHED LIMIT</p>
+<a href='2q_normalized_independent/seed_100/dynamics.png'><img src='2q_normalized_independent/seed_100/dynamics.png' alt='dynamics'></a>
+<a href='2q_normalized_independent/seed_100/wigner.png'><img src='2q_normalized_independent/seed_100/wigner.png' alt='wigner'></a>
+<a href='2q_normalized_independent/seed_100/optimization.png'><img src='2q_normalized_independent/seed_100/optimization.png' alt='optimization'></a>
+<a href='2q_normalized_independent/seed_100/actuator.png'><img src='2q_normalized_independent/seed_100/actuator.png' alt='actuator'></a>
+<a href='2q_normalized_independent/seed_100/populations.png'><img src='2q_normalized_independent/seed_100/populations.png' alt='populations'></a>
+<h3>Seed 101</h3><p>Controlli falliti: nessuno</p><a href='2q_normalized_independent/seed_101/result.json'>Dettagli</a>
+<p>Maximum number of function evaluations has been exceeded.; STOP: TOTAL NO. OF ITERATIONS REACHED LIMIT</p>
+<a href='2q_normalized_independent/seed_101/dynamics.png'><img src='2q_normalized_independent/seed_101/dynamics.png' alt='dynamics'></a>
+<a href='2q_normalized_independent/seed_101/wigner.png'><img src='2q_normalized_independent/seed_101/wigner.png' alt='wigner'></a>
+<a href='2q_normalized_independent/seed_101/optimization.png'><img src='2q_normalized_independent/seed_101/optimization.png' alt='optimization'></a>
+<a href='2q_normalized_independent/seed_101/actuator.png'><img src='2q_normalized_independent/seed_101/actuator.png' alt='actuator'></a>
+<a href='2q_normalized_independent/seed_101/populations.png'><img src='2q_normalized_independent/seed_101/populations.png' alt='populations'></a></body></html>

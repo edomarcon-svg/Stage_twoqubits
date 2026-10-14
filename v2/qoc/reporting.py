@@ -15,7 +15,6 @@ from .controls import Signal
 def _save(fig, path):
     fig.tight_layout()
     fig.savefig(path.with_suffix(".png"),dpi=150)
-    fig.savefig(path.with_suffix(".pdf"))
     plt.close(fig)
 
 
@@ -53,7 +52,6 @@ def seed_figures(folder):
             ax.set(title=title,xlabel="x",ylabel="p",aspect="equal")
         fig.colorbar(im,ax=axs,label="W(x,p)")
         fig.savefig(folder/"wigner.png",dpi=150)
-        fig.savefig(folder/"wigner.pdf")
         plt.close(fig)
         fig,axs = plt.subplots(1,2,figsize=(10,4))
         axs[0].plot(data["crab_history"],label="CRAB")
@@ -181,6 +179,6 @@ def write_reports(root, make_figures=True):
             body.append(f"<p>{html.escape(item['crab']['message'])}; {html.escape(item['grape']['message'])}</p>")
             for figure in ["dynamics","wigner","optimization","actuator","populations"]:
                 if (root/item["folder"]/(figure+".png")).exists():
-                    body.append(f"<a href='{path}/{figure}.pdf'><img src='{path}/{figure}.png' alt='{figure}'></a>")
+                    body.append(f"<a href='{path}/{figure}.png'><img src='{path}/{figure}.png' alt='{figure}'></a>")
     document = "<!doctype html><html lang='it'><meta charset='utf-8'><title>Simulazioni v2</title><style>body{font:16px system-ui;max-width:1200px;margin:30px auto;padding:20px;color:#172033}table{border-collapse:collapse;width:100%;font-size:14px}td,th{padding:8px;border:1px solid #ccc}th{background:#eef3fa}img{max-width:100%;height:auto}a{color:#165aa7}</style><body>"+"\n".join(body)+"</body></html>"
     (root/"report.html").write_text(document,encoding="utf-8")

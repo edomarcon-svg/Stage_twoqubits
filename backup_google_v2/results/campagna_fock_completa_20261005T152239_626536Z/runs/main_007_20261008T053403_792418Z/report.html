@@ -1,0 +1,336 @@
+<!doctype html><html lang='it'><meta charset='utf-8'><title>Simulazioni v2</title><style>body{font:16px system-ui;max-width:1200px;margin:30px auto;padding:20px;color:#172033}table{border-collapse:collapse;width:100%;font-size:14px}td,th{padding:8px;border:1px solid #ccc}th{background:#eef3fa}img{max-width:100%;height:auto}a{color:#165aa7}</style><body><h1>Risultati v2</h1><p>Propagazione continua indipendente. P = probabilità target; F = √P.</p>
+<p>Durata fisica T = 104.7197551. T = 20 × tau_s; tau_s = pi/(2*g_ref) = 5.235987756, g_ref = 0.3.</p>
+<p>Validazione numerica, raggiungimento del target e convergenza dell'ottimizzatore sono criteri distinti. Nessun risultato implica da solo un quantum speed limit.</p>
+<p><a href='summary.csv'>Tabella CSV</a> · <a href='config.json'>Configurazione</a> · <a href='provenance.json'>Provenienza</a></p>
+<table><tr><th>case</th><th>seed</th><th>cohort</th><th>P_target</th><th>F_root</th><th>purezza</th><th>validato</th><th>obiettivo_raggiunto</th><th>fluence_modulazione</th><th>banda99_peggiore</th><th>potenza_sopra_soglia</th><th>P_iniziale</th><th>P_CRAB</th><th>guadagno_GRAPE</th><th>iterazioni_GRAPE</th><th>gradiente_proiettato_iniziale</th><th>gradiente_proiettato_finale</th><th>max_fotoni</th><th>P_hold_min</th></tr>
+<tr><td>1q</td><td>0</td><td>random</td><td>0.999996</td><td>0.999998</td><td>0.999998</td><td>True</td><td>True</td><td>44.0825</td><td>4.32</td><td>0.179649</td><td>0.000150902</td><td>0.0580181</td><td>0.941981</td><td>505</td><td>0.0355289</td><td>8.62074e-06</td><td>6.00446</td><td>0.254548</td></tr>
+<tr><td>1q</td><td>1</td><td>random</td><td>0.999997</td><td>0.999998</td><td>0.999997</td><td>True</td><td>True</td><td>43.0111</td><td>4.02</td><td>0.187735</td><td>7.37438e-05</td><td>0.00987224</td><td>0.990127</td><td>600</td><td>0.0167211</td><td>1.58336e-06</td><td>6.00361</td><td>0.26043</td></tr>
+<tr><td>1q</td><td>2</td><td>random</td><td>0.999997</td><td>0.999998</td><td>0.999999</td><td>True</td><td>True</td><td>40.5511</td><td>4.08</td><td>0.171827</td><td>8.04804e-05</td><td>0.0442215</td><td>0.955778</td><td>600</td><td>0.0322557</td><td>3.43647e-06</td><td>6.00361</td><td>0.260424</td></tr>
+<tr><td>1q</td><td>3</td><td>random</td><td>0.999996</td><td>0.999998</td><td>0.999998</td><td>True</td><td>True</td><td>43.2572</td><td>4.08</td><td>0.148307</td><td>6.38068e-05</td><td>0.0164895</td><td>0.98351</td><td>600</td><td>0.0337008</td><td>5.72538e-06</td><td>6.00333</td><td>0.261864</td></tr>
+<tr><td>1q</td><td>4</td><td>random</td><td>0.999997</td><td>0.999998</td><td>0.999999</td><td>True</td><td>True</td><td>36.3145</td><td>4.38</td><td>0.234198</td><td>1.81183e-05</td><td>0.0328326</td><td>0.967167</td><td>600</td><td>0.0283768</td><td>9.18558e-07</td><td>6.00356</td><td>0.261547</td></tr>
+<tr><td>1q</td><td>5</td><td>random</td><td>0.999996</td><td>0.999998</td><td>0.999999</td><td>True</td><td>True</td><td>43.2229</td><td>4.32</td><td>0.14634</td><td>0.000194104</td><td>0.0100663</td><td>0.989933</td><td>600</td><td>0.0220338</td><td>3.57357e-06</td><td>6.00353</td><td>0.260881</td></tr>
+<tr><td>1q</td><td>6</td><td>random</td><td>0.999996</td><td>0.999998</td><td>0.999997</td><td>True</td><td>True</td><td>39.0332</td><td>4.14</td><td>0.168862</td><td>2.70967e-05</td><td>0.00617288</td><td>0.993826</td><td>600</td><td>0.0162517</td><td>1.27137e-05</td><td>6.00313</td><td>0.262274</td></tr>
+<tr><td>1q</td><td>7</td><td>random</td><td>0.999996</td><td>0.999998</td><td>0.999997</td><td>True</td><td>True</td><td>36.3705</td><td>3.72</td><td>0.192055</td><td>5.71825e-05</td><td>0.0107772</td><td>0.989222</td><td>552</td><td>0.0206071</td><td>6.28628e-06</td><td>6.00343</td><td>0.260822</td></tr>
+<tr><td>2q_common</td><td>0</td><td>random</td><td>0.999998</td><td>0.999999</td><td>0.999998</td><td>True</td><td>True</td><td>50.9672</td><td>3.54</td><td>0.060995</td><td>0.0016504</td><td>0.207068</td><td>0.792931</td><td>600</td><td>0.0454508</td><td>6.3624e-06</td><td>6.00926</td><td>0.0272895</td></tr>
+<tr><td>2q_common</td><td>1</td><td>random</td><td>0.999998</td><td>0.999999</td><td>0.999998</td><td>True</td><td>True</td><td>44.0042</td><td>3.36</td><td>0.0651911</td><td>0.000476354</td><td>0.198288</td><td>0.801711</td><td>600</td><td>0.0659412</td><td>3.44062e-06</td><td>6.00311</td><td>0.0185557</td></tr>
+<tr><td>2q_common</td><td>2</td><td>random</td><td>0.999997</td><td>0.999998</td><td>0.999997</td><td>True</td><td>True</td><td>41.5405</td><td>3.96</td><td>0.0701187</td><td>0.00131486</td><td>0.200713</td><td>0.799286</td><td>600</td><td>0.0516701</td><td>4.53663e-06</td><td>6.00418</td><td>0.0205967</td></tr>
+<tr><td>2q_common</td><td>3</td><td>random</td><td>0.999997</td><td>0.999999</td><td>0.999997</td><td>True</td><td>True</td><td>57.9817</td><td>3.66</td><td>0.0481716</td><td>0.000839982</td><td>0.10674</td><td>0.893259</td><td>600</td><td>0.0544615</td><td>8.42472e-06</td><td>6.00403</td><td>0.0193287</td></tr>
+<tr><td>2q_common</td><td>4</td><td>random</td><td>0.999998</td><td>0.999999</td><td>0.999998</td><td>True</td><td>True</td><td>48.9985</td><td>3.54</td><td>0.0491392</td><td>0.000563565</td><td>0.171223</td><td>0.828776</td><td>600</td><td>0.0769594</td><td>7.55832e-06</td><td>6.00297</td><td>0.0195292</td></tr>
+<tr><td>2q_common</td><td>5</td><td>random</td><td>0.999998</td><td>0.999999</td><td>0.999998</td><td>True</td><td>True</td><td>42.9588</td><td>3.48</td><td>0.0414034</td><td>0.00113123</td><td>0.0689597</td><td>0.93104</td><td>600</td><td>0.0550143</td><td>5.37392e-06</td><td>6.00381</td><td>0.0159622</td></tr>
+<tr><td>2q_common</td><td>6</td><td>random</td><td>0.999996</td><td>0.999998</td><td>0.999996</td><td>True</td><td>True</td><td>65.8511</td><td>3.9</td><td>0.114334</td><td>0.000142873</td><td>0.018676</td><td>0.981323</td><td>600</td><td>0.0354574</td><td>1.90945e-05</td><td>6.06176</td><td>0.0361911</td></tr>
+<tr><td>2q_common</td><td>7</td><td>random</td><td>0.999997</td><td>0.999998</td><td>0.999998</td><td>True</td><td>True</td><td>53.1325</td><td>3.72</td><td>0.0695968</td><td>0.00166687</td><td>0.114148</td><td>0.88585</td><td>600</td><td>0.045501</td><td>2.15222e-05</td><td>6.00504</td><td>0.0249507</td></tr>
+<tr><td>2q_independent</td><td>0</td><td>random</td><td>0.999993</td><td>0.999996</td><td>0.999989</td><td>True</td><td>True</td><td>108.743</td><td>5.34</td><td>0.075839</td><td>0.000236707</td><td>0.00733408</td><td>0.992662</td><td>600</td><td>0.0240523</td><td>1.35151e-05</td><td>7.19196</td><td>0.0325806</td></tr>
+<tr><td>2q_independent</td><td>1</td><td>random</td><td>0.999996</td><td>0.999998</td><td>0.999995</td><td>True</td><td>True</td><td>38.9931</td><td>3.78</td><td>0.110185</td><td>0.000694532</td><td>0.00524877</td><td>0.994749</td><td>600</td><td>0.0218478</td><td>6.57326e-06</td><td>6.03267</td><td>0.020273</td></tr>
+<tr><td>2q_independent</td><td>2</td><td>random</td><td>0.999997</td><td>0.999999</td><td>0.999998</td><td>True</td><td>True</td><td>37.9162</td><td>3.84</td><td>0.143833</td><td>0.00034653</td><td>0.00708738</td><td>0.992912</td><td>600</td><td>0.0176734</td><td>5.39465e-06</td><td>6.00823</td><td>0.0211796</td></tr>
+<tr><td>2q_independent</td><td>3</td><td>random</td><td>0.999996</td><td>0.999998</td><td>0.999997</td><td>True</td><td>True</td><td>55.3003</td><td>3.84</td><td>0.109206</td><td>8.77238e-05</td><td>0.00180756</td><td>0.998191</td><td>600</td><td>0.0111459</td><td>8.63473e-06</td><td>6.0048</td><td>0.031097</td></tr>
+<tr><td>2q_independent</td><td>4</td><td>random</td><td>0.999996</td><td>0.999998</td><td>0.999996</td><td>True</td><td>True</td><td>109.992</td><td>3.6</td><td>0.0824768</td><td>3.71518e-05</td><td>0.00394567</td><td>0.996053</td><td>600</td><td>0.019598</td><td>4.8919e-06</td><td>6.00441</td><td>0.0240824</td></tr>
+<tr><td>2q_independent</td><td>5</td><td>random</td><td>0.999994</td><td>0.999997</td><td>0.999991</td><td>True</td><td>True</td><td>111.425</td><td>4.5</td><td>0.166169</td><td>0.000893413</td><td>0.0108607</td><td>0.989138</td><td>600</td><td>0.0242435</td><td>7.68146e-06</td><td>6.04126</td><td>0.0257834</td></tr>
+<tr><td>2q_independent</td><td>6</td><td>random</td><td>0.999997</td><td>0.999999</td><td>0.999997</td><td>True</td><td>True</td><td>37.7451</td><td>3.54</td><td>0.220501</td><td>0.000886664</td><td>0.0125396</td><td>0.98746</td><td>600</td><td>0.0223118</td><td>3.45076e-06</td><td>6.00751</td><td>0.0235669</td></tr>
+<tr><td>2q_independent</td><td>7</td><td>random</td><td>0.999998</td><td>0.999999</td><td>0.999998</td><td>True</td><td>True</td><td>36.2817</td><td>3.72</td><td>0.118875</td><td>5.02923e-05</td><td>0.00435074</td><td>0.995649</td><td>600</td><td>0.0246294</td><td>6.68659e-06</td><td>6.00633</td><td>0.0224444</td></tr>
+<tr><td>2q_normalized_common</td><td>0</td><td>random</td><td>0.999982</td><td>0.999991</td><td>0.999978</td><td>True</td><td>True</td><td>96.0972</td><td>4.86</td><td>0.206579</td><td>1.38674e-05</td><td>0.0265364</td><td>0.973448</td><td>444</td><td>0.037004</td><td>6.22773e-05</td><td>6.17761</td><td>0.281404</td></tr>
+<tr><td>2q_normalized_common</td><td>1</td><td>random</td><td>0.999989</td><td>0.999995</td><td>0.999987</td><td>True</td><td>True</td><td>90.7651</td><td>4.56</td><td>0.223362</td><td>1.59668e-05</td><td>0.00455725</td><td>0.995437</td><td>600</td><td>0.0187006</td><td>2.74759e-05</td><td>6.00323</td><td>0.279014</td></tr>
+<tr><td>2q_normalized_common</td><td>2</td><td>random</td><td>0.999992</td><td>0.999996</td><td>0.999991</td><td>True</td><td>True</td><td>85.8416</td><td>4.26</td><td>0.137054</td><td>7.59874e-06</td><td>0.0298676</td><td>0.970127</td><td>600</td><td>0.0289771</td><td>2.16983e-05</td><td>6.5822</td><td>0.271686</td></tr>
+<tr><td>2q_normalized_common</td><td>3</td><td>random</td><td>0.999992</td><td>0.999996</td><td>0.99999</td><td>True</td><td>True</td><td>108.063</td><td>4.26</td><td>0.159513</td><td>8.95637e-06</td><td>0.01271</td><td>0.987285</td><td>600</td><td>0.0306981</td><td>3.89717e-05</td><td>6.09374</td><td>0.268512</td></tr>
+<tr><td>2q_normalized_common</td><td>4</td><td>random</td><td>0.999983</td><td>0.999992</td><td>0.99998</td><td>True</td><td>True</td><td>108.686</td><td>5.16</td><td>0.176702</td><td>1.69686e-05</td><td>0.0363301</td><td>0.963656</td><td>600</td><td>0.0270581</td><td>3.79762e-05</td><td>6.82181</td><td>0.149314</td></tr>
+<tr><td>2q_normalized_common</td><td>5</td><td>random</td><td>0.999987</td><td>0.999993</td><td>0.999982</td><td>True</td><td>True</td><td>108.169</td><td>4.2</td><td>0.179297</td><td>1.44417e-06</td><td>0.00412138</td><td>0.995868</td><td>600</td><td>0.0212243</td><td>4.2781e-05</td><td>6.108</td><td>0.275091</td></tr>
+<tr><td>2q_normalized_common</td><td>6</td><td>random</td><td>0.999992</td><td>0.999996</td><td>0.999992</td><td>True</td><td>True</td><td>89.5458</td><td>4.26</td><td>0.187654</td><td>2.44365e-06</td><td>0.00162762</td><td>0.998368</td><td>600</td><td>0.011641</td><td>2.55281e-05</td><td>6.43393</td><td>0.259785</td></tr>
+<tr><td>2q_normalized_common</td><td>7</td><td>random</td><td>0.99999</td><td>0.999995</td><td>0.999987</td><td>True</td><td>True</td><td>83.8345</td><td>4.38</td><td>0.206113</td><td>7.09614e-06</td><td>0.00174459</td><td>0.998248</td><td>600</td><td>0.00958698</td><td>1.93714e-05</td><td>7.39912</td><td>0.109747</td></tr>
+<tr><td>2q_normalized_independent</td><td>0</td><td>random</td><td>0.999993</td><td>0.999996</td><td>0.999991</td><td>True</td><td>True</td><td>85.0282</td><td>4.32</td><td>0.156342</td><td>4.36865e-06</td><td>8.44107e-05</td><td>0.999913</td><td>600</td><td>0.00256458</td><td>1.03647e-05</td><td>6.00322</td><td>0.277777</td></tr>
+<tr><td>2q_normalized_independent</td><td>1</td><td>random</td><td>0.999994</td><td>0.999997</td><td>0.999993</td><td>True</td><td>True</td><td>76.1132</td><td>5.04</td><td>0.320777</td><td>3.07522e-07</td><td>3.47365e-05</td><td>0.999963</td><td>600</td><td>0.00178704</td><td>6.42854e-06</td><td>6.00334</td><td>0.269391</td></tr>
+<tr><td>2q_normalized_independent</td><td>2</td><td>random</td><td>0.999994</td><td>0.999997</td><td>0.999992</td><td>True</td><td>True</td><td>94.1404</td><td>4.2</td><td>0.124101</td><td>1.84408e-05</td><td>0.000359936</td><td>0.999637</td><td>600</td><td>0.004182</td><td>8.15569e-06</td><td>6.00396</td><td>0.272418</td></tr>
+<tr><td>2q_normalized_independent</td><td>3</td><td>random</td><td>0.999993</td><td>0.999996</td><td>0.999991</td><td>True</td><td>True</td><td>81.1448</td><td>4.14</td><td>0.190909</td><td>1.70871e-06</td><td>0.00012261</td><td>0.999874</td><td>600</td><td>0.00241519</td><td>7.26798e-06</td><td>6.00264</td><td>0.277656</td></tr>
+<tr><td>2q_normalized_independent</td><td>4</td><td>random</td><td>0.999989</td><td>0.999994</td><td>0.999983</td><td>True</td><td>True</td><td>104.916</td><td>4.44</td><td>0.176915</td><td>1.05661e-05</td><td>0.00011285</td><td>0.999879</td><td>600</td><td>0.00362212</td><td>1.41455e-05</td><td>6.00287</td><td>0.277715</td></tr>
+<tr><td>2q_normalized_independent</td><td>5</td><td>random</td><td>0.999991</td><td>0.999995</td><td>0.999987</td><td>True</td><td>True</td><td>86.0457</td><td>4.62</td><td>0.227372</td><td>1.68075e-06</td><td>0.000102621</td><td>0.999892</td><td>600</td><td>0.00409464</td><td>5.33027e-05</td><td>6.00307</td><td>0.283039</td></tr>
+<tr><td>2q_normalized_independent</td><td>6</td><td>random</td><td>0.999993</td><td>0.999997</td><td>0.99999</td><td>True</td><td>True</td><td>88.0331</td><td>4.44</td><td>0.215824</td><td>6.99127e-07</td><td>7.48433e-05</td><td>0.999922</td><td>600</td><td>0.0027963</td><td>1.60645e-05</td><td>6.0036</td><td>0.272488</td></tr>
+<tr><td>2q_normalized_independent</td><td>7</td><td>random</td><td>0.99999</td><td>0.999995</td><td>0.999988</td><td>True</td><td>True</td><td>71.3832</td><td>4.68</td><td>0.311851</td><td>6.45658e-07</td><td>3.73861e-05</td><td>0.999957</td><td>600</td><td>0.00220783</td><td>1.78427e-05</td><td>6.00384</td><td>0.265565</td></tr>
+</table>
+<h2>1q</h2><p>Statistiche: {&quot;count&quot;: 8, &quot;probability_mean&quot;: 0.9999962340341498, &quot;probability_std_population&quot;: 4.5789283901830465e-07, &quot;probability_median&quot;: 0.9999963450443385, &quot;probability_min&quot;: 0.9999955085413094, &quot;probability_max&quot;: 0.9999968402826119, &quot;numerically_valid_count&quot;: 8, &quot;validated_goal_count&quot;: 8, &quot;validated_goal_fraction&quot;: 1.0, &quot;probability_q25&quot;: 0.9999959780827036, &quot;probability_q75&quot;: 0.9999965463731129, &quot;selection_bias_top_only&quot;: false}</p>
+<p>Probabilità target senza modulazione: 0.00000200.</p>
+<h3>Seed 0</h3><p>Controlli falliti: nessuno</p><a href='1q/seed_0/result.json'>Dettagli</a>
+<p>Maximum number of function evaluations has been exceeded.; CONVERGENCE: RELATIVE REDUCTION OF F &lt;= FACTR*EPSMCH</p>
+<a href='1q/seed_0/dynamics.png'><img src='1q/seed_0/dynamics.png' alt='dynamics'></a>
+<a href='1q/seed_0/wigner.png'><img src='1q/seed_0/wigner.png' alt='wigner'></a>
+<a href='1q/seed_0/optimization.png'><img src='1q/seed_0/optimization.png' alt='optimization'></a>
+<a href='1q/seed_0/actuator.png'><img src='1q/seed_0/actuator.png' alt='actuator'></a>
+<a href='1q/seed_0/populations.png'><img src='1q/seed_0/populations.png' alt='populations'></a>
+<h3>Seed 1</h3><p>Controlli falliti: nessuno</p><a href='1q/seed_1/result.json'>Dettagli</a>
+<p>Maximum number of function evaluations has been exceeded.; STOP: TOTAL NO. OF ITERATIONS REACHED LIMIT</p>
+<a href='1q/seed_1/dynamics.png'><img src='1q/seed_1/dynamics.png' alt='dynamics'></a>
+<a href='1q/seed_1/wigner.png'><img src='1q/seed_1/wigner.png' alt='wigner'></a>
+<a href='1q/seed_1/optimization.png'><img src='1q/seed_1/optimization.png' alt='optimization'></a>
+<a href='1q/seed_1/actuator.png'><img src='1q/seed_1/actuator.png' alt='actuator'></a>
+<a href='1q/seed_1/populations.png'><img src='1q/seed_1/populations.png' alt='populations'></a>
+<h3>Seed 2</h3><p>Controlli falliti: nessuno</p><a href='1q/seed_2/result.json'>Dettagli</a>
+<p>Maximum number of function evaluations has been exceeded.; STOP: TOTAL NO. OF ITERATIONS REACHED LIMIT</p>
+<a href='1q/seed_2/dynamics.png'><img src='1q/seed_2/dynamics.png' alt='dynamics'></a>
+<a href='1q/seed_2/wigner.png'><img src='1q/seed_2/wigner.png' alt='wigner'></a>
+<a href='1q/seed_2/optimization.png'><img src='1q/seed_2/optimization.png' alt='optimization'></a>
+<a href='1q/seed_2/actuator.png'><img src='1q/seed_2/actuator.png' alt='actuator'></a>
+<a href='1q/seed_2/populations.png'><img src='1q/seed_2/populations.png' alt='populations'></a>
+<h3>Seed 3</h3><p>Controlli falliti: nessuno</p><a href='1q/seed_3/result.json'>Dettagli</a>
+<p>Maximum number of function evaluations has been exceeded.; STOP: TOTAL NO. OF ITERATIONS REACHED LIMIT</p>
+<a href='1q/seed_3/dynamics.png'><img src='1q/seed_3/dynamics.png' alt='dynamics'></a>
+<a href='1q/seed_3/wigner.png'><img src='1q/seed_3/wigner.png' alt='wigner'></a>
+<a href='1q/seed_3/optimization.png'><img src='1q/seed_3/optimization.png' alt='optimization'></a>
+<a href='1q/seed_3/actuator.png'><img src='1q/seed_3/actuator.png' alt='actuator'></a>
+<a href='1q/seed_3/populations.png'><img src='1q/seed_3/populations.png' alt='populations'></a>
+<h3>Seed 4</h3><p>Controlli falliti: nessuno</p><a href='1q/seed_4/result.json'>Dettagli</a>
+<p>Maximum number of function evaluations has been exceeded.; STOP: TOTAL NO. OF ITERATIONS REACHED LIMIT</p>
+<a href='1q/seed_4/dynamics.png'><img src='1q/seed_4/dynamics.png' alt='dynamics'></a>
+<a href='1q/seed_4/wigner.png'><img src='1q/seed_4/wigner.png' alt='wigner'></a>
+<a href='1q/seed_4/optimization.png'><img src='1q/seed_4/optimization.png' alt='optimization'></a>
+<a href='1q/seed_4/actuator.png'><img src='1q/seed_4/actuator.png' alt='actuator'></a>
+<a href='1q/seed_4/populations.png'><img src='1q/seed_4/populations.png' alt='populations'></a>
+<h3>Seed 5</h3><p>Controlli falliti: nessuno</p><a href='1q/seed_5/result.json'>Dettagli</a>
+<p>Maximum number of function evaluations has been exceeded.; STOP: TOTAL NO. OF ITERATIONS REACHED LIMIT</p>
+<a href='1q/seed_5/dynamics.png'><img src='1q/seed_5/dynamics.png' alt='dynamics'></a>
+<a href='1q/seed_5/wigner.png'><img src='1q/seed_5/wigner.png' alt='wigner'></a>
+<a href='1q/seed_5/optimization.png'><img src='1q/seed_5/optimization.png' alt='optimization'></a>
+<a href='1q/seed_5/actuator.png'><img src='1q/seed_5/actuator.png' alt='actuator'></a>
+<a href='1q/seed_5/populations.png'><img src='1q/seed_5/populations.png' alt='populations'></a>
+<h3>Seed 6</h3><p>Controlli falliti: nessuno</p><a href='1q/seed_6/result.json'>Dettagli</a>
+<p>Maximum number of function evaluations has been exceeded.; STOP: TOTAL NO. OF ITERATIONS REACHED LIMIT</p>
+<a href='1q/seed_6/dynamics.png'><img src='1q/seed_6/dynamics.png' alt='dynamics'></a>
+<a href='1q/seed_6/wigner.png'><img src='1q/seed_6/wigner.png' alt='wigner'></a>
+<a href='1q/seed_6/optimization.png'><img src='1q/seed_6/optimization.png' alt='optimization'></a>
+<a href='1q/seed_6/actuator.png'><img src='1q/seed_6/actuator.png' alt='actuator'></a>
+<a href='1q/seed_6/populations.png'><img src='1q/seed_6/populations.png' alt='populations'></a>
+<h3>Seed 7</h3><p>Controlli falliti: nessuno</p><a href='1q/seed_7/result.json'>Dettagli</a>
+<p>Maximum number of function evaluations has been exceeded.; CONVERGENCE: RELATIVE REDUCTION OF F &lt;= FACTR*EPSMCH</p>
+<a href='1q/seed_7/dynamics.png'><img src='1q/seed_7/dynamics.png' alt='dynamics'></a>
+<a href='1q/seed_7/wigner.png'><img src='1q/seed_7/wigner.png' alt='wigner'></a>
+<a href='1q/seed_7/optimization.png'><img src='1q/seed_7/optimization.png' alt='optimization'></a>
+<a href='1q/seed_7/actuator.png'><img src='1q/seed_7/actuator.png' alt='actuator'></a>
+<a href='1q/seed_7/populations.png'><img src='1q/seed_7/populations.png' alt='populations'></a>
+<h2>2q_common</h2><p>Statistiche: {&quot;count&quot;: 8, &quot;probability_mean&quot;: 0.999997214322042, &quot;probability_std_population&quot;: 7.43916483370577e-07, &quot;probability_median&quot;: 0.9999973359117973, &quot;probability_min&quot;: 0.999995717267359, &quot;probability_max&quot;: 0.9999979830574746, &quot;numerically_valid_count&quot;: 8, &quot;validated_goal_count&quot;: 8, &quot;validated_goal_fraction&quot;: 1.0, &quot;probability_q25&quot;: 0.9999967965196032, &quot;probability_q75&quot;: 0.9999979182731884, &quot;selection_bias_top_only&quot;: false}</p>
+<p>Probabilità target senza modulazione: 0.00003513.</p>
+<h3>Seed 0</h3><p>Controlli falliti: nessuno</p><a href='2q_common/seed_0/result.json'>Dettagli</a>
+<p>Maximum number of function evaluations has been exceeded.; STOP: TOTAL NO. OF ITERATIONS REACHED LIMIT</p>
+<a href='2q_common/seed_0/dynamics.png'><img src='2q_common/seed_0/dynamics.png' alt='dynamics'></a>
+<a href='2q_common/seed_0/wigner.png'><img src='2q_common/seed_0/wigner.png' alt='wigner'></a>
+<a href='2q_common/seed_0/optimization.png'><img src='2q_common/seed_0/optimization.png' alt='optimization'></a>
+<a href='2q_common/seed_0/actuator.png'><img src='2q_common/seed_0/actuator.png' alt='actuator'></a>
+<a href='2q_common/seed_0/populations.png'><img src='2q_common/seed_0/populations.png' alt='populations'></a>
+<h3>Seed 1</h3><p>Controlli falliti: nessuno</p><a href='2q_common/seed_1/result.json'>Dettagli</a>
+<p>Maximum number of function evaluations has been exceeded.; STOP: TOTAL NO. OF ITERATIONS REACHED LIMIT</p>
+<a href='2q_common/seed_1/dynamics.png'><img src='2q_common/seed_1/dynamics.png' alt='dynamics'></a>
+<a href='2q_common/seed_1/wigner.png'><img src='2q_common/seed_1/wigner.png' alt='wigner'></a>
+<a href='2q_common/seed_1/optimization.png'><img src='2q_common/seed_1/optimization.png' alt='optimization'></a>
+<a href='2q_common/seed_1/actuator.png'><img src='2q_common/seed_1/actuator.png' alt='actuator'></a>
+<a href='2q_common/seed_1/populations.png'><img src='2q_common/seed_1/populations.png' alt='populations'></a>
+<h3>Seed 2</h3><p>Controlli falliti: nessuno</p><a href='2q_common/seed_2/result.json'>Dettagli</a>
+<p>Maximum number of function evaluations has been exceeded.; STOP: TOTAL NO. OF ITERATIONS REACHED LIMIT</p>
+<a href='2q_common/seed_2/dynamics.png'><img src='2q_common/seed_2/dynamics.png' alt='dynamics'></a>
+<a href='2q_common/seed_2/wigner.png'><img src='2q_common/seed_2/wigner.png' alt='wigner'></a>
+<a href='2q_common/seed_2/optimization.png'><img src='2q_common/seed_2/optimization.png' alt='optimization'></a>
+<a href='2q_common/seed_2/actuator.png'><img src='2q_common/seed_2/actuator.png' alt='actuator'></a>
+<a href='2q_common/seed_2/populations.png'><img src='2q_common/seed_2/populations.png' alt='populations'></a>
+<h3>Seed 3</h3><p>Controlli falliti: nessuno</p><a href='2q_common/seed_3/result.json'>Dettagli</a>
+<p>Maximum number of function evaluations has been exceeded.; STOP: TOTAL NO. OF ITERATIONS REACHED LIMIT</p>
+<a href='2q_common/seed_3/dynamics.png'><img src='2q_common/seed_3/dynamics.png' alt='dynamics'></a>
+<a href='2q_common/seed_3/wigner.png'><img src='2q_common/seed_3/wigner.png' alt='wigner'></a>
+<a href='2q_common/seed_3/optimization.png'><img src='2q_common/seed_3/optimization.png' alt='optimization'></a>
+<a href='2q_common/seed_3/actuator.png'><img src='2q_common/seed_3/actuator.png' alt='actuator'></a>
+<a href='2q_common/seed_3/populations.png'><img src='2q_common/seed_3/populations.png' alt='populations'></a>
+<h3>Seed 4</h3><p>Controlli falliti: nessuno</p><a href='2q_common/seed_4/result.json'>Dettagli</a>
+<p>Maximum number of function evaluations has been exceeded.; STOP: TOTAL NO. OF ITERATIONS REACHED LIMIT</p>
+<a href='2q_common/seed_4/dynamics.png'><img src='2q_common/seed_4/dynamics.png' alt='dynamics'></a>
+<a href='2q_common/seed_4/wigner.png'><img src='2q_common/seed_4/wigner.png' alt='wigner'></a>
+<a href='2q_common/seed_4/optimization.png'><img src='2q_common/seed_4/optimization.png' alt='optimization'></a>
+<a href='2q_common/seed_4/actuator.png'><img src='2q_common/seed_4/actuator.png' alt='actuator'></a>
+<a href='2q_common/seed_4/populations.png'><img src='2q_common/seed_4/populations.png' alt='populations'></a>
+<h3>Seed 5</h3><p>Controlli falliti: nessuno</p><a href='2q_common/seed_5/result.json'>Dettagli</a>
+<p>Maximum number of function evaluations has been exceeded.; STOP: TOTAL NO. OF ITERATIONS REACHED LIMIT</p>
+<a href='2q_common/seed_5/dynamics.png'><img src='2q_common/seed_5/dynamics.png' alt='dynamics'></a>
+<a href='2q_common/seed_5/wigner.png'><img src='2q_common/seed_5/wigner.png' alt='wigner'></a>
+<a href='2q_common/seed_5/optimization.png'><img src='2q_common/seed_5/optimization.png' alt='optimization'></a>
+<a href='2q_common/seed_5/actuator.png'><img src='2q_common/seed_5/actuator.png' alt='actuator'></a>
+<a href='2q_common/seed_5/populations.png'><img src='2q_common/seed_5/populations.png' alt='populations'></a>
+<h3>Seed 6</h3><p>Controlli falliti: nessuno</p><a href='2q_common/seed_6/result.json'>Dettagli</a>
+<p>Maximum number of function evaluations has been exceeded.; STOP: TOTAL NO. OF ITERATIONS REACHED LIMIT</p>
+<a href='2q_common/seed_6/dynamics.png'><img src='2q_common/seed_6/dynamics.png' alt='dynamics'></a>
+<a href='2q_common/seed_6/wigner.png'><img src='2q_common/seed_6/wigner.png' alt='wigner'></a>
+<a href='2q_common/seed_6/optimization.png'><img src='2q_common/seed_6/optimization.png' alt='optimization'></a>
+<a href='2q_common/seed_6/actuator.png'><img src='2q_common/seed_6/actuator.png' alt='actuator'></a>
+<a href='2q_common/seed_6/populations.png'><img src='2q_common/seed_6/populations.png' alt='populations'></a>
+<h3>Seed 7</h3><p>Controlli falliti: nessuno</p><a href='2q_common/seed_7/result.json'>Dettagli</a>
+<p>Maximum number of function evaluations has been exceeded.; STOP: TOTAL NO. OF ITERATIONS REACHED LIMIT</p>
+<a href='2q_common/seed_7/dynamics.png'><img src='2q_common/seed_7/dynamics.png' alt='dynamics'></a>
+<a href='2q_common/seed_7/wigner.png'><img src='2q_common/seed_7/wigner.png' alt='wigner'></a>
+<a href='2q_common/seed_7/optimization.png'><img src='2q_common/seed_7/optimization.png' alt='optimization'></a>
+<a href='2q_common/seed_7/actuator.png'><img src='2q_common/seed_7/actuator.png' alt='actuator'></a>
+<a href='2q_common/seed_7/populations.png'><img src='2q_common/seed_7/populations.png' alt='populations'></a>
+<h2>2q_independent</h2><p>Statistiche: {&quot;count&quot;: 8, &quot;probability_mean&quot;: 0.9999959511188277, &quot;probability_std_population&quot;: 1.5179800309034914e-06, &quot;probability_median&quot;: 0.9999961852022439, &quot;probability_min&quot;: 0.999992954724984, &quot;probability_max&quot;: 0.9999976915542179, &quot;numerically_valid_count&quot;: 8, &quot;validated_goal_count&quot;: 8, &quot;validated_goal_fraction&quot;: 1.0, &quot;probability_q25&quot;: 0.999995488997645, &quot;probability_q75&quot;: 0.9999971423090839, &quot;selection_bias_top_only&quot;: false}</p>
+<p>Probabilità target senza modulazione: 0.00003513.</p>
+<h3>Seed 0</h3><p>Controlli falliti: nessuno</p><a href='2q_independent/seed_0/result.json'>Dettagli</a>
+<p>Maximum number of function evaluations has been exceeded.; STOP: TOTAL NO. OF ITERATIONS REACHED LIMIT</p>
+<a href='2q_independent/seed_0/dynamics.png'><img src='2q_independent/seed_0/dynamics.png' alt='dynamics'></a>
+<a href='2q_independent/seed_0/wigner.png'><img src='2q_independent/seed_0/wigner.png' alt='wigner'></a>
+<a href='2q_independent/seed_0/optimization.png'><img src='2q_independent/seed_0/optimization.png' alt='optimization'></a>
+<a href='2q_independent/seed_0/actuator.png'><img src='2q_independent/seed_0/actuator.png' alt='actuator'></a>
+<a href='2q_independent/seed_0/populations.png'><img src='2q_independent/seed_0/populations.png' alt='populations'></a>
+<h3>Seed 1</h3><p>Controlli falliti: nessuno</p><a href='2q_independent/seed_1/result.json'>Dettagli</a>
+<p>Maximum number of function evaluations has been exceeded.; STOP: TOTAL NO. OF ITERATIONS REACHED LIMIT</p>
+<a href='2q_independent/seed_1/dynamics.png'><img src='2q_independent/seed_1/dynamics.png' alt='dynamics'></a>
+<a href='2q_independent/seed_1/wigner.png'><img src='2q_independent/seed_1/wigner.png' alt='wigner'></a>
+<a href='2q_independent/seed_1/optimization.png'><img src='2q_independent/seed_1/optimization.png' alt='optimization'></a>
+<a href='2q_independent/seed_1/actuator.png'><img src='2q_independent/seed_1/actuator.png' alt='actuator'></a>
+<a href='2q_independent/seed_1/populations.png'><img src='2q_independent/seed_1/populations.png' alt='populations'></a>
+<h3>Seed 2</h3><p>Controlli falliti: nessuno</p><a href='2q_independent/seed_2/result.json'>Dettagli</a>
+<p>Maximum number of function evaluations has been exceeded.; STOP: TOTAL NO. OF ITERATIONS REACHED LIMIT</p>
+<a href='2q_independent/seed_2/dynamics.png'><img src='2q_independent/seed_2/dynamics.png' alt='dynamics'></a>
+<a href='2q_independent/seed_2/wigner.png'><img src='2q_independent/seed_2/wigner.png' alt='wigner'></a>
+<a href='2q_independent/seed_2/optimization.png'><img src='2q_independent/seed_2/optimization.png' alt='optimization'></a>
+<a href='2q_independent/seed_2/actuator.png'><img src='2q_independent/seed_2/actuator.png' alt='actuator'></a>
+<a href='2q_independent/seed_2/populations.png'><img src='2q_independent/seed_2/populations.png' alt='populations'></a>
+<h3>Seed 3</h3><p>Controlli falliti: nessuno</p><a href='2q_independent/seed_3/result.json'>Dettagli</a>
+<p>Maximum number of function evaluations has been exceeded.; STOP: TOTAL NO. OF ITERATIONS REACHED LIMIT</p>
+<a href='2q_independent/seed_3/dynamics.png'><img src='2q_independent/seed_3/dynamics.png' alt='dynamics'></a>
+<a href='2q_independent/seed_3/wigner.png'><img src='2q_independent/seed_3/wigner.png' alt='wigner'></a>
+<a href='2q_independent/seed_3/optimization.png'><img src='2q_independent/seed_3/optimization.png' alt='optimization'></a>
+<a href='2q_independent/seed_3/actuator.png'><img src='2q_independent/seed_3/actuator.png' alt='actuator'></a>
+<a href='2q_independent/seed_3/populations.png'><img src='2q_independent/seed_3/populations.png' alt='populations'></a>
+<h3>Seed 4</h3><p>Controlli falliti: nessuno</p><a href='2q_independent/seed_4/result.json'>Dettagli</a>
+<p>Maximum number of function evaluations has been exceeded.; STOP: TOTAL NO. OF ITERATIONS REACHED LIMIT</p>
+<a href='2q_independent/seed_4/dynamics.png'><img src='2q_independent/seed_4/dynamics.png' alt='dynamics'></a>
+<a href='2q_independent/seed_4/wigner.png'><img src='2q_independent/seed_4/wigner.png' alt='wigner'></a>
+<a href='2q_independent/seed_4/optimization.png'><img src='2q_independent/seed_4/optimization.png' alt='optimization'></a>
+<a href='2q_independent/seed_4/actuator.png'><img src='2q_independent/seed_4/actuator.png' alt='actuator'></a>
+<a href='2q_independent/seed_4/populations.png'><img src='2q_independent/seed_4/populations.png' alt='populations'></a>
+<h3>Seed 5</h3><p>Controlli falliti: nessuno</p><a href='2q_independent/seed_5/result.json'>Dettagli</a>
+<p>Maximum number of function evaluations has been exceeded.; STOP: TOTAL NO. OF ITERATIONS REACHED LIMIT</p>
+<a href='2q_independent/seed_5/dynamics.png'><img src='2q_independent/seed_5/dynamics.png' alt='dynamics'></a>
+<a href='2q_independent/seed_5/wigner.png'><img src='2q_independent/seed_5/wigner.png' alt='wigner'></a>
+<a href='2q_independent/seed_5/optimization.png'><img src='2q_independent/seed_5/optimization.png' alt='optimization'></a>
+<a href='2q_independent/seed_5/actuator.png'><img src='2q_independent/seed_5/actuator.png' alt='actuator'></a>
+<a href='2q_independent/seed_5/populations.png'><img src='2q_independent/seed_5/populations.png' alt='populations'></a>
+<h3>Seed 6</h3><p>Controlli falliti: nessuno</p><a href='2q_independent/seed_6/result.json'>Dettagli</a>
+<p>Maximum number of function evaluations has been exceeded.; STOP: TOTAL NO. OF ITERATIONS REACHED LIMIT</p>
+<a href='2q_independent/seed_6/dynamics.png'><img src='2q_independent/seed_6/dynamics.png' alt='dynamics'></a>
+<a href='2q_independent/seed_6/wigner.png'><img src='2q_independent/seed_6/wigner.png' alt='wigner'></a>
+<a href='2q_independent/seed_6/optimization.png'><img src='2q_independent/seed_6/optimization.png' alt='optimization'></a>
+<a href='2q_independent/seed_6/actuator.png'><img src='2q_independent/seed_6/actuator.png' alt='actuator'></a>
+<a href='2q_independent/seed_6/populations.png'><img src='2q_independent/seed_6/populations.png' alt='populations'></a>
+<h3>Seed 7</h3><p>Controlli falliti: nessuno</p><a href='2q_independent/seed_7/result.json'>Dettagli</a>
+<p>Maximum number of function evaluations has been exceeded.; STOP: TOTAL NO. OF ITERATIONS REACHED LIMIT</p>
+<a href='2q_independent/seed_7/dynamics.png'><img src='2q_independent/seed_7/dynamics.png' alt='dynamics'></a>
+<a href='2q_independent/seed_7/wigner.png'><img src='2q_independent/seed_7/wigner.png' alt='wigner'></a>
+<a href='2q_independent/seed_7/optimization.png'><img src='2q_independent/seed_7/optimization.png' alt='optimization'></a>
+<a href='2q_independent/seed_7/actuator.png'><img src='2q_independent/seed_7/actuator.png' alt='actuator'></a>
+<a href='2q_independent/seed_7/populations.png'><img src='2q_independent/seed_7/populations.png' alt='populations'></a>
+<h2>2q_normalized_common</h2><p>Statistiche: {&quot;count&quot;: 8, &quot;probability_mean&quot;: 0.9999883893307807, &quot;probability_std_population&quot;: 3.698245728660207e-06, &quot;probability_median&quot;: 0.9999893646131472, &quot;probability_min&quot;: 0.9999824163966152, &quot;probability_max&quot;: 0.9999921768688996, &quot;numerically_valid_count&quot;: 8, &quot;validated_goal_count&quot;: 8, &quot;validated_goal_fraction&quot;: 1.0, &quot;probability_q25&quot;: 0.9999858517791712, &quot;probability_q75&quot;: 0.9999918948883142, &quot;selection_bias_top_only&quot;: false}</p>
+<p>Probabilità target senza modulazione: 0.00000001.</p>
+<h3>Seed 0</h3><p>Controlli falliti: nessuno</p><a href='2q_normalized_common/seed_0/result.json'>Dettagli</a>
+<p>Maximum number of function evaluations has been exceeded.; CONVERGENCE: RELATIVE REDUCTION OF F &lt;= FACTR*EPSMCH</p>
+<a href='2q_normalized_common/seed_0/dynamics.png'><img src='2q_normalized_common/seed_0/dynamics.png' alt='dynamics'></a>
+<a href='2q_normalized_common/seed_0/wigner.png'><img src='2q_normalized_common/seed_0/wigner.png' alt='wigner'></a>
+<a href='2q_normalized_common/seed_0/optimization.png'><img src='2q_normalized_common/seed_0/optimization.png' alt='optimization'></a>
+<a href='2q_normalized_common/seed_0/actuator.png'><img src='2q_normalized_common/seed_0/actuator.png' alt='actuator'></a>
+<a href='2q_normalized_common/seed_0/populations.png'><img src='2q_normalized_common/seed_0/populations.png' alt='populations'></a>
+<h3>Seed 1</h3><p>Controlli falliti: nessuno</p><a href='2q_normalized_common/seed_1/result.json'>Dettagli</a>
+<p>Maximum number of function evaluations has been exceeded.; STOP: TOTAL NO. OF ITERATIONS REACHED LIMIT</p>
+<a href='2q_normalized_common/seed_1/dynamics.png'><img src='2q_normalized_common/seed_1/dynamics.png' alt='dynamics'></a>
+<a href='2q_normalized_common/seed_1/wigner.png'><img src='2q_normalized_common/seed_1/wigner.png' alt='wigner'></a>
+<a href='2q_normalized_common/seed_1/optimization.png'><img src='2q_normalized_common/seed_1/optimization.png' alt='optimization'></a>
+<a href='2q_normalized_common/seed_1/actuator.png'><img src='2q_normalized_common/seed_1/actuator.png' alt='actuator'></a>
+<a href='2q_normalized_common/seed_1/populations.png'><img src='2q_normalized_common/seed_1/populations.png' alt='populations'></a>
+<h3>Seed 2</h3><p>Controlli falliti: nessuno</p><a href='2q_normalized_common/seed_2/result.json'>Dettagli</a>
+<p>Maximum number of function evaluations has been exceeded.; STOP: TOTAL NO. OF ITERATIONS REACHED LIMIT</p>
+<a href='2q_normalized_common/seed_2/dynamics.png'><img src='2q_normalized_common/seed_2/dynamics.png' alt='dynamics'></a>
+<a href='2q_normalized_common/seed_2/wigner.png'><img src='2q_normalized_common/seed_2/wigner.png' alt='wigner'></a>
+<a href='2q_normalized_common/seed_2/optimization.png'><img src='2q_normalized_common/seed_2/optimization.png' alt='optimization'></a>
+<a href='2q_normalized_common/seed_2/actuator.png'><img src='2q_normalized_common/seed_2/actuator.png' alt='actuator'></a>
+<a href='2q_normalized_common/seed_2/populations.png'><img src='2q_normalized_common/seed_2/populations.png' alt='populations'></a>
+<h3>Seed 3</h3><p>Controlli falliti: nessuno</p><a href='2q_normalized_common/seed_3/result.json'>Dettagli</a>
+<p>Maximum number of function evaluations has been exceeded.; STOP: TOTAL NO. OF ITERATIONS REACHED LIMIT</p>
+<a href='2q_normalized_common/seed_3/dynamics.png'><img src='2q_normalized_common/seed_3/dynamics.png' alt='dynamics'></a>
+<a href='2q_normalized_common/seed_3/wigner.png'><img src='2q_normalized_common/seed_3/wigner.png' alt='wigner'></a>
+<a href='2q_normalized_common/seed_3/optimization.png'><img src='2q_normalized_common/seed_3/optimization.png' alt='optimization'></a>
+<a href='2q_normalized_common/seed_3/actuator.png'><img src='2q_normalized_common/seed_3/actuator.png' alt='actuator'></a>
+<a href='2q_normalized_common/seed_3/populations.png'><img src='2q_normalized_common/seed_3/populations.png' alt='populations'></a>
+<h3>Seed 4</h3><p>Controlli falliti: nessuno</p><a href='2q_normalized_common/seed_4/result.json'>Dettagli</a>
+<p>Maximum number of function evaluations has been exceeded.; STOP: TOTAL NO. OF ITERATIONS REACHED LIMIT</p>
+<a href='2q_normalized_common/seed_4/dynamics.png'><img src='2q_normalized_common/seed_4/dynamics.png' alt='dynamics'></a>
+<a href='2q_normalized_common/seed_4/wigner.png'><img src='2q_normalized_common/seed_4/wigner.png' alt='wigner'></a>
+<a href='2q_normalized_common/seed_4/optimization.png'><img src='2q_normalized_common/seed_4/optimization.png' alt='optimization'></a>
+<a href='2q_normalized_common/seed_4/actuator.png'><img src='2q_normalized_common/seed_4/actuator.png' alt='actuator'></a>
+<a href='2q_normalized_common/seed_4/populations.png'><img src='2q_normalized_common/seed_4/populations.png' alt='populations'></a>
+<h3>Seed 5</h3><p>Controlli falliti: nessuno</p><a href='2q_normalized_common/seed_5/result.json'>Dettagli</a>
+<p>Maximum number of function evaluations has been exceeded.; STOP: TOTAL NO. OF ITERATIONS REACHED LIMIT</p>
+<a href='2q_normalized_common/seed_5/dynamics.png'><img src='2q_normalized_common/seed_5/dynamics.png' alt='dynamics'></a>
+<a href='2q_normalized_common/seed_5/wigner.png'><img src='2q_normalized_common/seed_5/wigner.png' alt='wigner'></a>
+<a href='2q_normalized_common/seed_5/optimization.png'><img src='2q_normalized_common/seed_5/optimization.png' alt='optimization'></a>
+<a href='2q_normalized_common/seed_5/actuator.png'><img src='2q_normalized_common/seed_5/actuator.png' alt='actuator'></a>
+<a href='2q_normalized_common/seed_5/populations.png'><img src='2q_normalized_common/seed_5/populations.png' alt='populations'></a>
+<h3>Seed 6</h3><p>Controlli falliti: nessuno</p><a href='2q_normalized_common/seed_6/result.json'>Dettagli</a>
+<p>Maximum number of function evaluations has been exceeded.; STOP: TOTAL NO. OF ITERATIONS REACHED LIMIT</p>
+<a href='2q_normalized_common/seed_6/dynamics.png'><img src='2q_normalized_common/seed_6/dynamics.png' alt='dynamics'></a>
+<a href='2q_normalized_common/seed_6/wigner.png'><img src='2q_normalized_common/seed_6/wigner.png' alt='wigner'></a>
+<a href='2q_normalized_common/seed_6/optimization.png'><img src='2q_normalized_common/seed_6/optimization.png' alt='optimization'></a>
+<a href='2q_normalized_common/seed_6/actuator.png'><img src='2q_normalized_common/seed_6/actuator.png' alt='actuator'></a>
+<a href='2q_normalized_common/seed_6/populations.png'><img src='2q_normalized_common/seed_6/populations.png' alt='populations'></a>
+<h3>Seed 7</h3><p>Controlli falliti: nessuno</p><a href='2q_normalized_common/seed_7/result.json'>Dettagli</a>
+<p>Maximum number of function evaluations has been exceeded.; STOP: TOTAL NO. OF ITERATIONS REACHED LIMIT</p>
+<a href='2q_normalized_common/seed_7/dynamics.png'><img src='2q_normalized_common/seed_7/dynamics.png' alt='dynamics'></a>
+<a href='2q_normalized_common/seed_7/wigner.png'><img src='2q_normalized_common/seed_7/wigner.png' alt='wigner'></a>
+<a href='2q_normalized_common/seed_7/optimization.png'><img src='2q_normalized_common/seed_7/optimization.png' alt='optimization'></a>
+<a href='2q_normalized_common/seed_7/actuator.png'><img src='2q_normalized_common/seed_7/actuator.png' alt='actuator'></a>
+<a href='2q_normalized_common/seed_7/populations.png'><img src='2q_normalized_common/seed_7/populations.png' alt='populations'></a>
+<h2>2q_normalized_independent</h2><p>Statistiche: {&quot;count&quot;: 8, &quot;probability_mean&quot;: 0.9999919418608011, &quot;probability_std_population&quot;: 1.686236598079415e-06, &quot;probability_median&quot;: 0.9999926471613414, &quot;probability_min&quot;: 0.999988913246673, &quot;probability_max&quot;: 0.9999938370644541, &quot;numerically_valid_count&quot;: 8, &quot;validated_goal_count&quot;: 8, &quot;validated_goal_fraction&quot;: 1.0, &quot;probability_q25&quot;: 0.9999905538368127, &quot;probability_q75&quot;: 0.9999932169682691, &quot;selection_bias_top_only&quot;: false}</p>
+<p>Probabilità target senza modulazione: 0.00000001.</p>
+<h3>Seed 0</h3><p>Controlli falliti: nessuno</p><a href='2q_normalized_independent/seed_0/result.json'>Dettagli</a>
+<p>Maximum number of function evaluations has been exceeded.; STOP: TOTAL NO. OF ITERATIONS REACHED LIMIT</p>
+<a href='2q_normalized_independent/seed_0/dynamics.png'><img src='2q_normalized_independent/seed_0/dynamics.png' alt='dynamics'></a>
+<a href='2q_normalized_independent/seed_0/wigner.png'><img src='2q_normalized_independent/seed_0/wigner.png' alt='wigner'></a>
+<a href='2q_normalized_independent/seed_0/optimization.png'><img src='2q_normalized_independent/seed_0/optimization.png' alt='optimization'></a>
+<a href='2q_normalized_independent/seed_0/actuator.png'><img src='2q_normalized_independent/seed_0/actuator.png' alt='actuator'></a>
+<a href='2q_normalized_independent/seed_0/populations.png'><img src='2q_normalized_independent/seed_0/populations.png' alt='populations'></a>
+<h3>Seed 1</h3><p>Controlli falliti: nessuno</p><a href='2q_normalized_independent/seed_1/result.json'>Dettagli</a>
+<p>Maximum number of function evaluations has been exceeded.; STOP: TOTAL NO. OF ITERATIONS REACHED LIMIT</p>
+<a href='2q_normalized_independent/seed_1/dynamics.png'><img src='2q_normalized_independent/seed_1/dynamics.png' alt='dynamics'></a>
+<a href='2q_normalized_independent/seed_1/wigner.png'><img src='2q_normalized_independent/seed_1/wigner.png' alt='wigner'></a>
+<a href='2q_normalized_independent/seed_1/optimization.png'><img src='2q_normalized_independent/seed_1/optimization.png' alt='optimization'></a>
+<a href='2q_normalized_independent/seed_1/actuator.png'><img src='2q_normalized_independent/seed_1/actuator.png' alt='actuator'></a>
+<a href='2q_normalized_independent/seed_1/populations.png'><img src='2q_normalized_independent/seed_1/populations.png' alt='populations'></a>
+<h3>Seed 2</h3><p>Controlli falliti: nessuno</p><a href='2q_normalized_independent/seed_2/result.json'>Dettagli</a>
+<p>Maximum number of function evaluations has been exceeded.; STOP: TOTAL NO. OF ITERATIONS REACHED LIMIT</p>
+<a href='2q_normalized_independent/seed_2/dynamics.png'><img src='2q_normalized_independent/seed_2/dynamics.png' alt='dynamics'></a>
+<a href='2q_normalized_independent/seed_2/wigner.png'><img src='2q_normalized_independent/seed_2/wigner.png' alt='wigner'></a>
+<a href='2q_normalized_independent/seed_2/optimization.png'><img src='2q_normalized_independent/seed_2/optimization.png' alt='optimization'></a>
+<a href='2q_normalized_independent/seed_2/actuator.png'><img src='2q_normalized_independent/seed_2/actuator.png' alt='actuator'></a>
+<a href='2q_normalized_independent/seed_2/populations.png'><img src='2q_normalized_independent/seed_2/populations.png' alt='populations'></a>
+<h3>Seed 3</h3><p>Controlli falliti: nessuno</p><a href='2q_normalized_independent/seed_3/result.json'>Dettagli</a>
+<p>Maximum number of function evaluations has been exceeded.; STOP: TOTAL NO. OF ITERATIONS REACHED LIMIT</p>
+<a href='2q_normalized_independent/seed_3/dynamics.png'><img src='2q_normalized_independent/seed_3/dynamics.png' alt='dynamics'></a>
+<a href='2q_normalized_independent/seed_3/wigner.png'><img src='2q_normalized_independent/seed_3/wigner.png' alt='wigner'></a>
+<a href='2q_normalized_independent/seed_3/optimization.png'><img src='2q_normalized_independent/seed_3/optimization.png' alt='optimization'></a>
+<a href='2q_normalized_independent/seed_3/actuator.png'><img src='2q_normalized_independent/seed_3/actuator.png' alt='actuator'></a>
+<a href='2q_normalized_independent/seed_3/populations.png'><img src='2q_normalized_independent/seed_3/populations.png' alt='populations'></a>
+<h3>Seed 4</h3><p>Controlli falliti: nessuno</p><a href='2q_normalized_independent/seed_4/result.json'>Dettagli</a>
+<p>Maximum number of function evaluations has been exceeded.; STOP: TOTAL NO. OF ITERATIONS REACHED LIMIT</p>
+<a href='2q_normalized_independent/seed_4/dynamics.png'><img src='2q_normalized_independent/seed_4/dynamics.png' alt='dynamics'></a>
+<a href='2q_normalized_independent/seed_4/wigner.png'><img src='2q_normalized_independent/seed_4/wigner.png' alt='wigner'></a>
+<a href='2q_normalized_independent/seed_4/optimization.png'><img src='2q_normalized_independent/seed_4/optimization.png' alt='optimization'></a>
+<a href='2q_normalized_independent/seed_4/actuator.png'><img src='2q_normalized_independent/seed_4/actuator.png' alt='actuator'></a>
+<a href='2q_normalized_independent/seed_4/populations.png'><img src='2q_normalized_independent/seed_4/populations.png' alt='populations'></a>
+<h3>Seed 5</h3><p>Controlli falliti: nessuno</p><a href='2q_normalized_independent/seed_5/result.json'>Dettagli</a>
+<p>Maximum number of function evaluations has been exceeded.; STOP: TOTAL NO. OF ITERATIONS REACHED LIMIT</p>
+<a href='2q_normalized_independent/seed_5/dynamics.png'><img src='2q_normalized_independent/seed_5/dynamics.png' alt='dynamics'></a>
+<a href='2q_normalized_independent/seed_5/wigner.png'><img src='2q_normalized_independent/seed_5/wigner.png' alt='wigner'></a>
+<a href='2q_normalized_independent/seed_5/optimization.png'><img src='2q_normalized_independent/seed_5/optimization.png' alt='optimization'></a>
+<a href='2q_normalized_independent/seed_5/actuator.png'><img src='2q_normalized_independent/seed_5/actuator.png' alt='actuator'></a>
+<a href='2q_normalized_independent/seed_5/populations.png'><img src='2q_normalized_independent/seed_5/populations.png' alt='populations'></a>
+<h3>Seed 6</h3><p>Controlli falliti: nessuno</p><a href='2q_normalized_independent/seed_6/result.json'>Dettagli</a>
+<p>Maximum number of function evaluations has been exceeded.; STOP: TOTAL NO. OF ITERATIONS REACHED LIMIT</p>
+<a href='2q_normalized_independent/seed_6/dynamics.png'><img src='2q_normalized_independent/seed_6/dynamics.png' alt='dynamics'></a>
+<a href='2q_normalized_independent/seed_6/wigner.png'><img src='2q_normalized_independent/seed_6/wigner.png' alt='wigner'></a>
+<a href='2q_normalized_independent/seed_6/optimization.png'><img src='2q_normalized_independent/seed_6/optimization.png' alt='optimization'></a>
+<a href='2q_normalized_independent/seed_6/actuator.png'><img src='2q_normalized_independent/seed_6/actuator.png' alt='actuator'></a>
+<a href='2q_normalized_independent/seed_6/populations.png'><img src='2q_normalized_independent/seed_6/populations.png' alt='populations'></a>
+<h3>Seed 7</h3><p>Controlli falliti: nessuno</p><a href='2q_normalized_independent/seed_7/result.json'>Dettagli</a>
+<p>Maximum number of function evaluations has been exceeded.; STOP: TOTAL NO. OF ITERATIONS REACHED LIMIT</p>
+<a href='2q_normalized_independent/seed_7/dynamics.png'><img src='2q_normalized_independent/seed_7/dynamics.png' alt='dynamics'></a>
+<a href='2q_normalized_independent/seed_7/wigner.png'><img src='2q_normalized_independent/seed_7/wigner.png' alt='wigner'></a>
+<a href='2q_normalized_independent/seed_7/optimization.png'><img src='2q_normalized_independent/seed_7/optimization.png' alt='optimization'></a>
+<a href='2q_normalized_independent/seed_7/actuator.png'><img src='2q_normalized_independent/seed_7/actuator.png' alt='actuator'></a>
+<a href='2q_normalized_independent/seed_7/populations.png'><img src='2q_normalized_independent/seed_7/populations.png' alt='populations'></a></body></html>

@@ -1,0 +1,2402 @@
+{
+  "schema_version": 2,
+  "case": "2q_normalized_common",
+  "seed": 0,
+  "cohort": "random",
+  "crab": {
+    "schema_version": 2,
+    "algorithm": "CRAB/Nelder-Mead",
+    "seed": 0,
+    "success": false,
+    "message": "Maximum number of function evaluations has been exceeded.",
+    "iterations": 4601,
+    "evaluations": 6000,
+    "elapsed_seconds": 9321.411398202006,
+    "cost": 0.8795562327667353,
+    "target_probability": 0.014506701064461298,
+    "fidelity_root": 0.12044376722961342,
+    "initial_probability": 1.0847197695126764e-06,
+    "probability_gain": 0.014505616344691784,
+    "initial_std": 0.1,
+    "objective": "root",
+    "objective_scale": 1.0,
+    "array_file": "crab.npz",
+    "array_sha256": "b001df0d678e33f5df466d1d9c4e72d5a08057e5ec505a96ed2084695f1b1045"
+  },
+  "grape": {
+    "algorithm": "GRAPE/L-BFGS-B",
+    "success": true,
+    "message": "CONVERGENCE: RELATIVE REDUCTION OF F <= FACTR*EPSMCH",
+    "iterations": 275,
+    "evaluations": 280,
+    "elapsed_seconds": 750.0107294170011,
+    "cost": 0.20164463933553178,
+    "target_probability": 0.6373712819014916,
+    "fidelity_root": 0.798355360664342,
+    "objective": "root",
+    "objective_scale": 1.0,
+    "initial_probability": 0.014506701064461298,
+    "probability_gain": 0.6228645808370303,
+    "initial_gradient": {
+      "gradient_max": 0.018928770052447617,
+      "projected_gradient_max": 0.01877945003408943
+    },
+    "final_gradient": {
+      "gradient_max": 0.044897970410187976,
+      "projected_gradient_max": 2.2758411322154615e-08
+    },
+    "projected_gradient_scope": "box bounds only; slew constraints excluded",
+    "accepted_iterations": [
+      {
+        "iteration": 1,
+        "cost": 0.8735557834326234,
+        "target_probability": 0.015988139902464088,
+        "command_step_max": 0.01877945003408943,
+        "gradient_max": 0.019631286535851514,
+        "projected_gradient_max": 0.018634836517499892
+      },
+      {
+        "iteration": 2,
+        "cost": 0.8052057727266029,
+        "target_probability": 0.037944790978234694,
+        "command_step_max": 0.31079500177142505,
+        "gradient_max": 0.02360917107770696,
+        "projected_gradient_max": 0.023609171077706992
+      },
+      {
+        "iteration": 3,
+        "cost": 0.7775021153349614,
+        "target_probability": 0.049505308679639336,
+        "command_step_max": 0.23994978421530422,
+        "gradient_max": 0.037895753084604945,
+        "projected_gradient_max": 0.03789575308460491
+      },
+      {
+        "iteration": 4,
+        "cost": 0.7286745133523498,
+        "target_probability": 0.07361751970385558,
+        "command_step_max": 0.1890140060146197,
+        "gradient_max": 0.027798251220810304,
+        "projected_gradient_max": 0.027798251220810255
+      },
+      {
+        "iteration": 5,
+        "cost": 0.6569726756338305,
+        "target_probability": 0.11766774526115632,
+        "command_step_max": 0.35140035249507245,
+        "gradient_max": 0.03386237354602085,
+        "projected_gradient_max": 0.01864752393061142
+      },
+      {
+        "iteration": 6,
+        "cost": 0.6063321440647944,
+        "target_probability": 0.15497438079601553,
+        "command_step_max": 0.453883459150936,
+        "gradient_max": 0.05080099192941031,
+        "projected_gradient_max": 0.03452919910567734
+      },
+      {
+        "iteration": 7,
+        "cost": 0.574314468391639,
+        "target_probability": 0.18120817182011856,
+        "command_step_max": 0.23110340216831737,
+        "gradient_max": 0.04675126556863419,
+        "projected_gradient_max": 0.029591472135435337
+      },
+      {
+        "iteration": 8,
+        "cost": 0.5531355642626147,
+        "target_probability": 0.19968782392633866,
+        "command_step_max": 0.08590466238031569,
+        "gradient_max": 0.03635631610068512,
+        "projected_gradient_max": 0.02628055320547515
+      },
+      {
+        "iteration": 9,
+        "cost": 0.528877132349854,
+        "target_probability": 0.22195675642236806,
+        "command_step_max": 0.13277424715027353,
+        "gradient_max": 0.029508254109537942,
+        "projected_gradient_max": 0.027049060112599
+      },
+      {
+        "iteration": 10,
+        "cost": 0.4944570226914696,
+        "target_probability": 0.25557370190547885,
+        "command_step_max": 0.2644768697984957,
+        "gradient_max": 0.029061929800546477,
+        "projected_gradient_max": 0.02906192980054645
+      },
+      {
+        "iteration": 11,
+        "cost": 0.4648823025761982,
+        "target_probability": 0.2863509500956867,
+        "command_step_max": 0.2809018900698276,
+        "gradient_max": 0.030069877562571946,
+        "projected_gradient_max": 0.02456151014095098
+      },
+      {
+        "iteration": 12,
+        "cost": 0.44369003113718586,
+        "target_probability": 0.3094807814557017,
+        "command_step_max": 0.13951809775658153,
+        "gradient_max": 0.027400605365225917,
+        "projected_gradient_max": 0.021137865681804868
+      },
+      {
+        "iteration": 13,
+        "cost": 0.4189736451534608,
+        "target_probability": 0.33759162502583756,
+        "command_step_max": 0.2551602786727696,
+        "gradient_max": 0.027219747348206227,
+        "projected_gradient_max": 0.024097708513099003
+      },
+      {
+        "iteration": 14,
+        "cost": 0.4087372733796062,
+        "target_probability": 0.3495916118901739,
+        "command_step_max": 0.0828890436527786,
+        "gradient_max": 0.02244360827421945,
+        "projected_gradient_max": 0.02085281119266491
+      },
+      {
+        "iteration": 15,
+        "cost": 0.38383502224318045,
+        "target_probability": 0.37965927981367814,
+        "command_step_max": 0.5004546680174724,
+        "gradient_max": 0.03944615777928462,
+        "projected_gradient_max": 0.02901354536125353
+      },
+      {
+        "iteration": 16,
+        "cost": 0.3756536709139878,
+        "target_probability": 0.3898083386428034,
+        "command_step_max": 0.03692614474580935,
+        "gradient_max": 0.029815852013892436,
+        "projected_gradient_max": 0.013936368621250583
+      },
+      {
+        "iteration": 17,
+        "cost": 0.37093111606941653,
+        "target_probability": 0.39572766072929905,
+        "command_step_max": 0.060564973425088375,
+        "gradient_max": 0.023228960366160917,
+        "projected_gradient_max": 0.015396378746798778
+      },
+      {
+        "iteration": 18,
+        "cost": 0.3660924627775336,
+        "target_probability": 0.4018387657470866,
+        "command_step_max": 0.06591827686846807,
+        "gradient_max": 0.02280116590889674,
+        "projected_gradient_max": 0.017970716548263987
+      },
+      {
+        "iteration": 19,
+        "cost": 0.34518756170523,
+        "target_probability": 0.42877932934519686,
+        "command_step_max": 0.36279450030902927,
+        "gradient_max": 0.03477780085677214,
+        "projected_gradient_max": 0.018753233324991736
+      },
+      {
+        "iteration": 20,
+        "cost": 0.3379577952354882,
+        "target_probability": 0.4382998808891179,
+        "command_step_max": 0.22240636184587825,
+        "gradient_max": 0.037115151776617276,
+        "projected_gradient_max": 0.02821655167866488
+      },
+      {
+        "iteration": 21,
+        "cost": 0.3316906888451687,
+        "target_probability": 0.44663733537591344,
+        "command_step_max": 0.2334596019597076,
+        "gradient_max": 0.038251611964231914,
+        "projected_gradient_max": 0.034359959070857427
+      },
+      {
+        "iteration": 22,
+        "cost": 0.3248312697395046,
+        "target_probability": 0.45585281432124486,
+        "command_step_max": 0.03703062615368202,
+        "gradient_max": 0.03141555916541333,
+        "projected_gradient_max": 0.024776863169348906
+      },
+      {
+        "iteration": 23,
+        "cost": 0.3196450971740482,
+        "target_probability": 0.4628827937989908,
+        "command_step_max": 0.047221457979329085,
+        "gradient_max": 0.03047144418858955,
+        "projected_gradient_max": 0.016927238292007707
+      },
+      {
+        "iteration": 24,
+        "cost": 0.3159258679854935,
+        "target_probability": 0.4679574180910847,
+        "command_step_max": 0.060140552857043006,
+        "gradient_max": 0.03295975241737766,
+        "projected_gradient_max": 0.012468198306977207
+      },
+      {
+        "iteration": 25,
+        "cost": 0.31000490188710317,
+        "target_probability": 0.4760932354195162,
+        "command_step_max": 0.20318201645652967,
+        "gradient_max": 0.02666560237433392,
+        "projected_gradient_max": 0.016763445791416864
+      },
+      {
+        "iteration": 26,
+        "cost": 0.30807214823205176,
+        "target_probability": 0.4787641520518997,
+        "command_step_max": 0.033882596667827725,
+        "gradient_max": 0.024282050891770112,
+        "projected_gradient_max": 0.013587740235604828
+      },
+      {
+        "iteration": 27,
+        "cost": 0.2994743456211818,
+        "target_probability": 0.49073619244257205,
+        "command_step_max": 0.282546772755895,
+        "gradient_max": 0.03264998944156897,
+        "projected_gradient_max": 0.019344267111087055
+      },
+      {
+        "iteration": 28,
+        "cost": 0.2963666384491237,
+        "target_probability": 0.49509990748709,
+        "command_step_max": 0.11822973576315532,
+        "gradient_max": 0.034939699396751206,
+        "projected_gradient_max": 0.014307829897975743
+      },
+      {
+        "iteration": 29,
+        "cost": 0.2931534061417912,
+        "target_probability": 0.4996321072486586,
+        "command_step_max": 0.1611285598676262,
+        "gradient_max": 0.028880452545634285,
+        "projected_gradient_max": 0.008624570899863904
+      },
+      {
+        "iteration": 30,
+        "cost": 0.2917168720270418,
+        "target_probability": 0.5016649893708663,
+        "command_step_max": 0.09170520146020067,
+        "gradient_max": 0.025972437369902637,
+        "projected_gradient_max": 0.011191204837281754
+      },
+      {
+        "iteration": 31,
+        "cost": 0.28889933351372266,
+        "target_probability": 0.505664157876939,
+        "command_step_max": 0.18472238443275846,
+        "gradient_max": 0.03201861558944283,
+        "projected_gradient_max": 0.017088099047689154
+      },
+      {
+        "iteration": 32,
+        "cost": 0.2866375223515504,
+        "target_probability": 0.5088860245164483,
+        "command_step_max": 0.04552384432474654,
+        "gradient_max": 0.03128567601607387,
+        "projected_gradient_max": 0.015346332020840014
+      },
+      {
+        "iteration": 33,
+        "cost": 0.28110986679138317,
+        "target_probability": 0.5168030236244218,
+        "command_step_max": 0.2171843506809561,
+        "gradient_max": 0.035311538164353735,
+        "projected_gradient_max": 0.01382584462198666
+      },
+      {
+        "iteration": 34,
+        "cost": 0.2770815988505204,
+        "target_probability": 0.522611014720243,
+        "command_step_max": 0.15346846538235925,
+        "gradient_max": 0.025274004539114305,
+        "projected_gradient_max": 0.008126802610453066
+      },
+      {
+        "iteration": 35,
+        "cost": 0.2747084641768206,
+        "target_probability": 0.5260478119364718,
+        "command_step_max": 0.2582108379240171,
+        "gradient_max": 0.02516527168295843,
+        "projected_gradient_max": 0.015043096755005703
+      },
+      {
+        "iteration": 36,
+        "cost": 0.2724651773185077,
+        "target_probability": 0.5293069182139181,
+        "command_step_max": 0.046312377024878226,
+        "gradient_max": 0.021119972907287905,
+        "projected_gradient_max": 0.01177873800427498
+      },
+      {
+        "iteration": 37,
+        "cost": 0.27082581555375074,
+        "target_probability": 0.531694991262582,
+        "command_step_max": 0.045311599366423205,
+        "gradient_max": 0.02284292384181684,
+        "projected_gradient_max": 0.005953535747502903
+      },
+      {
+        "iteration": 38,
+        "cost": 0.26954730336974786,
+        "target_probability": 0.5335611420141377,
+        "command_step_max": 0.04781844178823624,
+        "gradient_max": 0.02610768174201422,
+        "projected_gradient_max": 0.008237299840087475
+      },
+      {
+        "iteration": 39,
+        "cost": 0.26754573721010266,
+        "target_probability": 0.5364892470788245,
+        "command_step_max": 0.1446691219380909,
+        "gradient_max": 0.029157600781602226,
+        "projected_gradient_max": 0.012789062193553136
+      },
+      {
+        "iteration": 40,
+        "cost": 0.26579266880751096,
+        "target_probability": 0.5390604051765315,
+        "command_step_max": 0.08151979689501512,
+        "gradient_max": 0.025164207000174084,
+        "projected_gradient_max": 0.00825628637533693
+      },
+      {
+        "iteration": 41,
+        "cost": 0.26354443703990993,
+        "target_probability": 0.5423667962145997,
+        "command_step_max": 0.1759880096839572,
+        "gradient_max": 0.025774059259611865,
+        "projected_gradient_max": 0.009848126840222404
+      },
+      {
+        "iteration": 42,
+        "cost": 0.2626959319785648,
+        "target_probability": 0.5436172887206946,
+        "command_step_max": 0.06835194761691293,
+        "gradient_max": 0.026136044990605862,
+        "projected_gradient_max": 0.01020444263290532
+      },
+      {
+        "iteration": 43,
+        "cost": 0.26084017303987483,
+        "target_probability": 0.5463572497914614,
+        "command_step_max": 0.18660523651012306,
+        "gradient_max": 0.02780607018697366,
+        "projected_gradient_max": 0.01216728661067723
+      },
+      {
+        "iteration": 44,
+        "cost": 0.2586055225049624,
+        "target_probability": 0.5496657712598814,
+        "command_step_max": 0.17836431197790414,
+        "gradient_max": 0.02596152385726978,
+        "projected_gradient_max": 0.009793927693485305
+      },
+      {
+        "iteration": 45,
+        "cost": 0.2555268915309784,
+        "target_probability": 0.5542402092332722,
+        "command_step_max": 0.2793935836000919,
+        "gradient_max": 0.028942176255967695,
+        "projected_gradient_max": 0.01097252574632357
+      },
+      {
+        "iteration": 46,
+        "cost": 0.25365243858908415,
+        "target_probability": 0.5570346824237672,
+        "command_step_max": 0.04412747857533672,
+        "gradient_max": 0.027662781442378628,
+        "projected_gradient_max": 0.00934857885583762
+      },
+      {
+        "iteration": 47,
+        "cost": 0.25126293547434053,
+        "target_probability": 0.5606071917942503,
+        "command_step_max": 0.11130615379849407,
+        "gradient_max": 0.02552221282139477,
+        "projected_gradient_max": 0.0064806442842212375
+      },
+      {
+        "iteration": 48,
+        "cost": 0.2499480042740423,
+        "target_probability": 0.5625779962922423,
+        "command_step_max": 0.07680250905262709,
+        "gradient_max": 0.0272587123598002,
+        "projected_gradient_max": 0.007079018226092942
+      },
+      {
+        "iteration": 49,
+        "cost": 0.24803091031610291,
+        "target_probability": 0.565457511839781,
+        "command_step_max": 0.13855686513212517,
+        "gradient_max": 0.026380198359098554,
+        "projected_gradient_max": 0.004846904664377316
+      },
+      {
+        "iteration": 50,
+        "cost": 0.2466781216346977,
+        "target_probability": 0.5674938524235807,
+        "command_step_max": 0.13119829288701146,
+        "gradient_max": 0.028802322937094796,
+        "projected_gradient_max": 0.006869930034472671
+      },
+      {
+        "iteration": 51,
+        "cost": 0.24621493200300282,
+        "target_probability": 0.5681919287349916,
+        "command_step_max": 0.21315437096241596,
+        "gradient_max": 0.0292910721668864,
+        "projected_gradient_max": 0.011324476542947548
+      },
+      {
+        "iteration": 52,
+        "cost": 0.24518000071737567,
+        "target_probability": 0.5697532313167759,
+        "command_step_max": 0.02881083471771187,
+        "gradient_max": 0.029618852740115737,
+        "projected_gradient_max": 0.007183241957762265
+      },
+      {
+        "iteration": 53,
+        "cost": 0.24425703440336666,
+        "target_probability": 0.57114743004855,
+        "command_step_max": 0.03974579768728359,
+        "gradient_max": 0.029945447295670235,
+        "projected_gradient_max": 0.004196625422083211
+      },
+      {
+        "iteration": 54,
+        "cost": 0.2430215362857523,
+        "target_probability": 0.5730163945269398,
+        "command_step_max": 0.10799525053602776,
+        "gradient_max": 0.031510559735094895,
+        "projected_gradient_max": 0.0063332879760109595
+      },
+      {
+        "iteration": 55,
+        "cost": 0.24259458184690108,
+        "target_probability": 0.5736629674474281,
+        "command_step_max": 0.17385910250007397,
+        "gradient_max": 0.029791178771875367,
+        "projected_gradient_max": 0.010341534026807597
+      },
+      {
+        "iteration": 56,
+        "cost": 0.2416973671876328,
+        "target_probability": 0.5750228829299262,
+        "command_step_max": 0.01991636940036682,
+        "gradient_max": 0.029818250201382724,
+        "projected_gradient_max": 0.0061907947945334385
+      },
+      {
+        "iteration": 57,
+        "cost": 0.2410036502319961,
+        "target_probability": 0.5760754589609133,
+        "command_step_max": 0.10094233809090825,
+        "gradient_max": 0.027973998240187287,
+        "projected_gradient_max": 0.009225144794845042
+      },
+      {
+        "iteration": 58,
+        "cost": 0.24066232702993284,
+        "target_probability": 0.5765937015913561,
+        "command_step_max": 0.01389748620755965,
+        "gradient_max": 0.028979411562632888,
+        "projected_gradient_max": 0.006044986386735229
+      },
+      {
+        "iteration": 59,
+        "cost": 0.24002639275449045,
+        "target_probability": 0.5775598837095121,
+        "command_step_max": 0.0346695474978862,
+        "gradient_max": 0.0302558928834943,
+        "projected_gradient_max": 0.005772910201185755
+      },
+      {
+        "iteration": 60,
+        "cost": 0.23942211836215,
+        "target_probability": 0.57847871403648,
+        "command_step_max": 0.0558469669391104,
+        "gradient_max": 0.029661920892608263,
+        "projected_gradient_max": 0.005329117617502099
+      },
+      {
+        "iteration": 61,
+        "cost": 0.2384410469211372,
+        "target_probability": 0.5799720390143351,
+        "command_step_max": 0.13277275147071155,
+        "gradient_max": 0.028247171879084352,
+        "projected_gradient_max": 0.005912956461153307
+      },
+      {
+        "iteration": 62,
+        "cost": 0.23765740942976488,
+        "target_probability": 0.5811662253970996,
+        "command_step_max": 0.09638574396741251,
+        "gradient_max": 0.027491975777893817,
+        "projected_gradient_max": 0.00578388972792665
+      },
+      {
+        "iteration": 63,
+        "cost": 0.2366642957527404,
+        "target_probability": 0.5826813973784233,
+        "command_step_max": 0.11536363267776761,
+        "gradient_max": 0.026324810874477966,
+        "projected_gradient_max": 0.00758951429218202
+      },
+      {
+        "iteration": 64,
+        "cost": 0.23609892831136836,
+        "target_probability": 0.5835448473268039,
+        "command_step_max": 0.04836623313725408,
+        "gradient_max": 0.027980825551702986,
+        "projected_gradient_max": 0.006110199173371078
+      },
+      {
+        "iteration": 65,
+        "cost": 0.2354798103582877,
+        "target_probability": 0.5844911203695643,
+        "command_step_max": 0.09586888589159881,
+        "gradient_max": 0.032926485748603726,
+        "projected_gradient_max": 0.005107679324412917
+      },
+      {
+        "iteration": 66,
+        "cost": 0.2350859454253692,
+        "target_probability": 0.5850935108855663,
+        "command_step_max": 0.019194709519266606,
+        "gradient_max": 0.032744352184920916,
+        "projected_gradient_max": 0.003214156749505259
+      },
+      {
+        "iteration": 67,
+        "cost": 0.2347363200656306,
+        "target_probability": 0.5856284998264583,
+        "command_step_max": 0.032293486406961336,
+        "gradient_max": 0.032156941775399,
+        "projected_gradient_max": 0.003515248639063717
+      },
+      {
+        "iteration": 68,
+        "cost": 0.23458027603297094,
+        "target_probability": 0.5858673538375284,
+        "command_step_max": 0.015171141754084516,
+        "gradient_max": 0.03200390940695403,
+        "projected_gradient_max": 0.003308119037470969
+      },
+      {
+        "iteration": 69,
+        "cost": 0.23422790786072922,
+        "target_probability": 0.5864068970991217,
+        "command_step_max": 0.06208310095465741,
+        "gradient_max": 0.031824807773083115,
+        "projected_gradient_max": 0.002067239173296209
+      },
+      {
+        "iteration": 70,
+        "cost": 0.23391215106942076,
+        "target_probability": 0.5868905922788482,
+        "command_step_max": 0.07674798174588993,
+        "gradient_max": 0.03188935660596514,
+        "projected_gradient_max": 0.002495172112291444
+      },
+      {
+        "iteration": 71,
+        "cost": 0.23335334512396222,
+        "target_probability": 0.5877470934323854,
+        "command_step_max": 0.1522601011079205,
+        "gradient_max": 0.029601930514587364,
+        "projected_gradient_max": 0.005204252604126047
+      },
+      {
+        "iteration": 72,
+        "cost": 0.23309197000266146,
+        "target_probability": 0.5881479264741657,
+        "command_step_max": 0.025227229147132837,
+        "gradient_max": 0.030230645591961924,
+        "projected_gradient_max": 0.0040351707175547355
+      },
+      {
+        "iteration": 73,
+        "cost": 0.23264591214847474,
+        "target_probability": 0.5888322961422138,
+        "command_step_max": 0.07616958303812557,
+        "gradient_max": 0.032155866462392414,
+        "projected_gradient_max": 0.0025501351600567546
+      },
+      {
+        "iteration": 74,
+        "cost": 0.2325396556499556,
+        "target_probability": 0.5889953801496562,
+        "command_step_max": 0.019899002591833803,
+        "gradient_max": 0.030806054465572233,
+        "projected_gradient_max": 0.002006327523822571
+      },
+      {
+        "iteration": 75,
+        "cost": 0.23246707310586057,
+        "target_probability": 0.589106793866452,
+        "command_step_max": 0.017314762410574946,
+        "gradient_max": 0.029902357372714017,
+        "projected_gradient_max": 0.0014246133936779704
+      },
+      {
+        "iteration": 76,
+        "cost": 0.23243050934363907,
+        "target_probability": 0.589162922986233,
+        "command_step_max": 0.011964650198269311,
+        "gradient_max": 0.02933332559657245,
+        "projected_gradient_max": 0.0012491244848252259
+      },
+      {
+        "iteration": 77,
+        "cost": 0.23239145831673969,
+        "target_probability": 0.5892228732648693,
+        "command_step_max": 0.015414680150400178,
+        "gradient_max": 0.029061675916773742,
+        "projected_gradient_max": 0.0011156572159357614
+      },
+      {
+        "iteration": 78,
+        "cost": 0.2323314599438513,
+        "target_probability": 0.5893149873917066,
+        "command_step_max": 0.023818152874406445,
+        "gradient_max": 0.02873425226387189,
+        "projected_gradient_max": 0.001188915383232625
+      },
+      {
+        "iteration": 79,
+        "cost": 0.23221367359609324,
+        "target_probability": 0.5894958430125744,
+        "command_step_max": 0.041138757015490884,
+        "gradient_max": 0.028543036660553515,
+        "projected_gradient_max": 0.0014887471486333403
+      },
+      {
+        "iteration": 80,
+        "cost": 0.2318542321147642,
+        "target_probability": 0.5900479207197667,
+        "command_step_max": 0.16816222525996083,
+        "gradient_max": 0.027882835159921158,
+        "projected_gradient_max": 0.002609221003865292
+      },
+      {
+        "iteration": 81,
+        "cost": 0.23160607036129122,
+        "target_probability": 0.5904292311053855,
+        "command_step_max": 0.10632799023188205,
+        "gradient_max": 0.027809583922536473,
+        "projected_gradient_max": 0.0023127978712741554
+      },
+      {
+        "iteration": 82,
+        "cost": 0.23117459715551336,
+        "target_probability": 0.591092500058756,
+        "command_step_max": 0.3999034587734905,
+        "gradient_max": 0.028447337728147358,
+        "projected_gradient_max": 0.004094139729800772
+      },
+      {
+        "iteration": 83,
+        "cost": 0.23090095903346874,
+        "target_probability": 0.5915133348154074,
+        "command_step_max": 0.023561095826992506,
+        "gradient_max": 0.02755902256995775,
+        "projected_gradient_max": 0.0036470299432761477
+      },
+      {
+        "iteration": 84,
+        "cost": 0.23060768993375635,
+        "target_probability": 0.5919645267888403,
+        "command_step_max": 0.040614252296492626,
+        "gradient_max": 0.02707709425271977,
+        "projected_gradient_max": 0.0034642935210646986
+      },
+      {
+        "iteration": 85,
+        "cost": 0.23030862847384304,
+        "target_probability": 0.5924248074015863,
+        "command_step_max": 0.06493079016969028,
+        "gradient_max": 0.02778298194365667,
+        "projected_gradient_max": 0.004742004289627122
+      },
+      {
+        "iteration": 86,
+        "cost": 0.2296755137588612,
+        "target_probability": 0.5933998141024449,
+        "command_step_max": 0.1527726647148283,
+        "gradient_max": 0.029767720223710548,
+        "projected_gradient_max": 0.008579681306055437
+      },
+      {
+        "iteration": 87,
+        "cost": 0.2288930468805498,
+        "target_probability": 0.5946059331489332,
+        "command_step_max": 0.25862866284766806,
+        "gradient_max": 0.03369845787759392,
+        "projected_gradient_max": 0.013055277440039897
+      },
+      {
+        "iteration": 88,
+        "cost": 0.2282884422957343,
+        "target_probability": 0.595538728294116,
+        "command_step_max": 0.07781076737661419,
+        "gradient_max": 0.03355811057934976,
+        "projected_gradient_max": 0.013480105852057611
+      },
+      {
+        "iteration": 89,
+        "cost": 0.22696621286206609,
+        "target_probability": 0.5975812360565896,
+        "command_step_max": 0.0790169419322998,
+        "gradient_max": 0.03203184994204679,
+        "projected_gradient_max": 0.012300956115154471
+      },
+      {
+        "iteration": 90,
+        "cost": 0.22531085003635398,
+        "target_probability": 0.6001432790711712,
+        "command_step_max": 0.14112911356108065,
+        "gradient_max": 0.03254868664229527,
+        "projected_gradient_max": 0.00442786552763641
+      },
+      {
+        "iteration": 91,
+        "cost": 0.22495634968359435,
+        "target_probability": 0.600692659895554,
+        "command_step_max": 0.04769502129637704,
+        "gradient_max": 0.033227336100099605,
+        "projected_gradient_max": 0.003988193823668107
+      },
+      {
+        "iteration": 92,
+        "cost": 0.22462106917983327,
+        "target_probability": 0.6012124863596003,
+        "command_step_max": 0.05392065884562519,
+        "gradient_max": 0.03430129556016883,
+        "projected_gradient_max": 0.004355495369398388
+      },
+      {
+        "iteration": 93,
+        "cost": 0.22422795074684732,
+        "target_probability": 0.6018222724022118,
+        "command_step_max": 0.08401786368013917,
+        "gradient_max": 0.03643752236720388,
+        "projected_gradient_max": 0.005756757386013334
+      },
+      {
+        "iteration": 94,
+        "cost": 0.2238719052328756,
+        "target_probability": 0.6023748194866226,
+        "command_step_max": 0.05648878019760714,
+        "gradient_max": 0.03736817351615712,
+        "projected_gradient_max": 0.004934773065881193
+      },
+      {
+        "iteration": 95,
+        "cost": 0.22333105277287102,
+        "target_probability": 0.6032146535866736,
+        "command_step_max": 0.09605943473265822,
+        "gradient_max": 0.03781602898262432,
+        "projected_gradient_max": 0.003893831442134399
+      },
+      {
+        "iteration": 96,
+        "cost": 0.22314381399090621,
+        "target_probability": 0.6035055337403726,
+        "command_step_max": 0.02332921973091362,
+        "gradient_max": 0.03719957812345771,
+        "projected_gradient_max": 0.0031148343764021424
+      },
+      {
+        "iteration": 97,
+        "cost": 0.22287867941525696,
+        "target_probability": 0.6039175469071522,
+        "command_step_max": 0.0455749167574816,
+        "gradient_max": 0.03591227816925372,
+        "projected_gradient_max": 0.004105105007762178
+      },
+      {
+        "iteration": 98,
+        "cost": 0.22276390027296866,
+        "target_probability": 0.6040959547186651,
+        "command_step_max": 0.014583152436739473,
+        "gradient_max": 0.035751783113946264,
+        "projected_gradient_max": 0.003909426441571218
+      },
+      {
+        "iteration": 99,
+        "cost": 0.2225020669929495,
+        "target_probability": 0.6045030358300135,
+        "command_step_max": 0.029707912373210944,
+        "gradient_max": 0.03557584920688406,
+        "projected_gradient_max": 0.002888347549263176
+      },
+      {
+        "iteration": 100,
+        "cost": 0.22220969546570746,
+        "target_probability": 0.6049577578273254,
+        "command_step_max": 0.04080648480744864,
+        "gradient_max": 0.03528063507612857,
+        "projected_gradient_max": 0.0031450414779172764
+      },
+      {
+        "iteration": 101,
+        "cost": 0.22191921972694473,
+        "target_probability": 0.6054097006301047,
+        "command_step_max": 0.04884324579908761,
+        "gradient_max": 0.03523430887718305,
+        "projected_gradient_max": 0.0036334633653912762
+      },
+      {
+        "iteration": 102,
+        "cost": 0.22135467370286055,
+        "target_probability": 0.6062885441641575,
+        "command_step_max": 0.10693483594968843,
+        "gradient_max": 0.03539687410431947,
+        "projected_gradient_max": 0.00519818973144015
+      },
+      {
+        "iteration": 103,
+        "cost": 0.22061713663361926,
+        "target_probability": 0.6074376477089579,
+        "command_step_max": 0.15100837841843928,
+        "gradient_max": 0.03478986620709524,
+        "projected_gradient_max": 0.004973080110342254
+      },
+      {
+        "iteration": 104,
+        "cost": 0.22013251041158055,
+        "target_probability": 0.6081933013167236,
+        "command_step_max": 0.052864571460831344,
+        "gradient_max": 0.035119463103513326,
+        "projected_gradient_max": 0.0036955229225628106
+      },
+      {
+        "iteration": 105,
+        "cost": 0.21973330365538435,
+        "target_probability": 0.6088161174243211,
+        "command_step_max": 0.06100311999320818,
+        "gradient_max": 0.03537958908847032,
+        "projected_gradient_max": 0.0038212796192328424
+      },
+      {
+        "iteration": 106,
+        "cost": 0.21939666212665943,
+        "target_probability": 0.6093415710987814,
+        "command_step_max": 0.04359042303752669,
+        "gradient_max": 0.03574380921803338,
+        "projected_gradient_max": 0.003876966942949589
+      },
+      {
+        "iteration": 107,
+        "cost": 0.21869005521748697,
+        "target_probability": 0.6104452298158349,
+        "command_step_max": 0.10156971899576694,
+        "gradient_max": 0.03569737360163367,
+        "projected_gradient_max": 0.004256305428929186
+      },
+      {
+        "iteration": 108,
+        "cost": 0.21774804221620792,
+        "target_probability": 0.6119181254563579,
+        "command_step_max": 0.17218228798505208,
+        "gradient_max": 0.0365063128154573,
+        "projected_gradient_max": 0.005832856638541828
+      },
+      {
+        "iteration": 109,
+        "cost": 0.21635631285462797,
+        "target_probability": 0.6140974284025774,
+        "command_step_max": 0.21083112521021963,
+        "gradient_max": 0.037364593226792954,
+        "projected_gradient_max": 0.006602067830022484
+      },
+      {
+        "iteration": 110,
+        "cost": 0.21549926989552093,
+        "target_probability": 0.6154413955342454,
+        "command_step_max": 0.20851647618397517,
+        "gradient_max": 0.03793641469296231,
+        "projected_gradient_max": 0.009060619097404965
+      },
+      {
+        "iteration": 111,
+        "cost": 0.21468116259471548,
+        "target_probability": 0.6167256763833732,
+        "command_step_max": 0.264274815527535,
+        "gradient_max": 0.038681958651204204,
+        "projected_gradient_max": 0.01019741511099671
+      },
+      {
+        "iteration": 112,
+        "cost": 0.21297025926605861,
+        "target_probability": 0.6194158127995222,
+        "command_step_max": 0.08327716144552327,
+        "gradient_max": 0.03802230727635948,
+        "projected_gradient_max": 0.008109768917723414
+      },
+      {
+        "iteration": 113,
+        "cost": 0.21129083727363906,
+        "target_probability": 0.622062143368306,
+        "command_step_max": 0.1279182106122651,
+        "gradient_max": 0.03745290641218293,
+        "projected_gradient_max": 0.0066487557194540026
+      },
+      {
+        "iteration": 114,
+        "cost": 0.21037770002026634,
+        "target_probability": 0.6235033766250742,
+        "command_step_max": 0.1640183703852025,
+        "gradient_max": 0.03671474980198982,
+        "projected_gradient_max": 0.009144830452372243
+      },
+      {
+        "iteration": 115,
+        "cost": 0.20992534170923705,
+        "target_probability": 0.6242179656730561,
+        "command_step_max": 0.0162943188405128,
+        "gradient_max": 0.03791543010071185,
+        "projected_gradient_max": 0.007277931954514649
+      },
+      {
+        "iteration": 116,
+        "cost": 0.20880606616150665,
+        "target_probability": 0.6259878409426215,
+        "command_step_max": 0.08800464975656253,
+        "gradient_max": 0.04228434720113839,
+        "projected_gradient_max": 0.006445246494385604
+      },
+      {
+        "iteration": 117,
+        "cost": 0.20823620305803325,
+        "target_probability": 0.6268899101477519,
+        "command_step_max": 0.07252267631208908,
+        "gradient_max": 0.04384013961359077,
+        "projected_gradient_max": 0.0063872791562258335
+      },
+      {
+        "iteration": 118,
+        "cost": 0.20763664592230446,
+        "target_probability": 0.6278396848850479,
+        "command_step_max": 0.1094872324911047,
+        "gradient_max": 0.04482773061062468,
+        "projected_gradient_max": 0.008484618148466683
+      },
+      {
+        "iteration": 119,
+        "cost": 0.20716578566487776,
+        "target_probability": 0.6285860914201835,
+        "command_step_max": 0.024878686608098333,
+        "gradient_max": 0.04462670897283677,
+        "projected_gradient_max": 0.004321509448797167
+      },
+      {
+        "iteration": 120,
+        "cost": 0.20691632002704607,
+        "target_probability": 0.628981723439236,
+        "command_step_max": 0.021368350131984903,
+        "gradient_max": 0.044374277027191864,
+        "projected_gradient_max": 0.0042894417794950845
+      },
+      {
+        "iteration": 121,
+        "cost": 0.20676324249131284,
+        "target_probability": 0.629224553462689,
+        "command_step_max": 0.02664280534116248,
+        "gradient_max": 0.04423880620060326,
+        "projected_gradient_max": 0.004644467473462255
+      },
+      {
+        "iteration": 122,
+        "cost": 0.20579768307579405,
+        "target_probability": 0.6307573202075712,
+        "command_step_max": 0.2637020755148007,
+        "gradient_max": 0.043769040106710844,
+        "projected_gradient_max": 0.004208034098104441
+      },
+      {
+        "iteration": 123,
+        "cost": 0.20548373289860256,
+        "target_probability": 0.6312560986885337,
+        "command_step_max": 0.07727738281670204,
+        "gradient_max": 0.04432889196610043,
+        "projected_gradient_max": 0.0034289364158814895
+      },
+      {
+        "iteration": 124,
+        "cost": 0.2051199802503897,
+        "target_probability": 0.6318342457969358,
+        "command_step_max": 0.11028797497006892,
+        "gradient_max": 0.045175697371647006,
+        "projected_gradient_max": 0.002985805345466941
+      },
+      {
+        "iteration": 125,
+        "cost": 0.20496696429164285,
+        "target_probability": 0.6320775278674411,
+        "command_step_max": 0.04770860643016245,
+        "gradient_max": 0.04546885453181916,
+        "projected_gradient_max": 0.0023155561907124422
+      },
+      {
+        "iteration": 126,
+        "cost": 0.20475663132941313,
+        "target_probability": 0.6324120154143382,
+        "command_step_max": 0.06852031547072884,
+        "gradient_max": 0.04580612573411905,
+        "projected_gradient_max": 0.00261351103504448
+      },
+      {
+        "iteration": 127,
+        "cost": 0.20460753552802513,
+        "target_probability": 0.6326491725385973,
+        "command_step_max": 0.0412348577421453,
+        "gradient_max": 0.04574960189233591,
+        "projected_gradient_max": 0.001963879005362634
+      },
+      {
+        "iteration": 128,
+        "cost": 0.204431511997058,
+        "target_probability": 0.6329292191030829,
+        "command_step_max": 0.04843549498617117,
+        "gradient_max": 0.04523155398889918,
+        "projected_gradient_max": 0.002430096822344012
+      },
+      {
+        "iteration": 129,
+        "cost": 0.20430591526122166,
+        "target_probability": 0.633129076488078,
+        "command_step_max": 0.03603267163300278,
+        "gradient_max": 0.0445261573121248,
+        "projected_gradient_max": 0.00202350323619975
+      },
+      {
+        "iteration": 130,
+        "cost": 0.20424391204182446,
+        "target_probability": 0.6332277515222955,
+        "command_step_max": 0.016945345129705955,
+        "gradient_max": 0.044097627708942426,
+        "projected_gradient_max": 0.0012103186651251097
+      },
+      {
+        "iteration": 131,
+        "cost": 0.2042095358668563,
+        "target_probability": 0.6332824628050401,
+        "command_step_max": 0.015282528905753615,
+        "gradient_max": 0.0439691675538252,
+        "projected_gradient_max": 0.0010108688309210523
+      },
+      {
+        "iteration": 132,
+        "cost": 0.2041823683329409,
+        "target_probability": 0.6333257028719628,
+        "command_step_max": 0.013274756857846223,
+        "gradient_max": 0.04398802113405275,
+        "projected_gradient_max": 0.001133980088766695
+      },
+      {
+        "iteration": 133,
+        "cost": 0.2041244546538037,
+        "target_probability": 0.6334178836799013,
+        "command_step_max": 0.030989771134722913,
+        "gradient_max": 0.04410813250412648,
+        "projected_gradient_max": 0.001490997293305596
+      },
+      {
+        "iteration": 134,
+        "cost": 0.20404945723034762,
+        "target_probability": 0.6335372665351002,
+        "command_step_max": 0.046431217576393985,
+        "gradient_max": 0.04421629506986315,
+        "projected_gradient_max": 0.0013873293353584004
+      },
+      {
+        "iteration": 135,
+        "cost": 0.2039672235124531,
+        "target_probability": 0.6336681812422689,
+        "command_step_max": 0.06286653622348193,
+        "gradient_max": 0.044164921294601776,
+        "projected_gradient_max": 0.0012609869828728026
+      },
+      {
+        "iteration": 136,
+        "cost": 0.20390512318957943,
+        "target_probability": 0.6337670528835949,
+        "command_step_max": 0.06430250218190703,
+        "gradient_max": 0.04401203282074813,
+        "projected_gradient_max": 0.001001029520551408
+      },
+      {
+        "iteration": 137,
+        "cost": 0.20386338108355417,
+        "target_probability": 0.6338335159795063,
+        "command_step_max": 0.04466860600751277,
+        "gradient_max": 0.04382666273536028,
+        "projected_gradient_max": 0.0011312573092531475
+      },
+      {
+        "iteration": 138,
+        "cost": 0.2038144227548897,
+        "target_probability": 0.6339114734129259,
+        "command_step_max": 0.05350268056695817,
+        "gradient_max": 0.0437717326205222,
+        "projected_gradient_max": 0.0010000170426966992
+      },
+      {
+        "iteration": 139,
+        "cost": 0.20377283255780299,
+        "target_probability": 0.6339777021728208,
+        "command_step_max": 0.048176152744879464,
+        "gradient_max": 0.04357308246871762,
+        "projected_gradient_max": 0.0012893357674542694
+      },
+      {
+        "iteration": 140,
+        "cost": 0.20373336598000202,
+        "target_probability": 0.6340405524533338,
+        "command_step_max": 0.0515149609767222,
+        "gradient_max": 0.04348942194493484,
+        "projected_gradient_max": 0.00108378032804278
+      },
+      {
+        "iteration": 141,
+        "cost": 0.20370151903067013,
+        "target_probability": 0.6340912707938586,
+        "command_step_max": 0.04243207865655729,
+        "gradient_max": 0.04346793780528008,
+        "projected_gradient_max": 0.0012286819466791332
+      },
+      {
+        "iteration": 142,
+        "cost": 0.20366167541453983,
+        "target_probability": 0.6341547272033742,
+        "command_step_max": 0.04632545645625452,
+        "gradient_max": 0.043437350752411105,
+        "projected_gradient_max": 0.001392921975249109
+      },
+      {
+        "iteration": 143,
+        "cost": 0.2036069335070001,
+        "target_probability": 0.6342419163579203,
+        "command_step_max": 0.06657113926293823,
+        "gradient_max": 0.04348251297849081,
+        "projected_gradient_max": 0.0011950572754915179
+      },
+      {
+        "iteration": 144,
+        "cost": 0.20355413888022977,
+        "target_probability": 0.634326009694609,
+        "command_step_max": 0.06106549679936513,
+        "gradient_max": 0.04344684304389979,
+        "projected_gradient_max": 0.0011700652688091395
+      },
+      {
+        "iteration": 145,
+        "cost": 0.20349947374828647,
+        "target_probability": 0.6344130883190532,
+        "command_step_max": 0.06406165394073582,
+        "gradient_max": 0.043504094918267185,
+        "projected_gradient_max": 0.001544232231803111
+      },
+      {
+        "iteration": 146,
+        "cost": 0.20345411313921158,
+        "target_probability": 0.6344853498746367,
+        "command_step_max": 0.05017222991611581,
+        "gradient_max": 0.0436230668941335,
+        "projected_gradient_max": 0.0015645716930066111
+      },
+      {
+        "iteration": 147,
+        "cost": 0.20339684366644972,
+        "target_probability": 0.6345765886803715,
+        "command_step_max": 0.06808326926323827,
+        "gradient_max": 0.04390160224365997,
+        "projected_gradient_max": 0.0017031617695183465
+      },
+      {
+        "iteration": 148,
+        "cost": 0.20331038274980917,
+        "target_probability": 0.6347143462340524,
+        "command_step_max": 0.11976327035083079,
+        "gradient_max": 0.0445563947256003,
+        "projected_gradient_max": 0.001834338836894378
+      },
+      {
+        "iteration": 149,
+        "cost": 0.20322193852530346,
+        "target_probability": 0.6348552792471722,
+        "command_step_max": 0.08099893461696417,
+        "gradient_max": 0.0451351552086238,
+        "projected_gradient_max": 0.0023683077950240605
+      },
+      {
+        "iteration": 150,
+        "cost": 0.20305140445476888,
+        "target_probability": 0.6351270639413135,
+        "command_step_max": 0.17773754727760394,
+        "gradient_max": 0.04624438398486287,
+        "projected_gradient_max": 0.0037204048899139863
+      },
+      {
+        "iteration": 151,
+        "cost": 0.20284172625861374,
+        "target_probability": 0.6354613133941442,
+        "command_step_max": 0.24074463286134962,
+        "gradient_max": 0.04792123897971242,
+        "projected_gradient_max": 0.004928264363979862
+      },
+      {
+        "iteration": 152,
+        "cost": 0.20269253286999755,
+        "target_probability": 0.6356991971410573,
+        "command_step_max": 0.014221042753647106,
+        "gradient_max": 0.0476306033296926,
+        "projected_gradient_max": 0.0038195113237595724
+      },
+      {
+        "iteration": 153,
+        "cost": 0.20239689200443767,
+        "target_probability": 0.6361707178839784,
+        "command_step_max": 0.03969685154423397,
+        "gradient_max": 0.045860485839978204,
+        "projected_gradient_max": 0.002538218567765038
+      },
+      {
+        "iteration": 154,
+        "cost": 0.20227200514370913,
+        "target_probability": 0.6363699537772363,
+        "command_step_max": 0.018104558675568927,
+        "gradient_max": 0.044875287975772685,
+        "projected_gradient_max": 0.00225723115779608
+      },
+      {
+        "iteration": 155,
+        "cost": 0.20216597587726448,
+        "target_probability": 0.6365391300476756,
+        "command_step_max": 0.028598017100383788,
+        "gradient_max": 0.04400533107027716,
+        "projected_gradient_max": 0.00210256520305252
+      },
+      {
+        "iteration": 156,
+        "cost": 0.20210164501951133,
+        "target_probability": 0.6366417848803678,
+        "command_step_max": 0.020956628628944984,
+        "gradient_max": 0.04387571277899232,
+        "projected_gradient_max": 0.0019629255921845834
+      },
+      {
+        "iteration": 157,
+        "cost": 0.20199982896492397,
+        "target_probability": 0.6368042729718086,
+        "command_step_max": 0.03923333862775924,
+        "gradient_max": 0.04404161143593363,
+        "projected_gradient_max": 0.001468534096586871
+      },
+      {
+        "iteration": 158,
+        "cost": 0.20192294166780878,
+        "target_probability": 0.6369269910359618,
+        "command_step_max": 0.03796562285195604,
+        "gradient_max": 0.044275285993406424,
+        "projected_gradient_max": 0.0010504382493329717
+      },
+      {
+        "iteration": 159,
+        "cost": 0.20187568045563542,
+        "target_probability": 0.6370024294479532,
+        "command_step_max": 0.027270792587328896,
+        "gradient_max": 0.04442698535317735,
+        "projected_gradient_max": 0.0008723444361197208
+      },
+      {
+        "iteration": 160,
+        "cost": 0.20184511417534745,
+        "target_probability": 0.6370512217655624,
+        "command_step_max": 0.020019549044208718,
+        "gradient_max": 0.04437579839076425,
+        "projected_gradient_max": 0.000753877670314429
+      },
+      {
+        "iteration": 161,
+        "cost": 0.20182048874617742,
+        "target_probability": 0.6370905321851893,
+        "command_step_max": 0.016061662249578557,
+        "gradient_max": 0.04414566244010294,
+        "projected_gradient_max": 0.0005524446133169381
+      },
+      {
+        "iteration": 162,
+        "cost": 0.20180221886489258,
+        "target_probability": 0.6371196978088071,
+        "command_step_max": 0.012216288125785402,
+        "gradient_max": 0.043939543541511146,
+        "projected_gradient_max": 0.0005717141056210684
+      },
+      {
+        "iteration": 163,
+        "cost": 0.20179173108225212,
+        "target_probability": 0.637136440568466,
+        "command_step_max": 0.010276386619700872,
+        "gradient_max": 0.043807500352680925,
+        "projected_gradient_max": 0.0005678685590211341
+      },
+      {
+        "iteration": 164,
+        "cost": 0.20178024600146804,
+        "target_probability": 0.6371547756732752,
+        "command_step_max": 0.012966521955631194,
+        "gradient_max": 0.043846515122045675,
+        "projected_gradient_max": 0.0006975519012570874
+      },
+      {
+        "iteration": 165,
+        "cost": 0.20176000560792784,
+        "target_probability": 0.6371870886468537,
+        "command_step_max": 0.02012228727125054,
+        "gradient_max": 0.04414371548714922,
+        "projected_gradient_max": 0.0005755807481251374
+      },
+      {
+        "iteration": 166,
+        "cost": 0.2017394100599137,
+        "target_probability": 0.637219969451293,
+        "command_step_max": 0.02800010398859043,
+        "gradient_max": 0.044699856460803246,
+        "projected_gradient_max": 0.0006588862194845113
+      },
+      {
+        "iteration": 167,
+        "cost": 0.20172799089792126,
+        "target_probability": 0.6372382005156676,
+        "command_step_max": 0.019045705466820273,
+        "gradient_max": 0.04505971125699603,
+        "projected_gradient_max": 0.0006480880417452095
+      },
+      {
+        "iteration": 168,
+        "cost": 0.2017176458138339,
+        "target_probability": 0.637254717004806,
+        "command_step_max": 0.018513999398979353,
+        "gradient_max": 0.04529671686620188,
+        "projected_gradient_max": 0.0007734599106330731
+      },
+      {
+        "iteration": 169,
+        "cost": 0.20170114399569172,
+        "target_probability": 0.6372810634975857,
+        "command_step_max": 0.030032863467931437,
+        "gradient_max": 0.04542254954779516,
+        "projected_gradient_max": 0.0008764363557675625
+      },
+      {
+        "iteration": 170,
+        "cost": 0.20168785339092155,
+        "target_probability": 0.6373022834233932,
+        "command_step_max": 0.02873471723442611,
+        "gradient_max": 0.04519881948063176,
+        "projected_gradient_max": 0.0006729696602609803
+      },
+      {
+        "iteration": 171,
+        "cost": 0.20168325621806538,
+        "target_probability": 0.6373096234023895,
+        "command_step_max": 0.0039894728932652335,
+        "gradient_max": 0.044973999864261864,
+        "projected_gradient_max": 0.00045717000076472836
+      },
+      {
+        "iteration": 172,
+        "cost": 0.20168092035613272,
+        "target_probability": 0.6373133529232297,
+        "command_step_max": 0.0034263424852388757,
+        "gradient_max": 0.04482812197703725,
+        "projected_gradient_max": 0.000505413829978929
+      },
+      {
+        "iteration": 173,
+        "cost": 0.2016789322457342,
+        "target_probability": 0.6373165272201095,
+        "command_step_max": 0.0027186939941612476,
+        "gradient_max": 0.04475078532978784,
+        "projected_gradient_max": 0.0005158647882172462
+      },
+      {
+        "iteration": 174,
+        "cost": 0.20167488994757166,
+        "target_probability": 0.6373229813400203,
+        "command_step_max": 0.005150926680594137,
+        "gradient_max": 0.044681955326892134,
+        "projected_gradient_max": 0.0004015594567636782
+      },
+      {
+        "iteration": 175,
+        "cost": 0.2016707773380083,
+        "target_probability": 0.6373295477558983,
+        "command_step_max": 0.007306163066617466,
+        "gradient_max": 0.044692690122358686,
+        "projected_gradient_max": 0.00036575282397566244
+      },
+      {
+        "iteration": 176,
+        "cost": 0.20166588806447883,
+        "target_probability": 0.6373373542796757,
+        "command_step_max": 0.013801669666353766,
+        "gradient_max": 0.04479322824474256,
+        "projected_gradient_max": 0.0005734894813020919
+      },
+      {
+        "iteration": 177,
+        "cost": 0.20166148567247566,
+        "target_probability": 0.6373443834584772,
+        "command_step_max": 0.016572101630126013,
+        "gradient_max": 0.044940613146753045,
+        "projected_gradient_max": 0.0006109555890557727
+      },
+      {
+        "iteration": 178,
+        "cost": 0.20165683142850244,
+        "target_probability": 0.637351814804577,
+        "command_step_max": 0.019058648148387203,
+        "gradient_max": 0.04509351268804599,
+        "projected_gradient_max": 0.0004507602202692418
+      },
+      {
+        "iteration": 179,
+        "cost": 0.20165598937940177,
+        "target_probability": 0.6373531592935803,
+        "command_step_max": 0.009365417496367434,
+        "gradient_max": 0.045187252964374876,
+        "projected_gradient_max": 0.0004564869583556508
+      },
+      {
+        "iteration": 180,
+        "cost": 0.20165520303596562,
+        "target_probability": 0.6373544148393437,
+        "command_step_max": 0.0038234019115247486,
+        "gradient_max": 0.0451977943438865,
+        "projected_gradient_max": 0.0004155108424530596
+      },
+      {
+        "iteration": 181,
+        "cost": 0.2016534728725936,
+        "target_probability": 0.637357177376189,
+        "command_step_max": 0.004818859303872602,
+        "gradient_max": 0.04510890050795582,
+        "projected_gradient_max": 0.0002783064496590937
+      },
+      {
+        "iteration": 182,
+        "cost": 0.2016522139205621,
+        "target_probability": 0.6373591875377385,
+        "command_step_max": 0.00357746798228209,
+        "gradient_max": 0.045018539694070686,
+        "projected_gradient_max": 0.0002405309123015842
+      },
+      {
+        "iteration": 183,
+        "cost": 0.2016512833153722,
+        "target_probability": 0.6373606734317905,
+        "command_step_max": 0.0026412002225255637,
+        "gradient_max": 0.04498418119499614,
+        "projected_gradient_max": 0.00022900009734239113
+      },
+      {
+        "iteration": 184,
+        "cost": 0.20164974652949186,
+        "target_probability": 0.637363127216223,
+        "command_step_max": 0.004152207651767492,
+        "gradient_max": 0.044965790028947614,
+        "projected_gradient_max": 0.00019143057956416687
+      },
+      {
+        "iteration": 185,
+        "cost": 0.20164846816330995,
+        "target_probability": 0.637365168385788,
+        "command_step_max": 0.006101997054868136,
+        "gradient_max": 0.044975546999463364,
+        "projected_gradient_max": 0.00018823017896729688
+      },
+      {
+        "iteration": 186,
+        "cost": 0.20164737194504867,
+        "target_probability": 0.637366918722046,
+        "command_step_max": 0.007088852409562363,
+        "gradient_max": 0.04499907760411705,
+        "projected_gradient_max": 0.00015519825380594376
+      },
+      {
+        "iteration": 187,
+        "cost": 0.20164660973130177,
+        "target_probability": 0.6373681357533229,
+        "command_step_max": 0.00484336251107198,
+        "gradient_max": 0.04501382814081553,
+        "projected_gradient_max": 0.00010478756840059944
+      },
+      {
+        "iteration": 188,
+        "cost": 0.20164610046417153,
+        "target_probability": 0.6373689489038622,
+        "command_step_max": 0.0025270210205159405,
+        "gradient_max": 0.04500649368712543,
+        "projected_gradient_max": 9.886968417482933e-05
+      },
+      {
+        "iteration": 189,
+        "cost": 0.20164585943494295,
+        "target_probability": 0.6373693337571693,
+        "command_step_max": 0.001753233408829602,
+        "gradient_max": 0.04498840653793608,
+        "projected_gradient_max": 8.5181835737691e-05
+      },
+      {
+        "iteration": 190,
+        "cost": 0.20164569414306943,
+        "target_probability": 0.6373695976800998,
+        "command_step_max": 0.0014478460340020538,
+        "gradient_max": 0.04496705941235295,
+        "projected_gradient_max": 8.570589461931455e-05
+      },
+      {
+        "iteration": 191,
+        "cost": 0.201645515882114,
+        "target_probability": 0.6373698823109344,
+        "command_step_max": 0.0018024661386285556,
+        "gradient_max": 0.04494564388011851,
+        "projected_gradient_max": 7.12933640706348e-05
+      },
+      {
+        "iteration": 192,
+        "cost": 0.20164530814934012,
+        "target_probability": 0.6373702139997606,
+        "command_step_max": 0.002288341031212171,
+        "gradient_max": 0.04492686941587481,
+        "projected_gradient_max": 6.3864585463147e-05
+      },
+      {
+        "iteration": 193,
+        "cost": 0.20164510623697363,
+        "target_probability": 0.6373705363951715,
+        "command_step_max": 0.0023513795981142116,
+        "gradient_max": 0.044916899905495355,
+        "projected_gradient_max": 5.104442198095027e-05
+      },
+      {
+        "iteration": 194,
+        "cost": 0.2016449543797879,
+        "target_probability": 0.6373707788670493,
+        "command_step_max": 0.001851510375073362,
+        "gradient_max": 0.044914063608304834,
+        "projected_gradient_max": 5.7219510775974314e-05
+      },
+      {
+        "iteration": 195,
+        "cost": 0.2016448699722817,
+        "target_probability": 0.6373709136413734,
+        "command_step_max": 0.0010881509664082412,
+        "gradient_max": 0.0449168180399295,
+        "projected_gradient_max": 4.4101384283123934e-05
+      },
+      {
+        "iteration": 196,
+        "cost": 0.20164482647863935,
+        "target_probability": 0.6373709830881202,
+        "command_step_max": 0.0004750542648377376,
+        "gradient_max": 0.04491647420438208,
+        "projected_gradient_max": 3.7929376802914305e-05
+      },
+      {
+        "iteration": 197,
+        "cost": 0.2016447980603664,
+        "target_probability": 0.6373710284638716,
+        "command_step_max": 0.00040550217178103587,
+        "gradient_max": 0.04491354219988984,
+        "projected_gradient_max": 3.190511161144105e-05
+      },
+      {
+        "iteration": 198,
+        "cost": 0.2016447806092011,
+        "target_probability": 0.6373710563283291,
+        "command_step_max": 0.00035671911675427825,
+        "gradient_max": 0.04490856163950486,
+        "projected_gradient_max": 2.2933641917410874e-05
+      },
+      {
+        "iteration": 199,
+        "cost": 0.20164476646679408,
+        "target_probability": 0.6373710789096582,
+        "command_step_max": 0.00036983178884475443,
+        "gradient_max": 0.044902504460898156,
+        "projected_gradient_max": 2.720979247361477e-05
+      },
+      {
+        "iteration": 200,
+        "cost": 0.20164475358612366,
+        "target_probability": 0.6373710994763597,
+        "command_step_max": 0.00036707457649243214,
+        "gradient_max": 0.044896869685981174,
+        "projected_gradient_max": 3.421704982065066e-05
+      },
+      {
+        "iteration": 201,
+        "cost": 0.2016447382418507,
+        "target_probability": 0.6373711239767216,
+        "command_step_max": 0.00042586405789357684,
+        "gradient_max": 0.04489194148008452,
+        "projected_gradient_max": 3.455418615794237e-05
+      },
+      {
+        "iteration": 202,
+        "cost": 0.2016447199872884,
+        "target_probability": 0.6373711531239735,
+        "command_step_max": 0.0006108057299863967,
+        "gradient_max": 0.04488940906528689,
+        "projected_gradient_max": 2.648043118702592e-05
+      },
+      {
+        "iteration": 203,
+        "cost": 0.20164469913103045,
+        "target_probability": 0.6373711864253814,
+        "command_step_max": 0.000810415524742425,
+        "gradient_max": 0.04489092828742288,
+        "projected_gradient_max": 2.7041651431414238e-05
+      },
+      {
+        "iteration": 204,
+        "cost": 0.20164468206700614,
+        "target_probability": 0.6373712136716901,
+        "command_step_max": 0.0007430603585877882,
+        "gradient_max": 0.04489595193590836,
+        "projected_gradient_max": 1.9918384568384795e-05
+      },
+      {
+        "iteration": 205,
+        "cost": 0.20164467349253667,
+        "target_probability": 0.6373712273626367,
+        "command_step_max": 0.0003493226529353577,
+        "gradient_max": 0.04490096888117169,
+        "projected_gradient_max": 1.1720222841127281e-05
+      },
+      {
+        "iteration": 206,
+        "cost": 0.20164466902483424,
+        "target_probability": 0.637371234496265,
+        "command_step_max": 0.00014955557053952795,
+        "gradient_max": 0.04490362073223203,
+        "projected_gradient_max": 1.1317663329735161e-05
+      },
+      {
+        "iteration": 207,
+        "cost": 0.201644665270856,
+        "target_probability": 0.6373712404902819,
+        "command_step_max": 0.00014721306918008548,
+        "gradient_max": 0.0449047722279461,
+        "projected_gradient_max": 1.0548504239038525e-05
+      },
+      {
+        "iteration": 208,
+        "cost": 0.2016446615374119,
+        "target_probability": 0.6373712464515121,
+        "command_step_max": 0.00019439924353448212,
+        "gradient_max": 0.04490458525426075,
+        "projected_gradient_max": 1.204805906521167e-05
+      },
+      {
+        "iteration": 209,
+        "cost": 0.20164465800501663,
+        "target_probability": 0.6373712520917253,
+        "command_step_max": 0.0002207916454259884,
+        "gradient_max": 0.04490360825757112,
+        "projected_gradient_max": 1.5504911003209887e-05
+      },
+      {
+        "iteration": 210,
+        "cost": 0.201644654782825,
+        "target_probability": 0.6373712572366331,
+        "command_step_max": 0.00023082777769067864,
+        "gradient_max": 0.04490234784913705,
+        "projected_gradient_max": 1.3831408474218598e-05
+      },
+      {
+        "iteration": 211,
+        "cost": 0.2016446516844117,
+        "target_probability": 0.6373712621839027,
+        "command_step_max": 0.00024351722362014883,
+        "gradient_max": 0.04490137855233475,
+        "projected_gradient_max": 8.437996710131124e-06
+      },
+      {
+        "iteration": 212,
+        "cost": 0.2016446491173478,
+        "target_probability": 0.6373712662827611,
+        "command_step_max": 0.0002038237932933118,
+        "gradient_max": 0.04490096658865907,
+        "projected_gradient_max": 7.59539822214883e-06
+      },
+      {
+        "iteration": 213,
+        "cost": 0.2016446474413015,
+        "target_probability": 0.6373712689589223,
+        "command_step_max": 0.0001240734946387212,
+        "gradient_max": 0.044901229068988004,
+        "projected_gradient_max": 8.542475844530717e-06
+      },
+      {
+        "iteration": 214,
+        "cost": 0.20164464622710776,
+        "target_probability": 0.6373712708976385,
+        "command_step_max": 7.723231789991125e-05,
+        "gradient_max": 0.04490165971177791,
+        "projected_gradient_max": 9.180816793852298e-06
+      },
+      {
+        "iteration": 215,
+        "cost": 0.20164464492036038,
+        "target_probability": 0.637371272984136,
+        "command_step_max": 0.00011657963286842987,
+        "gradient_max": 0.04490197311135627,
+        "projected_gradient_max": 8.279487699269783e-06
+      },
+      {
+        "iteration": 216,
+        "cost": 0.2016446434556508,
+        "target_probability": 0.6373712753228534,
+        "command_step_max": 0.00016393130290021096,
+        "gradient_max": 0.04490176580031975,
+        "projected_gradient_max": 6.200853321924882e-06
+      },
+      {
+        "iteration": 217,
+        "cost": 0.20164464238628155,
+        "target_probability": 0.6373712770303268,
+        "command_step_max": 0.00014448328173893854,
+        "gradient_max": 0.04490092060519065,
+        "projected_gradient_max": 5.610490969698567e-06
+      },
+      {
+        "iteration": 218,
+        "cost": 0.20164464189577413,
+        "target_probability": 0.6373712778135252,
+        "command_step_max": 6.635359209328229e-05,
+        "gradient_max": 0.04489998610090637,
+        "projected_gradient_max": 4.588180509523809e-06
+      },
+      {
+        "iteration": 219,
+        "cost": 0.20164464161881102,
+        "target_probability": 0.6373712782557551,
+        "command_step_max": 3.1834277523068444e-05,
+        "gradient_max": 0.0448992217337564,
+        "projected_gradient_max": 3.342725080290876e-06
+      },
+      {
+        "iteration": 220,
+        "cost": 0.20164464132596494,
+        "target_probability": 0.6373712787233456,
+        "command_step_max": 3.522152120205568e-05,
+        "gradient_max": 0.04489843031760443,
+        "projected_gradient_max": 3.2932422975306963e-06
+      },
+      {
+        "iteration": 221,
+        "cost": 0.20164464100104296,
+        "target_probability": 0.637371279242152,
+        "command_step_max": 4.320876748409308e-05,
+        "gradient_max": 0.04489774341961488,
+        "projected_gradient_max": 2.844065071450075e-06
+      },
+      {
+        "iteration": 222,
+        "cost": 0.20164464073018773,
+        "target_probability": 0.6373712796746295,
+        "command_step_max": 4.765918871424413e-05,
+        "gradient_max": 0.04489748945846605,
+        "projected_gradient_max": 3.335040300533887e-06
+      },
+      {
+        "iteration": 223,
+        "cost": 0.2016446405244985,
+        "target_probability": 0.6373712800030558,
+        "command_step_max": 4.691408688017873e-05,
+        "gradient_max": 0.0448976754982832,
+        "projected_gradient_max": 3.477529552903258e-06
+      },
+      {
+        "iteration": 224,
+        "cost": 0.20164464034868512,
+        "target_probability": 0.6373712802837788,
+        "command_step_max": 4.7602693688586495e-05,
+        "gradient_max": 0.0448981019291817,
+        "projected_gradient_max": 3.0833553022746596e-06
+      },
+      {
+        "iteration": 225,
+        "cost": 0.20164464017393835,
+        "target_probability": 0.6373712805627988,
+        "command_step_max": 5.143312296995717e-05,
+        "gradient_max": 0.044898579487060504,
+        "projected_gradient_max": 2.4646595989663567e-06
+      },
+      {
+        "iteration": 226,
+        "cost": 0.20164463999426174,
+        "target_probability": 0.6373712808496903,
+        "command_step_max": 5.11137973297493e-05,
+        "gradient_max": 0.04489885714906239,
+        "projected_gradient_max": 2.5038949000855126e-06
+      },
+      {
+        "iteration": 227,
+        "cost": 0.20164463980651703,
+        "target_probability": 0.6373712811494644,
+        "command_step_max": 5.5406381704092844e-05,
+        "gradient_max": 0.04489874630643411,
+        "projected_gradient_max": 2.3218398113727945e-06
+      },
+      {
+        "iteration": 228,
+        "cost": 0.20164463964945611,
+        "target_probability": 0.6373712814002452,
+        "command_step_max": 5.556812301599212e-05,
+        "gradient_max": 0.04489824328134618,
+        "projected_gradient_max": 1.8537111475744328e-06
+      },
+      {
+        "iteration": 229,
+        "cost": 0.20164463956267986,
+        "target_probability": 0.6373712815388018,
+        "command_step_max": 3.263394368901995e-05,
+        "gradient_max": 0.04489771305357862,
+        "projected_gradient_max": 1.349654473181694e-06
+      },
+      {
+        "iteration": 230,
+        "cost": 0.2016446395234487,
+        "target_probability": 0.6373712816014426,
+        "command_step_max": 1.3330587939952565e-05,
+        "gradient_max": 0.0448974461288229,
+        "projected_gradient_max": 9.576845148018265e-07
+      },
+      {
+        "iteration": 231,
+        "cost": 0.20164463950156664,
+        "target_probability": 0.637371281636382,
+        "command_step_max": 7.735336435499285e-06,
+        "gradient_max": 0.04489742105719565,
+        "projected_gradient_max": 1.2106047308502177e-06
+      },
+      {
+        "iteration": 232,
+        "cost": 0.20164463948450495,
+        "target_probability": 0.6373712816636246,
+        "command_step_max": 7.558367796201004e-06,
+        "gradient_max": 0.04489755181144231,
+        "projected_gradient_max": 1.1008852487393028e-06
+      },
+      {
+        "iteration": 233,
+        "cost": 0.20164463947056932,
+        "target_probability": 0.6373712816858756,
+        "command_step_max": 7.440234990774286e-06,
+        "gradient_max": 0.044897771704036214,
+        "projected_gradient_max": 7.454826284614136e-07
+      },
+      {
+        "iteration": 234,
+        "cost": 0.20164463945915412,
+        "target_probability": 0.6373712817041024,
+        "command_step_max": 6.883596742945919e-06,
+        "gradient_max": 0.044897994782321066,
+        "projected_gradient_max": 7.262549241993099e-07
+      },
+      {
+        "iteration": 235,
+        "cost": 0.20164463944834143,
+        "target_probability": 0.6373712817213671,
+        "command_step_max": 6.378374510895846e-06,
+        "gradient_max": 0.04489816876738381,
+        "projected_gradient_max": 6.119967854711916e-07
+      },
+      {
+        "iteration": 236,
+        "cost": 0.2016446394352489,
+        "target_probability": 0.6373712817422722,
+        "command_step_max": 7.478366930824265e-06,
+        "gradient_max": 0.04489828839183015,
+        "projected_gradient_max": 8.016821291256804e-07
+      },
+      {
+        "iteration": 237,
+        "cost": 0.20164463941858735,
+        "target_probability": 0.6373712817688759,
+        "command_step_max": 1.1973252948715984e-05,
+        "gradient_max": 0.04489833437781158,
+        "projected_gradient_max": 8.750301849769215e-07
+      },
+      {
+        "iteration": 238,
+        "cost": 0.20164463940182387,
+        "target_probability": 0.6373712817956423,
+        "command_step_max": 1.4406498690777703e-05,
+        "gradient_max": 0.04489828117829719,
+        "projected_gradient_max": 8.667250589455833e-07
+      },
+      {
+        "iteration": 239,
+        "cost": 0.20164463939020016,
+        "target_probability": 0.637371281814202,
+        "command_step_max": 1.0753100886690126e-05,
+        "gradient_max": 0.04489817933140489,
+        "projected_gradient_max": 6.269327658126045e-07
+      },
+      {
+        "iteration": 240,
+        "cost": 0.20164463938309996,
+        "target_probability": 0.6373712818255389,
+        "command_step_max": 6.431783202032193e-06,
+        "gradient_max": 0.04489811068063958,
+        "projected_gradient_max": 5.340742629256212e-07
+      },
+      {
+        "iteration": 241,
+        "cost": 0.20164463937723653,
+        "target_probability": 0.6373712818349011,
+        "command_step_max": 5.658773025829511e-06,
+        "gradient_max": 0.04489809863612101,
+        "projected_gradient_max": 4.4703190915651447e-07
+      },
+      {
+        "iteration": 242,
+        "cost": 0.20164463937149624,
+        "target_probability": 0.6373712818440668,
+        "command_step_max": 5.769048647463748e-06,
+        "gradient_max": 0.044898147105865156,
+        "projected_gradient_max": 3.779715449514498e-07
+      },
+      {
+        "iteration": 243,
+        "cost": 0.2016446393670881,
+        "target_probability": 0.6373712818511053,
+        "command_step_max": 5.360330491532839e-06,
+        "gradient_max": 0.0448982225780633,
+        "projected_gradient_max": 3.3964572854205954e-07
+      },
+      {
+        "iteration": 244,
+        "cost": 0.20164463936414412,
+        "target_probability": 0.6373712818558059,
+        "command_step_max": 3.911510269460905e-06,
+        "gradient_max": 0.044898269523513036,
+        "projected_gradient_max": 4.0902167075529405e-07
+      },
+      {
+        "iteration": 245,
+        "cost": 0.2016446393614013,
+        "target_probability": 0.6373712818601854,
+        "command_step_max": 3.7364443449261486e-06,
+        "gradient_max": 0.04489826873382899,
+        "projected_gradient_max": 4.137297380246707e-07
+      },
+      {
+        "iteration": 246,
+        "cost": 0.20164463935786525,
+        "target_probability": 0.6373712818658315,
+        "command_step_max": 5.322647522509882e-06,
+        "gradient_max": 0.044898197834240254,
+        "projected_gradient_max": 4.6631418948450687e-07
+      },
+      {
+        "iteration": 247,
+        "cost": 0.20164463935394017,
+        "target_probability": 0.6373712818720988,
+        "command_step_max": 6.863285254676832e-06,
+        "gradient_max": 0.04489804748135969,
+        "projected_gradient_max": 4.846935099944716e-07
+      },
+      {
+        "iteration": 248,
+        "cost": 0.20164463935082688,
+        "target_probability": 0.6373712818770697,
+        "command_step_max": 6.0926473268718695e-06,
+        "gradient_max": 0.044897891489576555,
+        "projected_gradient_max": 4.3344459554894854e-07
+      },
+      {
+        "iteration": 249,
+        "cost": 0.20164463934839538,
+        "target_probability": 0.6373712818809522,
+        "command_step_max": 4.783997247459482e-06,
+        "gradient_max": 0.04489779685920208,
+        "projected_gradient_max": 2.9239107257605923e-07
+      },
+      {
+        "iteration": 250,
+        "cost": 0.2016446393460063,
+        "target_probability": 0.6373712818847668,
+        "command_step_max": 4.919160404348588e-06,
+        "gradient_max": 0.04489777186095225,
+        "projected_gradient_max": 2.835561899172667e-07
+      },
+      {
+        "iteration": 251,
+        "cost": 0.20164463934356136,
+        "target_probability": 0.6373712818886706,
+        "command_step_max": 5.719482006283361e-06,
+        "gradient_max": 0.044897827152893886,
+        "projected_gradient_max": 3.096860946572022e-07
+      },
+      {
+        "iteration": 252,
+        "cost": 0.20164463934158672,
+        "target_probability": 0.6373712818918236,
+        "command_step_max": 5.28447016101552e-06,
+        "gradient_max": 0.044897933667730455,
+        "projected_gradient_max": 2.6415707110594155e-07
+      },
+      {
+        "iteration": 253,
+        "cost": 0.2016446393401783,
+        "target_probability": 0.6373712818940724,
+        "command_step_max": 4.5284897627340115e-06,
+        "gradient_max": 0.04489802410164115,
+        "projected_gradient_max": 1.7582218342360179e-07
+      },
+      {
+        "iteration": 254,
+        "cost": 0.2016446393390282,
+        "target_probability": 0.6373712818959087,
+        "command_step_max": 4.280896934827361e-06,
+        "gradient_max": 0.044898075243211634,
+        "projected_gradient_max": 2.2055555137789895e-07
+      },
+      {
+        "iteration": 255,
+        "cost": 0.20164463933801136,
+        "target_probability": 0.6373712818975324,
+        "command_step_max": 4.284331016513043e-06,
+        "gradient_max": 0.04489807735668254,
+        "projected_gradient_max": 2.1851434395259162e-07
+      },
+      {
+        "iteration": 256,
+        "cost": 0.20164463933723364,
+        "target_probability": 0.6373712818987741,
+        "command_step_max": 3.59342505584781e-06,
+        "gradient_max": 0.04489803697960791,
+        "projected_gradient_max": 1.4442722329199853e-07
+      },
+      {
+        "iteration": 257,
+        "cost": 0.2016446393368535,
+        "target_probability": 0.6373712818993812,
+        "command_step_max": 1.8542770604534908e-06,
+        "gradient_max": 0.044897995003537874,
+        "projected_gradient_max": 9.849447535348332e-08
+      },
+      {
+        "iteration": 258,
+        "cost": 0.20164463933668952,
+        "target_probability": 0.637371281899643,
+        "command_step_max": 7.967266898445402e-07,
+        "gradient_max": 0.04489797388739745,
+        "projected_gradient_max": 8.655181454875205e-08
+      },
+      {
+        "iteration": 259,
+        "cost": 0.20164463933653798,
+        "target_probability": 0.637371281899885,
+        "command_step_max": 6.478572298629359e-07,
+        "gradient_max": 0.04489796937361541,
+        "projected_gradient_max": 9.031361603017984e-08
+      },
+      {
+        "iteration": 260,
+        "cost": 0.20164463933636934,
+        "target_probability": 0.6373712819001542,
+        "command_step_max": 9.707832726579824e-07,
+        "gradient_max": 0.04489798065016287,
+        "projected_gradient_max": 1.1102202686352758e-07
+      },
+      {
+        "iteration": 261,
+        "cost": 0.20164463933621612,
+        "target_probability": 0.6373712819003988,
+        "command_step_max": 1.233432679992319e-06,
+        "gradient_max": 0.04489800406846692,
+        "projected_gradient_max": 1.1174888416010109e-07
+      },
+      {
+        "iteration": 262,
+        "cost": 0.2016446393360818,
+        "target_probability": 0.6373712819006133,
+        "command_step_max": 1.2185855626789532e-06,
+        "gradient_max": 0.04489802250354741,
+        "projected_gradient_max": 9.309952403446786e-08
+      },
+      {
+        "iteration": 263,
+        "cost": 0.20164463933595544,
+        "target_probability": 0.6373712819008152,
+        "command_step_max": 1.1017582033368e-06,
+        "gradient_max": 0.0448980261245342,
+        "projected_gradient_max": 5.526724478066569e-08
+      },
+      {
+        "iteration": 264,
+        "cost": 0.20164463933586363,
+        "target_probability": 0.6373712819009617,
+        "command_step_max": 7.390137255480766e-07,
+        "gradient_max": 0.04489801482222572,
+        "projected_gradient_max": 4.8817377584775556e-08
+      },
+      {
+        "iteration": 265,
+        "cost": 0.201644639335824,
+        "target_probability": 0.637371281901025,
+        "command_step_max": 4.068759658082399e-07,
+        "gradient_max": 0.04489799650683214,
+        "projected_gradient_max": 5.203695230271421e-08
+      },
+      {
+        "iteration": 266,
+        "cost": 0.20164463933578258,
+        "target_probability": 0.637371281901091,
+        "command_step_max": 4.4969472995370907e-07,
+        "gradient_max": 0.044897977202187446,
+        "projected_gradient_max": 4.868047381867413e-08
+      },
+      {
+        "iteration": 267,
+        "cost": 0.20164463933572618,
+        "target_probability": 0.6373712819011811,
+        "command_step_max": 5.564530154433811e-07,
+        "gradient_max": 0.044897963694452335,
+        "projected_gradient_max": 4.375440154635868e-08
+      },
+      {
+        "iteration": 268,
+        "cost": 0.20164463933571597,
+        "target_probability": 0.6373712819011975,
+        "command_step_max": 7.543471400861534e-07,
+        "gradient_max": 0.044897957185520435,
+        "projected_gradient_max": 3.885914140466795e-08
+      },
+      {
+        "iteration": 269,
+        "cost": 0.2016446393356811,
+        "target_probability": 0.6373712819012531,
+        "command_step_max": 5.158554340911614e-07,
+        "gradient_max": 0.044897960871964016,
+        "projected_gradient_max": 2.560102696502753e-08
+      },
+      {
+        "iteration": 270,
+        "cost": 0.2016446393356539,
+        "target_probability": 0.6373712819012967,
+        "command_step_max": 2.385795694892501e-07,
+        "gradient_max": 0.044897967666570136,
+        "projected_gradient_max": 3.80503990538017e-08
+      },
+      {
+        "iteration": 271,
+        "cost": 0.2016446393356257,
+        "target_probability": 0.6373712819013416,
+        "command_step_max": 2.4006015852950924e-07,
+        "gradient_max": 0.04489797358832367,
+        "projected_gradient_max": 3.798104375452027e-08
+      },
+      {
+        "iteration": 272,
+        "cost": 0.2016446393355925,
+        "target_probability": 0.6373712819013946,
+        "command_step_max": 4.1480475820865337e-07,
+        "gradient_max": 0.044897978122864717,
+        "projected_gradient_max": 4.527778663110382e-08
+      },
+      {
+        "iteration": 273,
+        "cost": 0.20164463933557697,
+        "target_probability": 0.6373712819014193,
+        "command_step_max": 6.464711560516534e-07,
+        "gradient_max": 0.04489797873911046,
+        "projected_gradient_max": 4.098248429507123e-08
+      },
+      {
+        "iteration": 274,
+        "cost": 0.20164463933553345,
+        "target_probability": 0.637371281901489,
+        "command_step_max": 6.165247444789301e-07,
+        "gradient_max": 0.04489797480617669,
+        "projected_gradient_max": 2.0909556752712888e-08
+      },
+      {
+        "iteration": 275,
+        "cost": 0.20164463933553178,
+        "target_probability": 0.6373712819014916,
+        "command_step_max": 3.4278206484383844e-07,
+        "gradient_max": 0.044897970410187976,
+        "projected_gradient_max": 2.2758411322154615e-08
+      }
+    ],
+    "extra_final_gradient_evaluations": 1
+  },
+  "metrics": {
+    "target_probability": 0.638056152085515,
+    "fidelity_root": 0.798784171153582,
+    "cavity_target_probability": 0.638056152085515,
+    "cavity_fidelity_root": 0.798784171153582,
+    "norm_error": 2.265116538779921e-09,
+    "purity": 0.8579073852620711,
+    "cavity_entropy_nats": 0.31743650709583693,
+    "mean_photons": 4.284824861087636,
+    "photon_variance": 7.805810199795623,
+    "parity_expectation": 0.9999999977348836,
+    "parity_error": 2.2651164277576186e-09,
+    "qubit_excited_populations": [
+      0.07101837170806698,
+      0.07101837170806685
+    ],
+    "qubits_ground_probability": 0.9146499030770534,
+    "minimum_quadrature_variance": 4.021319557126426,
+    "squeezing_dB": -9.0539858166973,
+    "qubit_concurrence": 0.15728262577140392,
+    "singlet_population": -1.5407439555097887e-33,
+    "wigner_integral": 0.9999998839471664,
+    "wigner_negative_volume": 0.5794132327268986,
+    "wigner_integral_error": 1.1605283356530549e-07,
+    "continuous_objective": 0.361943847914485,
+    "continuous_optimization_objective": 0.20121582884629208,
+    "max_mean_photons_preparation": 4.285243902716427,
+    "max_mean_photons_with_hold": 4.43156731146274,
+    "goal_reached": false
+  },
+  "actuator": {
+    "channels": [
+      {
+        "modulation_fluence": 39.30912744589584,
+        "total_frequency_fluence": 209.88339786078467,
+        "slew_max_sampled": 3.781819269948296,
+        "slew_rms": 1.6640601549260763,
+        "command_slew_max": 4.77464829275686,
+        "omega_99_ac": 5.04,
+        "ac_power_fraction_above_threshold": 0.07290324300440011,
+        "spectral_threshold": 3.0,
+        "total_frequency_min": 0.500444421543222,
+        "total_frequency_max": 2.9980921392473676,
+        "terminal_modulation": 0.47487723680582666
+      },
+      {
+        "modulation_fluence": 39.30912744589584,
+        "total_frequency_fluence": 209.88339786078467,
+        "slew_max_sampled": 3.781819269948296,
+        "slew_rms": 1.6640601549260763,
+        "command_slew_max": 4.77464829275686,
+        "omega_99_ac": 5.04,
+        "ac_power_fraction_above_threshold": 0.07290324300440011,
+        "spectral_threshold": 3.0,
+        "total_frequency_min": 0.500444421543222,
+        "total_frequency_max": 2.9980921392473676,
+        "terminal_modulation": 0.47487723680582666
+      }
+    ],
+    "modulation_fluence_total": 78.61825489179168,
+    "normalized_hilbert_schmidt_control_cost": 19.65456372294792,
+    "modulation_fluence_max_channel": 39.30912744589584,
+    "total_frequency_fluence_total": 419.76679572156934,
+    "omega_99_worst_channel": 5.04,
+    "slew_worst_channel": 3.781819269948296,
+    "ac_power_fraction_above_threshold_worst": 0.07290324300440011
+  },
+  "validation": {
+    "passed": false,
+    "checks": {
+      "time_grid": false,
+      "ode_tolerance": true,
+      "dimension": true,
+      "target_construction": true,
+      "initial_construction": true,
+      "edge_population": true,
+      "norm": true,
+      "parity": true,
+      "command_bounds": true,
+      "command_slew": true,
+      "command_endpoints": true
+    },
+    "midpoint_fidelity_error": 0.00042881048924003906,
+    "double_intervals_fidelity_error": 0.00010717783238112233,
+    "tighter_ode_fidelity_error": 6.741001090659893e-10,
+    "dimension_fidelity_error": 6.87144785516125e-11,
+    "dimension_cavity_trace_distance": 3.545450635054612e-09,
+    "target_truncation_error": 0.0,
+    "initial_truncation_error": 0.0,
+    "max_edge_population": 3.002158956372039e-17,
+    "max_norm_error": 2.3160954265577516e-09,
+    "larger_dimension": 80,
+    "larger_dimension_metrics": {
+      "target_probability": 0.638056151975739,
+      "fidelity_root": 0.7987841710848675,
+      "cavity_target_probability": 0.638056151975739,
+      "cavity_fidelity_root": 0.7987841710848675,
+      "norm_error": 2.7729651908003916e-09,
+      "purity": 0.8579073846472457,
+      "cavity_entropy_nats": 0.3174365070052284,
+      "mean_photons": 4.284824857583449,
+      "photon_variance": 7.805810188895766,
+      "parity_expectation": 0.9999999972270346,
+      "parity_error": 2.7729654128449965e-09,
+      "qubit_excited_populations": [
+        0.07101837132175248,
+        0.07101837132175237
+      ],
+      "qubits_ground_probability": 0.91464990296406,
+      "minimum_quadrature_variance": 4.021319550792918,
+      "squeezing_dB": -9.053985809857238,
+      "qubit_concurrence": 0.1572826235523347,
+      "singlet_population": 1.2266347333467007e-18
+    }
+  },
+  "hold_metrics": {
+    "target_probability": 0.3413280648904929,
+    "fidelity_root": 0.5842328858344872,
+    "cavity_target_probability": 0.3413280648904929,
+    "cavity_fidelity_root": 0.5842328858344872,
+    "norm_error": 2.3160952045131467e-09,
+    "purity": 0.6051727028662796,
+    "cavity_entropy_nats": 0.7169010582471329,
+    "mean_photons": 4.083989253154386,
+    "photon_variance": 8.220613973430929,
+    "parity_expectation": 0.9999999976839047,
+    "parity_error": 2.316095315535449e-09,
+    "qubit_excited_populations": [
+      0.19768663540116216,
+      0.1976866354011626
+    ],
+    "qubits_ground_probability": 0.7316148683571726,
+    "minimum_quadrature_variance": 3.40513504629069,
+    "squeezing_dB": -8.33164336199369,
+    "qubit_concurrence": 0.11857720708441938,
+    "singlet_population": -4.906538933386803e-18
+  },
+  "hold_summary": {
+    "minimum_target_probability": 0.23686693633533962,
+    "mean_target_probability": 0.38047252963581507,
+    "first_sample_below_goal_after_T": 0.0,
+    "sampling_step": 0.026179938779914945
+  },
+  "array_file": "arrays.npz",
+  "array_sha256": "1e49dca5e08b64664bc589bc6e5751ff93aade43714353ca31d998c5e647839a",
+  "elapsed_refinement_validation_seconds": 756.5201261389884,
+  "hilbert_dimension_full": 240,
+  "hilbert_dimension_used": 120,
+  "initial_parity": 1
+}

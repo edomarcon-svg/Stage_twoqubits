@@ -1,0 +1,146 @@
+{
+  "schema_version": 2,
+  "case": "1q",
+  "seed": 4,
+  "crab": {
+    "schema_version": 2,
+    "algorithm": "CRAB/Nelder-Mead",
+    "seed": 4,
+    "success": false,
+    "message": "Maximum number of function evaluations has been exceeded.",
+    "iterations": 1005,
+    "evaluations": 1600,
+    "elapsed_seconds": 421.4425973419999,
+    "cost": 0.999999999439786,
+    "target_probability": 5.602139321133146e-10,
+    "fidelity_root": 2.3668838841677778e-05,
+    "array_file": "crab.npz",
+    "array_sha256": "a11478c8ec3c0cea626ce2d3f6e6e0b2c9c382971213ffb6eea13b908df8f50a"
+  },
+  "grape": {
+    "algorithm": "GRAPE/L-BFGS-B",
+    "success": true,
+    "message": "CONVERGENCE: NORM OF PROJECTED GRADIENT <= PGTOL",
+    "iterations": 0,
+    "evaluations": 1,
+    "elapsed_seconds": 0.8492431130000568,
+    "cost": 0.999999999439786,
+    "target_probability": 5.602139321133146e-10,
+    "fidelity_root": 2.3668838841677778e-05
+  },
+  "metrics": {
+    "target_probability": 5.601796731534793e-10,
+    "fidelity_root": 2.3668115116195443e-05,
+    "cavity_target_probability": 5.601796731534793e-10,
+    "cavity_fidelity_root": 2.3668115116195443e-05,
+    "norm_error": 9.989531424281495e-11,
+    "purity": 0.9857999290197635,
+    "cavity_entropy_nats": 0.042455769803109854,
+    "mean_photons": 0.00848446265559362,
+    "photon_variance": 0.01083275570743217,
+    "parity_expectation": 0.9999999999001045,
+    "parity_error": 9.989553628741987e-11,
+    "qubit_excited_populations": [
+      0.007151174690389678
+    ],
+    "qubits_ground_probability": 0.9928488252097151,
+    "minimum_quadrature_variance": 0.4794675421097183,
+    "squeezing_dB": 0.18210791702666207,
+    "wigner_integral": 0.9999999998990332,
+    "wigner_negative_volume": 5.134134162720905e-05,
+    "wigner_integral_error": 1.0096679048388069e-10,
+    "continuous_objective": 0.9999999994398203,
+    "goal_reached": false
+  },
+  "actuator": {
+    "channels": [
+      {
+        "modulation_fluence": 0.7723040686999418,
+        "total_frequency_fluence": 419.6489965271019,
+        "slew_max_sampled": 0.470404453464338,
+        "slew_rms": 0.14699150230078492,
+        "command_slew_max": 0.5644134469482928,
+        "omega_99_ac": 2.94,
+        "total_frequency_min": 1.7044294383023362,
+        "total_frequency_max": 2.2667943236244126,
+        "terminal_modulation": -1.3000249887583222e-05
+      }
+    ],
+    "modulation_fluence_total": 0.7723040686999418,
+    "normalized_hilbert_schmidt_control_cost": 0.19307601717498546,
+    "modulation_fluence_max_channel": 0.7723040686999418,
+    "total_frequency_fluence_total": 419.6489965271019,
+    "omega_99_worst_channel": 2.94,
+    "slew_worst_channel": 0.470404453464338
+  },
+  "validation": {
+    "passed": true,
+    "checks": {
+      "time_grid": true,
+      "ode_tolerance": true,
+      "dimension": true,
+      "target_construction": true,
+      "initial_construction": true,
+      "edge_population": true,
+      "norm": true,
+      "parity": true,
+      "command_bounds": true,
+      "command_slew": true,
+      "command_endpoints": true
+    },
+    "midpoint_fidelity_error": 7.237254823346884e-10,
+    "double_intervals_fidelity_error": 5.440227956306448e-09,
+    "tighter_ode_fidelity_error": 6.673763838262859e-09,
+    "dimension_fidelity_error": 6.22568823187278e-09,
+    "dimension_cavity_trace_distance": 1.3012875695022044e-06,
+    "target_truncation_error": 0.0,
+    "initial_truncation_error": 0.0,
+    "max_edge_population": 9.092023312035464e-13,
+    "max_norm_error": 1.3973187718008262e-08,
+    "larger_dimension": 60,
+    "larger_dimension_metrics": {
+      "target_probability": 5.604744125241723e-10,
+      "fidelity_root": 2.3674340804427316e-05,
+      "cavity_target_probability": 5.604744125241723e-10,
+      "cavity_fidelity_root": 2.3674340804427316e-05,
+      "norm_error": 3.498949796565398e-09,
+      "purity": 0.9857999488966637,
+      "cavity_entropy_nats": 0.042455706546758856,
+      "mean_photons": 0.008484447313210918,
+      "photon_variance": 0.01083274770104336,
+      "parity_expectation": 0.9999999965010505,
+      "parity_error": 3.4989494634984908e-09,
+      "qubit_excited_populations": [
+        0.007151161184019936
+      ],
+      "qubits_ground_probability": 0.9928488353170304,
+      "minimum_quadrature_variance": 0.4794675449685979,
+      "squeezing_dB": 0.1821078911313613
+    }
+  },
+  "hold_metrics": {
+    "target_probability": 7.512231092285754e-10,
+    "fidelity_root": 2.7408449595491085e-05,
+    "cavity_target_probability": 7.512231092285754e-10,
+    "cavity_fidelity_root": 2.7408449595491085e-05,
+    "norm_error": 8.183442812281783e-11,
+    "purity": 0.9565441193954305,
+    "cavity_entropy_nats": 0.10656415764917453,
+    "mean_photons": 0.028792134322681094,
+    "photon_variance": 0.03594730475308537,
+    "parity_expectation": 0.9999999999181657,
+    "parity_error": 8.183431710051536e-11,
+    "qubit_excited_populations": [
+      0.02222174622767617
+    ],
+    "qubits_ground_probability": 0.9777782536904894,
+    "minimum_quadrature_variance": 0.45006194694506696,
+    "squeezing_dB": 0.45697709749927296
+  },
+  "array_file": "arrays.npz",
+  "array_sha256": "4b26040156fb8cdff2177d3688787cf82671f2c5f3fb4ed441cd44eddae2bf8e",
+  "elapsed_refinement_validation_seconds": 2.661458464999896,
+  "hilbert_dimension_full": 80,
+  "hilbert_dimension_used": 40,
+  "initial_parity": 1
+}

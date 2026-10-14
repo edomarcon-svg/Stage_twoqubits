@@ -1,0 +1,336 @@
+<!doctype html><html lang='it'><meta charset='utf-8'><title>Simulazioni v2</title><style>body{font:16px system-ui;max-width:1200px;margin:30px auto;padding:20px;color:#172033}table{border-collapse:collapse;width:100%;font-size:14px}td,th{padding:8px;border:1px solid #ccc}th{background:#eef3fa}img{max-width:100%;height:auto}a{color:#165aa7}</style><body><h1>Risultati v2</h1><p>Propagazione continua indipendente. P = probabilità target; F = √P.</p>
+<p>Durata fisica T = 52.35987756. T = 10 × tau_s; tau_s = pi/(2*g_ref) = 5.235987756, g_ref = 0.3.</p>
+<p>Validazione numerica, raggiungimento del target e convergenza dell'ottimizzatore sono criteri distinti. Nessun risultato implica da solo un quantum speed limit.</p>
+<p><a href='summary.csv'>Tabella CSV</a> · <a href='config.json'>Configurazione</a> · <a href='provenance.json'>Provenienza</a></p>
+<table><tr><th>case</th><th>seed</th><th>cohort</th><th>P_target</th><th>F_root</th><th>purezza</th><th>validato</th><th>obiettivo_raggiunto</th><th>fluence_modulazione</th><th>banda99_peggiore</th><th>potenza_sopra_soglia</th><th>P_iniziale</th><th>P_CRAB</th><th>guadagno_GRAPE</th><th>iterazioni_GRAPE</th><th>gradiente_proiettato_iniziale</th><th>gradiente_proiettato_finale</th><th>max_fotoni</th><th>P_hold_min</th></tr>
+<tr><td>1q</td><td>0</td><td>random</td><td>0.352806</td><td>0.593975</td><td>0.673335</td><td>False</td><td>False</td><td>40.2032</td><td>5.76</td><td>0.0911647</td><td>6.27191e-09</td><td>0.000274712</td><td>0.351763</td><td>188</td><td>0.00652856</td><td>1.68977e-08</td><td>4.76673</td><td>0.0360727</td></tr>
+<tr><td>1q</td><td>1</td><td>random</td><td>0.321958</td><td>0.567414</td><td>0.61441</td><td>False</td><td>False</td><td>38.8044</td><td>4.56</td><td>0.136752</td><td>7.53315e-09</td><td>6.87585e-05</td><td>0.321068</td><td>210</td><td>0.00273488</td><td>2.50011e-08</td><td>4.95087</td><td>0.00694327</td></tr>
+<tr><td>1q</td><td>2</td><td>random</td><td>0.31589</td><td>0.562041</td><td>0.778418</td><td>False</td><td>False</td><td>40.5662</td><td>4.8</td><td>0.125375</td><td>5.40831e-08</td><td>7.67601e-05</td><td>0.315018</td><td>184</td><td>0.0058329</td><td>2.44394e-08</td><td>5.32751</td><td>0.0249102</td></tr>
+<tr><td>1q</td><td>3</td><td>random</td><td>0.304482</td><td>0.551799</td><td>0.627194</td><td>False</td><td>False</td><td>36.0998</td><td>5.16</td><td>0.145785</td><td>4.06883e-08</td><td>3.54239e-05</td><td>0.303615</td><td>207</td><td>0.00241544</td><td>1.69047e-08</td><td>4.2012</td><td>0.0183459</td></tr>
+<tr><td>1q</td><td>4</td><td>random</td><td>0.342741</td><td>0.585441</td><td>0.575405</td><td>False</td><td>False</td><td>40.8826</td><td>4.68</td><td>0.116118</td><td>1.75468e-08</td><td>4.50193e-06</td><td>0.341876</td><td>238</td><td>0.00187699</td><td>2.77138e-08</td><td>5.03327</td><td>0.00772652</td></tr>
+<tr><td>1q</td><td>5</td><td>random</td><td>0.271406</td><td>0.520967</td><td>0.867215</td><td>False</td><td>False</td><td>35.1001</td><td>4.8</td><td>0.158249</td><td>6.28562e-08</td><td>5.62536e-05</td><td>0.270619</td><td>230</td><td>0.00624972</td><td>1.29996e-08</td><td>3.85462</td><td>0.0193748</td></tr>
+<tr><td>1q</td><td>6</td><td>random</td><td>0.272053</td><td>0.521587</td><td>0.721083</td><td>False</td><td>False</td><td>42.7814</td><td>4.8</td><td>0.137393</td><td>2.62117e-09</td><td>3.02691e-05</td><td>0.271237</td><td>300</td><td>0.00242906</td><td>1.5597e-08</td><td>4.39395</td><td>0.0334029</td></tr>
+<tr><td>1q</td><td>7</td><td>random</td><td>0.28332</td><td>0.532278</td><td>0.738726</td><td>False</td><td>False</td><td>36.7206</td><td>4.92</td><td>0.16927</td><td>2.16879e-09</td><td>0.000188833</td><td>0.282275</td><td>219</td><td>0.00435434</td><td>2.17271e-08</td><td>4.63183</td><td>0.0331508</td></tr>
+<tr><td>2q_common</td><td>0</td><td>random</td><td>0.91833</td><td>0.958296</td><td>0.875288</td><td>False</td><td>False</td><td>73.8983</td><td>4.44</td><td>0.0870253</td><td>2.06052e-06</td><td>0.0287525</td><td>0.889158</td><td>242</td><td>0.0236925</td><td>1.9948e-08</td><td>9.72295</td><td>0.0502072</td></tr>
+<tr><td>2q_common</td><td>1</td><td>random</td><td>0.85298</td><td>0.923569</td><td>0.913928</td><td>False</td><td>False</td><td>65.0673</td><td>5.28</td><td>0.166629</td><td>4.33779e-06</td><td>0.00701622</td><td>0.845114</td><td>278</td><td>0.0241403</td><td>2.71904e-08</td><td>9.09039</td><td>0.0535821</td></tr>
+<tr><td>2q_common</td><td>2</td><td>random</td><td>0.873357</td><td>0.934536</td><td>0.899902</td><td>False</td><td>False</td><td>52.2071</td><td>5.4</td><td>0.227949</td><td>3.24068e-05</td><td>0.00489913</td><td>0.867356</td><td>261</td><td>0.0276508</td><td>2.00811e-08</td><td>9.37504</td><td>0.0568917</td></tr>
+<tr><td>2q_common</td><td>3</td><td>random</td><td>0.900325</td><td>0.948855</td><td>0.929648</td><td>False</td><td>False</td><td>59.9902</td><td>5.28</td><td>0.234839</td><td>1.25681e-06</td><td>0.00261228</td><td>0.896974</td><td>465</td><td>0.0213566</td><td>2.61029e-08</td><td>9.49522</td><td>0.0680166</td></tr>
+<tr><td>2q_common</td><td>4</td><td>random</td><td>0.865532</td><td>0.93034</td><td>0.929378</td><td>False</td><td>False</td><td>64.726</td><td>5.4</td><td>0.178554</td><td>4.80243e-07</td><td>0.00112369</td><td>0.863655</td><td>480</td><td>0.0145515</td><td>1.38596e-08</td><td>9.21652</td><td>0.0607954</td></tr>
+<tr><td>2q_common</td><td>5</td><td>random</td><td>0.820678</td><td>0.905913</td><td>0.850532</td><td>False</td><td>False</td><td>60.0241</td><td>5.28</td><td>0.194981</td><td>8.01578e-05</td><td>0.00536683</td><td>0.814441</td><td>375</td><td>0.0222213</td><td>2.04238e-08</td><td>8.9412</td><td>0.0692109</td></tr>
+<tr><td>2q_common</td><td>6</td><td>random</td><td>0.802777</td><td>0.895978</td><td>0.840967</td><td>False</td><td>False</td><td>62.1686</td><td>5.28</td><td>0.166391</td><td>1.73687e-06</td><td>0.00575864</td><td>0.79619</td><td>281</td><td>0.0351839</td><td>1.19933e-08</td><td>8.50576</td><td>0.0502201</td></tr>
+<tr><td>2q_common</td><td>7</td><td>random</td><td>0.936308</td><td>0.96763</td><td>0.95384</td><td>False</td><td>False</td><td>70.4116</td><td>4.92</td><td>0.149433</td><td>1.16649e-05</td><td>0.0190065</td><td>0.916896</td><td>445</td><td>0.0253267</td><td>1.80509e-08</td><td>9.56168</td><td>0.0502082</td></tr>
+<tr><td>2q_independent</td><td>0</td><td>random</td><td>0.945759</td><td>0.972502</td><td>0.943953</td><td>False</td><td>False</td><td>66.621</td><td>4.8</td><td>0.187428</td><td>3.68167e-05</td><td>0.000745549</td><td>0.944362</td><td>600</td><td>0.00687392</td><td>6.34356e-05</td><td>9.80943</td><td>0.0731803</td></tr>
+<tr><td>2q_independent</td><td>1</td><td>random</td><td>0.875524</td><td>0.935695</td><td>0.882679</td><td>False</td><td>False</td><td>64.5365</td><td>5.4</td><td>0.185624</td><td>1.32759e-07</td><td>3.7667e-06</td><td>0.874575</td><td>531</td><td>0.00125274</td><td>1.49825e-08</td><td>9.21859</td><td>0.0556836</td></tr>
+<tr><td>2q_independent</td><td>2</td><td>random</td><td>0.944507</td><td>0.971857</td><td>0.947974</td><td>False</td><td>False</td><td>72.8996</td><td>4.92</td><td>0.145508</td><td>1.39524e-06</td><td>4.168e-05</td><td>0.943945</td><td>545</td><td>0.00286892</td><td>1.93106e-08</td><td>9.76408</td><td>0.0366928</td></tr>
+<tr><td>2q_independent</td><td>3</td><td>random</td><td>0.937422</td><td>0.968206</td><td>0.91362</td><td>False</td><td>False</td><td>69.8617</td><td>5.04</td><td>0.132436</td><td>1.82457e-06</td><td>5.84784e-05</td><td>0.936693</td><td>522</td><td>0.0038706</td><td>1.17441e-08</td><td>9.65835</td><td>0.0693009</td></tr>
+<tr><td>2q_independent</td><td>4</td><td>random</td><td>0.950899</td><td>0.975141</td><td>0.932884</td><td>False</td><td>False</td><td>70.8169</td><td>5.16</td><td>0.114449</td><td>6.10876e-07</td><td>3.74235e-05</td><td>0.950324</td><td>600</td><td>0.00280366</td><td>5.4093e-07</td><td>9.76518</td><td>0.06079</td></tr>
+<tr><td>2q_independent</td><td>5</td><td>random</td><td>0.922322</td><td>0.960376</td><td>0.91085</td><td>False</td><td>False</td><td>63.3959</td><td>5.52</td><td>0.293942</td><td>1.16155e-06</td><td>1.11331e-05</td><td>0.921576</td><td>404</td><td>0.00175453</td><td>1.1701e-08</td><td>9.77724</td><td>0.0541547</td></tr>
+<tr><td>2q_independent</td><td>6</td><td>random</td><td>0.961781</td><td>0.980704</td><td>0.956661</td><td>False</td><td>False</td><td>67.7529</td><td>5.52</td><td>0.15422</td><td>2.08118e-05</td><td>0.000280668</td><td>0.961047</td><td>488</td><td>0.0054388</td><td>1.23873e-08</td><td>9.84328</td><td>0.0616754</td></tr>
+<tr><td>2q_independent</td><td>7</td><td>random</td><td>0.929054</td><td>0.963875</td><td>0.927306</td><td>False</td><td>False</td><td>69.9002</td><td>5.28</td><td>0.193585</td><td>2.36601e-06</td><td>2.43446e-05</td><td>0.92849</td><td>365</td><td>0.00297685</td><td>1.27416e-08</td><td>9.67577</td><td>0.0482409</td></tr>
+<tr><td>2q_normalized_common</td><td>0</td><td>random</td><td>0.442175</td><td>0.664962</td><td>0.826413</td><td>False</td><td>False</td><td>87.325</td><td>5.16</td><td>0.100355</td><td>1.711e-08</td><td>0.00188182</td><td>0.439692</td><td>197</td><td>0.00986242</td><td>1.6947e-08</td><td>6.12623</td><td>0.0240554</td></tr>
+<tr><td>2q_normalized_common</td><td>1</td><td>random</td><td>0.261378</td><td>0.511251</td><td>0.727794</td><td>False</td><td>False</td><td>69.1448</td><td>4.8</td><td>0.133279</td><td>6.75481e-09</td><td>1.02681e-05</td><td>0.26069</td><td>294</td><td>0.00159064</td><td>1.72251e-08</td><td>4.3134</td><td>0.0164945</td></tr>
+<tr><td>2q_normalized_common</td><td>2</td><td>random</td><td>0.326957</td><td>0.571802</td><td>0.591499</td><td>False</td><td>False</td><td>73.351</td><td>4.56</td><td>0.0986319</td><td>9.67897e-09</td><td>4.98883e-06</td><td>0.326371</td><td>500</td><td>0.000988496</td><td>1.78419e-08</td><td>4.53276</td><td>0.0285497</td></tr>
+<tr><td>2q_normalized_common</td><td>3</td><td>random</td><td>0.37443</td><td>0.611907</td><td>0.75151</td><td>False</td><td>False</td><td>77.7386</td><td>4.56</td><td>0.111931</td><td>2.0766e-08</td><td>7.60037e-05</td><td>0.373603</td><td>347</td><td>0.00469227</td><td>3.14715e-08</td><td>4.8328</td><td>0.0283101</td></tr>
+<tr><td>2q_normalized_common</td><td>4</td><td>random</td><td>0.369917</td><td>0.608208</td><td>0.787004</td><td>False</td><td>False</td><td>72.4403</td><td>4.32</td><td>0.150888</td><td>1.52471e-08</td><td>0.000287065</td><td>0.36882</td><td>424</td><td>0.00521692</td><td>3.04946e-08</td><td>5.31633</td><td>0.0264165</td></tr>
+<tr><td>2q_normalized_common</td><td>5</td><td>random</td><td>0.208674</td><td>0.456809</td><td>0.749313</td><td>False</td><td>False</td><td>61.8303</td><td>5.28</td><td>0.129736</td><td>1.07467e-07</td><td>1.98265e-05</td><td>0.208019</td><td>264</td><td>0.00119035</td><td>1.51294e-08</td><td>3.00652</td><td>0.026347</td></tr>
+<tr><td>2q_normalized_common</td><td>6</td><td>random</td><td>0.17908</td><td>0.423178</td><td>0.650051</td><td>False</td><td>False</td><td>70.0229</td><td>5.16</td><td>0.158737</td><td>1.28149e-10</td><td>5.04512e-06</td><td>0.178484</td><td>178</td><td>0.00099972</td><td>2.04745e-08</td><td>3.52351</td><td>0.00186837</td></tr>
+<tr><td>2q_normalized_common</td><td>7</td><td>random</td><td>0.329386</td><td>0.573921</td><td>0.738625</td><td>False</td><td>False</td><td>97.6688</td><td>4.08</td><td>0.0924432</td><td>1.57226e-08</td><td>0.000589791</td><td>0.328256</td><td>231</td><td>0.00865895</td><td>1.2669e-08</td><td>4.54885</td><td>0.0109198</td></tr>
+<tr><td>2q_normalized_independent</td><td>0</td><td>random</td><td>0.458457</td><td>0.677095</td><td>0.469081</td><td>False</td><td>False</td><td>79.2177</td><td>4.44</td><td>0.115927</td><td>6.27468e-09</td><td>1.40465e-06</td><td>0.45754</td><td>600</td><td>0.000500291</td><td>3.78511e-07</td><td>6.6758</td><td>0.0363284</td></tr>
+<tr><td>2q_normalized_independent</td><td>1</td><td>random</td><td>0.303234</td><td>0.550667</td><td>0.739394</td><td>False</td><td>False</td><td>76.8555</td><td>4.44</td><td>0.100505</td><td>2.73904e-10</td><td>1.82899e-08</td><td>0.302479</td><td>380</td><td>9.80252e-05</td><td>2.84665e-08</td><td>4.38066</td><td>0.0260669</td></tr>
+<tr><td>2q_normalized_independent</td><td>2</td><td>random</td><td>0.33886</td><td>0.582117</td><td>0.423513</td><td>False</td><td>False</td><td>83.1442</td><td>5.16</td><td>0.10675</td><td>2.56192e-09</td><td>1.99116e-07</td><td>0.338142</td><td>407</td><td>0.000237355</td><td>2.28121e-08</td><td>5.67587</td><td>0.0148814</td></tr>
+<tr><td>2q_normalized_independent</td><td>3</td><td>random</td><td>0.373183</td><td>0.610887</td><td>0.497728</td><td>False</td><td>False</td><td>79.2441</td><td>4.8</td><td>0.127499</td><td>4.50706e-08</td><td>1.3661e-06</td><td>0.372303</td><td>360</td><td>0.00045308</td><td>2.92702e-08</td><td>5.21036</td><td>0.0136162</td></tr>
+<tr><td>2q_normalized_independent</td><td>4</td><td>random</td><td>0.371368</td><td>0.6094</td><td>0.560208</td><td>False</td><td>False</td><td>75.5968</td><td>4.68</td><td>0.102903</td><td>1.14503e-09</td><td>4.10139e-07</td><td>0.370419</td><td>301</td><td>0.000327929</td><td>1.72514e-08</td><td>5.40153</td><td>0.021668</td></tr>
+<tr><td>2q_normalized_independent</td><td>5</td><td>random</td><td>0.467935</td><td>0.684058</td><td>0.475282</td><td>False</td><td>False</td><td>86.254</td><td>4.2</td><td>0.11988</td><td>8.45005e-09</td><td>1.04943e-07</td><td>0.467011</td><td>600</td><td>0.000201046</td><td>9.02077e-07</td><td>6.6398</td><td>0.0361343</td></tr>
+<tr><td>2q_normalized_independent</td><td>6</td><td>random</td><td>0.294268</td><td>0.542465</td><td>0.364572</td><td>False</td><td>False</td><td>77.6907</td><td>4.32</td><td>0.100072</td><td>2.09072e-08</td><td>6.91487e-07</td><td>0.293545</td><td>479</td><td>0.000424514</td><td>2.0579e-08</td><td>4.89159</td><td>0.0143433</td></tr>
+<tr><td>2q_normalized_independent</td><td>7</td><td>random</td><td>0.301211</td><td>0.548827</td><td>0.481687</td><td>False</td><td>False</td><td>79.0855</td><td>4.92</td><td>0.184445</td><td>4.92964e-10</td><td>3.60034e-08</td><td>0.300327</td><td>463</td><td>7.26819e-05</td><td>1.67946e-08</td><td>5.05183</td><td>0.0236112</td></tr>
+</table>
+<h2>1q</h2><p>Statistiche: {&quot;count&quot;: 8, &quot;probability_mean&quot;: 0.3080821047688358, &quot;probability_std_population&quot;: 0.028992247961071284, &quot;probability_median&quot;: 0.31018618785822705, &quot;probability_min&quot;: 0.2714061094171599, &quot;probability_max&quot;: 0.352806222255004, &quot;numerically_valid_count&quot;: 0, &quot;validated_goal_count&quot;: 0, &quot;validated_goal_fraction&quot;: 0.0, &quot;probability_q25&quot;: 0.2805031053731576, &quot;probability_q75&quot;: 0.32715398557201913, &quot;selection_bias_top_only&quot;: false}</p>
+<p>Probabilità target senza modulazione: 0.00000000.</p>
+<h3>Seed 0</h3><p>Controlli falliti: time_grid</p><a href='1q/seed_0/result.json'>Dettagli</a>
+<p>Maximum number of function evaluations has been exceeded.; CONVERGENCE: RELATIVE REDUCTION OF F &lt;= FACTR*EPSMCH</p>
+<a href='1q/seed_0/dynamics.png'><img src='1q/seed_0/dynamics.png' alt='dynamics'></a>
+<a href='1q/seed_0/wigner.png'><img src='1q/seed_0/wigner.png' alt='wigner'></a>
+<a href='1q/seed_0/optimization.png'><img src='1q/seed_0/optimization.png' alt='optimization'></a>
+<a href='1q/seed_0/actuator.png'><img src='1q/seed_0/actuator.png' alt='actuator'></a>
+<a href='1q/seed_0/populations.png'><img src='1q/seed_0/populations.png' alt='populations'></a>
+<h3>Seed 1</h3><p>Controlli falliti: time_grid</p><a href='1q/seed_1/result.json'>Dettagli</a>
+<p>Maximum number of function evaluations has been exceeded.; CONVERGENCE: RELATIVE REDUCTION OF F &lt;= FACTR*EPSMCH</p>
+<a href='1q/seed_1/dynamics.png'><img src='1q/seed_1/dynamics.png' alt='dynamics'></a>
+<a href='1q/seed_1/wigner.png'><img src='1q/seed_1/wigner.png' alt='wigner'></a>
+<a href='1q/seed_1/optimization.png'><img src='1q/seed_1/optimization.png' alt='optimization'></a>
+<a href='1q/seed_1/actuator.png'><img src='1q/seed_1/actuator.png' alt='actuator'></a>
+<a href='1q/seed_1/populations.png'><img src='1q/seed_1/populations.png' alt='populations'></a>
+<h3>Seed 2</h3><p>Controlli falliti: time_grid</p><a href='1q/seed_2/result.json'>Dettagli</a>
+<p>Maximum number of function evaluations has been exceeded.; CONVERGENCE: RELATIVE REDUCTION OF F &lt;= FACTR*EPSMCH</p>
+<a href='1q/seed_2/dynamics.png'><img src='1q/seed_2/dynamics.png' alt='dynamics'></a>
+<a href='1q/seed_2/wigner.png'><img src='1q/seed_2/wigner.png' alt='wigner'></a>
+<a href='1q/seed_2/optimization.png'><img src='1q/seed_2/optimization.png' alt='optimization'></a>
+<a href='1q/seed_2/actuator.png'><img src='1q/seed_2/actuator.png' alt='actuator'></a>
+<a href='1q/seed_2/populations.png'><img src='1q/seed_2/populations.png' alt='populations'></a>
+<h3>Seed 3</h3><p>Controlli falliti: time_grid</p><a href='1q/seed_3/result.json'>Dettagli</a>
+<p>Maximum number of function evaluations has been exceeded.; CONVERGENCE: RELATIVE REDUCTION OF F &lt;= FACTR*EPSMCH</p>
+<a href='1q/seed_3/dynamics.png'><img src='1q/seed_3/dynamics.png' alt='dynamics'></a>
+<a href='1q/seed_3/wigner.png'><img src='1q/seed_3/wigner.png' alt='wigner'></a>
+<a href='1q/seed_3/optimization.png'><img src='1q/seed_3/optimization.png' alt='optimization'></a>
+<a href='1q/seed_3/actuator.png'><img src='1q/seed_3/actuator.png' alt='actuator'></a>
+<a href='1q/seed_3/populations.png'><img src='1q/seed_3/populations.png' alt='populations'></a>
+<h3>Seed 4</h3><p>Controlli falliti: time_grid</p><a href='1q/seed_4/result.json'>Dettagli</a>
+<p>Maximum number of function evaluations has been exceeded.; CONVERGENCE: RELATIVE REDUCTION OF F &lt;= FACTR*EPSMCH</p>
+<a href='1q/seed_4/dynamics.png'><img src='1q/seed_4/dynamics.png' alt='dynamics'></a>
+<a href='1q/seed_4/wigner.png'><img src='1q/seed_4/wigner.png' alt='wigner'></a>
+<a href='1q/seed_4/optimization.png'><img src='1q/seed_4/optimization.png' alt='optimization'></a>
+<a href='1q/seed_4/actuator.png'><img src='1q/seed_4/actuator.png' alt='actuator'></a>
+<a href='1q/seed_4/populations.png'><img src='1q/seed_4/populations.png' alt='populations'></a>
+<h3>Seed 5</h3><p>Controlli falliti: time_grid</p><a href='1q/seed_5/result.json'>Dettagli</a>
+<p>Maximum number of function evaluations has been exceeded.; CONVERGENCE: RELATIVE REDUCTION OF F &lt;= FACTR*EPSMCH</p>
+<a href='1q/seed_5/dynamics.png'><img src='1q/seed_5/dynamics.png' alt='dynamics'></a>
+<a href='1q/seed_5/wigner.png'><img src='1q/seed_5/wigner.png' alt='wigner'></a>
+<a href='1q/seed_5/optimization.png'><img src='1q/seed_5/optimization.png' alt='optimization'></a>
+<a href='1q/seed_5/actuator.png'><img src='1q/seed_5/actuator.png' alt='actuator'></a>
+<a href='1q/seed_5/populations.png'><img src='1q/seed_5/populations.png' alt='populations'></a>
+<h3>Seed 6</h3><p>Controlli falliti: time_grid</p><a href='1q/seed_6/result.json'>Dettagli</a>
+<p>Maximum number of function evaluations has been exceeded.; CONVERGENCE: RELATIVE REDUCTION OF F &lt;= FACTR*EPSMCH</p>
+<a href='1q/seed_6/dynamics.png'><img src='1q/seed_6/dynamics.png' alt='dynamics'></a>
+<a href='1q/seed_6/wigner.png'><img src='1q/seed_6/wigner.png' alt='wigner'></a>
+<a href='1q/seed_6/optimization.png'><img src='1q/seed_6/optimization.png' alt='optimization'></a>
+<a href='1q/seed_6/actuator.png'><img src='1q/seed_6/actuator.png' alt='actuator'></a>
+<a href='1q/seed_6/populations.png'><img src='1q/seed_6/populations.png' alt='populations'></a>
+<h3>Seed 7</h3><p>Controlli falliti: time_grid</p><a href='1q/seed_7/result.json'>Dettagli</a>
+<p>Maximum number of function evaluations has been exceeded.; CONVERGENCE: RELATIVE REDUCTION OF F &lt;= FACTR*EPSMCH</p>
+<a href='1q/seed_7/dynamics.png'><img src='1q/seed_7/dynamics.png' alt='dynamics'></a>
+<a href='1q/seed_7/wigner.png'><img src='1q/seed_7/wigner.png' alt='wigner'></a>
+<a href='1q/seed_7/optimization.png'><img src='1q/seed_7/optimization.png' alt='optimization'></a>
+<a href='1q/seed_7/actuator.png'><img src='1q/seed_7/actuator.png' alt='actuator'></a>
+<a href='1q/seed_7/populations.png'><img src='1q/seed_7/populations.png' alt='populations'></a>
+<h2>2q_common</h2><p>Statistiche: {&quot;count&quot;: 8, &quot;probability_mean&quot;: 0.871286078702518, &quot;probability_std_population&quot;: 0.043173433756312996, &quot;probability_median&quot;: 0.8694448776212249, &quot;probability_min&quot;: 0.802776611638942, &quot;probability_max&quot;: 0.9363083458667326, &quot;numerically_valid_count&quot;: 0, &quot;validated_goal_count&quot;: 0, &quot;validated_goal_fraction&quot;: 0.0, &quot;probability_q25&quot;: 0.8449048061836344, &quot;probability_q75&quot;: 0.9048265249940548, &quot;selection_bias_top_only&quot;: false}</p>
+<p>Probabilità target senza modulazione: 0.00000037.</p>
+<h3>Seed 0</h3><p>Controlli falliti: time_grid</p><a href='2q_common/seed_0/result.json'>Dettagli</a>
+<p>Maximum number of function evaluations has been exceeded.; CONVERGENCE: RELATIVE REDUCTION OF F &lt;= FACTR*EPSMCH</p>
+<a href='2q_common/seed_0/dynamics.png'><img src='2q_common/seed_0/dynamics.png' alt='dynamics'></a>
+<a href='2q_common/seed_0/wigner.png'><img src='2q_common/seed_0/wigner.png' alt='wigner'></a>
+<a href='2q_common/seed_0/optimization.png'><img src='2q_common/seed_0/optimization.png' alt='optimization'></a>
+<a href='2q_common/seed_0/actuator.png'><img src='2q_common/seed_0/actuator.png' alt='actuator'></a>
+<a href='2q_common/seed_0/populations.png'><img src='2q_common/seed_0/populations.png' alt='populations'></a>
+<h3>Seed 1</h3><p>Controlli falliti: time_grid</p><a href='2q_common/seed_1/result.json'>Dettagli</a>
+<p>Maximum number of function evaluations has been exceeded.; CONVERGENCE: RELATIVE REDUCTION OF F &lt;= FACTR*EPSMCH</p>
+<a href='2q_common/seed_1/dynamics.png'><img src='2q_common/seed_1/dynamics.png' alt='dynamics'></a>
+<a href='2q_common/seed_1/wigner.png'><img src='2q_common/seed_1/wigner.png' alt='wigner'></a>
+<a href='2q_common/seed_1/optimization.png'><img src='2q_common/seed_1/optimization.png' alt='optimization'></a>
+<a href='2q_common/seed_1/actuator.png'><img src='2q_common/seed_1/actuator.png' alt='actuator'></a>
+<a href='2q_common/seed_1/populations.png'><img src='2q_common/seed_1/populations.png' alt='populations'></a>
+<h3>Seed 2</h3><p>Controlli falliti: time_grid</p><a href='2q_common/seed_2/result.json'>Dettagli</a>
+<p>Maximum number of function evaluations has been exceeded.; CONVERGENCE: RELATIVE REDUCTION OF F &lt;= FACTR*EPSMCH</p>
+<a href='2q_common/seed_2/dynamics.png'><img src='2q_common/seed_2/dynamics.png' alt='dynamics'></a>
+<a href='2q_common/seed_2/wigner.png'><img src='2q_common/seed_2/wigner.png' alt='wigner'></a>
+<a href='2q_common/seed_2/optimization.png'><img src='2q_common/seed_2/optimization.png' alt='optimization'></a>
+<a href='2q_common/seed_2/actuator.png'><img src='2q_common/seed_2/actuator.png' alt='actuator'></a>
+<a href='2q_common/seed_2/populations.png'><img src='2q_common/seed_2/populations.png' alt='populations'></a>
+<h3>Seed 3</h3><p>Controlli falliti: time_grid</p><a href='2q_common/seed_3/result.json'>Dettagli</a>
+<p>Maximum number of function evaluations has been exceeded.; CONVERGENCE: RELATIVE REDUCTION OF F &lt;= FACTR*EPSMCH</p>
+<a href='2q_common/seed_3/dynamics.png'><img src='2q_common/seed_3/dynamics.png' alt='dynamics'></a>
+<a href='2q_common/seed_3/wigner.png'><img src='2q_common/seed_3/wigner.png' alt='wigner'></a>
+<a href='2q_common/seed_3/optimization.png'><img src='2q_common/seed_3/optimization.png' alt='optimization'></a>
+<a href='2q_common/seed_3/actuator.png'><img src='2q_common/seed_3/actuator.png' alt='actuator'></a>
+<a href='2q_common/seed_3/populations.png'><img src='2q_common/seed_3/populations.png' alt='populations'></a>
+<h3>Seed 4</h3><p>Controlli falliti: time_grid</p><a href='2q_common/seed_4/result.json'>Dettagli</a>
+<p>Maximum number of function evaluations has been exceeded.; CONVERGENCE: RELATIVE REDUCTION OF F &lt;= FACTR*EPSMCH</p>
+<a href='2q_common/seed_4/dynamics.png'><img src='2q_common/seed_4/dynamics.png' alt='dynamics'></a>
+<a href='2q_common/seed_4/wigner.png'><img src='2q_common/seed_4/wigner.png' alt='wigner'></a>
+<a href='2q_common/seed_4/optimization.png'><img src='2q_common/seed_4/optimization.png' alt='optimization'></a>
+<a href='2q_common/seed_4/actuator.png'><img src='2q_common/seed_4/actuator.png' alt='actuator'></a>
+<a href='2q_common/seed_4/populations.png'><img src='2q_common/seed_4/populations.png' alt='populations'></a>
+<h3>Seed 5</h3><p>Controlli falliti: time_grid</p><a href='2q_common/seed_5/result.json'>Dettagli</a>
+<p>Maximum number of function evaluations has been exceeded.; CONVERGENCE: RELATIVE REDUCTION OF F &lt;= FACTR*EPSMCH</p>
+<a href='2q_common/seed_5/dynamics.png'><img src='2q_common/seed_5/dynamics.png' alt='dynamics'></a>
+<a href='2q_common/seed_5/wigner.png'><img src='2q_common/seed_5/wigner.png' alt='wigner'></a>
+<a href='2q_common/seed_5/optimization.png'><img src='2q_common/seed_5/optimization.png' alt='optimization'></a>
+<a href='2q_common/seed_5/actuator.png'><img src='2q_common/seed_5/actuator.png' alt='actuator'></a>
+<a href='2q_common/seed_5/populations.png'><img src='2q_common/seed_5/populations.png' alt='populations'></a>
+<h3>Seed 6</h3><p>Controlli falliti: time_grid</p><a href='2q_common/seed_6/result.json'>Dettagli</a>
+<p>Maximum number of function evaluations has been exceeded.; ABNORMAL: </p>
+<a href='2q_common/seed_6/dynamics.png'><img src='2q_common/seed_6/dynamics.png' alt='dynamics'></a>
+<a href='2q_common/seed_6/wigner.png'><img src='2q_common/seed_6/wigner.png' alt='wigner'></a>
+<a href='2q_common/seed_6/optimization.png'><img src='2q_common/seed_6/optimization.png' alt='optimization'></a>
+<a href='2q_common/seed_6/actuator.png'><img src='2q_common/seed_6/actuator.png' alt='actuator'></a>
+<a href='2q_common/seed_6/populations.png'><img src='2q_common/seed_6/populations.png' alt='populations'></a>
+<h3>Seed 7</h3><p>Controlli falliti: time_grid</p><a href='2q_common/seed_7/result.json'>Dettagli</a>
+<p>Maximum number of function evaluations has been exceeded.; CONVERGENCE: RELATIVE REDUCTION OF F &lt;= FACTR*EPSMCH</p>
+<a href='2q_common/seed_7/dynamics.png'><img src='2q_common/seed_7/dynamics.png' alt='dynamics'></a>
+<a href='2q_common/seed_7/wigner.png'><img src='2q_common/seed_7/wigner.png' alt='wigner'></a>
+<a href='2q_common/seed_7/optimization.png'><img src='2q_common/seed_7/optimization.png' alt='optimization'></a>
+<a href='2q_common/seed_7/actuator.png'><img src='2q_common/seed_7/actuator.png' alt='actuator'></a>
+<a href='2q_common/seed_7/populations.png'><img src='2q_common/seed_7/populations.png' alt='populations'></a>
+<h2>2q_independent</h2><p>Statistiche: {&quot;count&quot;: 8, &quot;probability_mean&quot;: 0.9334087044991091, &quot;probability_std_population&quot;: 0.024736641943666333, &quot;probability_median&quot;: 0.9409645847013651, &quot;probability_min&quot;: 0.8755242812815439, &quot;probability_max&quot;: 0.9617811136647558, &quot;numerically_valid_count&quot;: 0, &quot;validated_goal_count&quot;: 0, &quot;validated_goal_fraction&quot;: 0.0, &quot;probability_q25&quot;: 0.9273712687400184, &quot;probability_q75&quot;: 0.9470442531822121, &quot;selection_bias_top_only&quot;: false}</p>
+<p>Probabilità target senza modulazione: 0.00000037.</p>
+<h3>Seed 0</h3><p>Controlli falliti: time_grid</p><a href='2q_independent/seed_0/result.json'>Dettagli</a>
+<p>Maximum number of function evaluations has been exceeded.; STOP: TOTAL NO. OF ITERATIONS REACHED LIMIT</p>
+<a href='2q_independent/seed_0/dynamics.png'><img src='2q_independent/seed_0/dynamics.png' alt='dynamics'></a>
+<a href='2q_independent/seed_0/wigner.png'><img src='2q_independent/seed_0/wigner.png' alt='wigner'></a>
+<a href='2q_independent/seed_0/optimization.png'><img src='2q_independent/seed_0/optimization.png' alt='optimization'></a>
+<a href='2q_independent/seed_0/actuator.png'><img src='2q_independent/seed_0/actuator.png' alt='actuator'></a>
+<a href='2q_independent/seed_0/populations.png'><img src='2q_independent/seed_0/populations.png' alt='populations'></a>
+<h3>Seed 1</h3><p>Controlli falliti: time_grid</p><a href='2q_independent/seed_1/result.json'>Dettagli</a>
+<p>Maximum number of function evaluations has been exceeded.; CONVERGENCE: RELATIVE REDUCTION OF F &lt;= FACTR*EPSMCH</p>
+<a href='2q_independent/seed_1/dynamics.png'><img src='2q_independent/seed_1/dynamics.png' alt='dynamics'></a>
+<a href='2q_independent/seed_1/wigner.png'><img src='2q_independent/seed_1/wigner.png' alt='wigner'></a>
+<a href='2q_independent/seed_1/optimization.png'><img src='2q_independent/seed_1/optimization.png' alt='optimization'></a>
+<a href='2q_independent/seed_1/actuator.png'><img src='2q_independent/seed_1/actuator.png' alt='actuator'></a>
+<a href='2q_independent/seed_1/populations.png'><img src='2q_independent/seed_1/populations.png' alt='populations'></a>
+<h3>Seed 2</h3><p>Controlli falliti: time_grid</p><a href='2q_independent/seed_2/result.json'>Dettagli</a>
+<p>Maximum number of function evaluations has been exceeded.; CONVERGENCE: RELATIVE REDUCTION OF F &lt;= FACTR*EPSMCH</p>
+<a href='2q_independent/seed_2/dynamics.png'><img src='2q_independent/seed_2/dynamics.png' alt='dynamics'></a>
+<a href='2q_independent/seed_2/wigner.png'><img src='2q_independent/seed_2/wigner.png' alt='wigner'></a>
+<a href='2q_independent/seed_2/optimization.png'><img src='2q_independent/seed_2/optimization.png' alt='optimization'></a>
+<a href='2q_independent/seed_2/actuator.png'><img src='2q_independent/seed_2/actuator.png' alt='actuator'></a>
+<a href='2q_independent/seed_2/populations.png'><img src='2q_independent/seed_2/populations.png' alt='populations'></a>
+<h3>Seed 3</h3><p>Controlli falliti: time_grid</p><a href='2q_independent/seed_3/result.json'>Dettagli</a>
+<p>Maximum number of function evaluations has been exceeded.; CONVERGENCE: RELATIVE REDUCTION OF F &lt;= FACTR*EPSMCH</p>
+<a href='2q_independent/seed_3/dynamics.png'><img src='2q_independent/seed_3/dynamics.png' alt='dynamics'></a>
+<a href='2q_independent/seed_3/wigner.png'><img src='2q_independent/seed_3/wigner.png' alt='wigner'></a>
+<a href='2q_independent/seed_3/optimization.png'><img src='2q_independent/seed_3/optimization.png' alt='optimization'></a>
+<a href='2q_independent/seed_3/actuator.png'><img src='2q_independent/seed_3/actuator.png' alt='actuator'></a>
+<a href='2q_independent/seed_3/populations.png'><img src='2q_independent/seed_3/populations.png' alt='populations'></a>
+<h3>Seed 4</h3><p>Controlli falliti: time_grid</p><a href='2q_independent/seed_4/result.json'>Dettagli</a>
+<p>Maximum number of function evaluations has been exceeded.; STOP: TOTAL NO. OF ITERATIONS REACHED LIMIT</p>
+<a href='2q_independent/seed_4/dynamics.png'><img src='2q_independent/seed_4/dynamics.png' alt='dynamics'></a>
+<a href='2q_independent/seed_4/wigner.png'><img src='2q_independent/seed_4/wigner.png' alt='wigner'></a>
+<a href='2q_independent/seed_4/optimization.png'><img src='2q_independent/seed_4/optimization.png' alt='optimization'></a>
+<a href='2q_independent/seed_4/actuator.png'><img src='2q_independent/seed_4/actuator.png' alt='actuator'></a>
+<a href='2q_independent/seed_4/populations.png'><img src='2q_independent/seed_4/populations.png' alt='populations'></a>
+<h3>Seed 5</h3><p>Controlli falliti: time_grid</p><a href='2q_independent/seed_5/result.json'>Dettagli</a>
+<p>Maximum number of function evaluations has been exceeded.; CONVERGENCE: RELATIVE REDUCTION OF F &lt;= FACTR*EPSMCH</p>
+<a href='2q_independent/seed_5/dynamics.png'><img src='2q_independent/seed_5/dynamics.png' alt='dynamics'></a>
+<a href='2q_independent/seed_5/wigner.png'><img src='2q_independent/seed_5/wigner.png' alt='wigner'></a>
+<a href='2q_independent/seed_5/optimization.png'><img src='2q_independent/seed_5/optimization.png' alt='optimization'></a>
+<a href='2q_independent/seed_5/actuator.png'><img src='2q_independent/seed_5/actuator.png' alt='actuator'></a>
+<a href='2q_independent/seed_5/populations.png'><img src='2q_independent/seed_5/populations.png' alt='populations'></a>
+<h3>Seed 6</h3><p>Controlli falliti: time_grid</p><a href='2q_independent/seed_6/result.json'>Dettagli</a>
+<p>Maximum number of function evaluations has been exceeded.; CONVERGENCE: RELATIVE REDUCTION OF F &lt;= FACTR*EPSMCH</p>
+<a href='2q_independent/seed_6/dynamics.png'><img src='2q_independent/seed_6/dynamics.png' alt='dynamics'></a>
+<a href='2q_independent/seed_6/wigner.png'><img src='2q_independent/seed_6/wigner.png' alt='wigner'></a>
+<a href='2q_independent/seed_6/optimization.png'><img src='2q_independent/seed_6/optimization.png' alt='optimization'></a>
+<a href='2q_independent/seed_6/actuator.png'><img src='2q_independent/seed_6/actuator.png' alt='actuator'></a>
+<a href='2q_independent/seed_6/populations.png'><img src='2q_independent/seed_6/populations.png' alt='populations'></a>
+<h3>Seed 7</h3><p>Controlli falliti: time_grid</p><a href='2q_independent/seed_7/result.json'>Dettagli</a>
+<p>Maximum number of function evaluations has been exceeded.; CONVERGENCE: RELATIVE REDUCTION OF F &lt;= FACTR*EPSMCH</p>
+<a href='2q_independent/seed_7/dynamics.png'><img src='2q_independent/seed_7/dynamics.png' alt='dynamics'></a>
+<a href='2q_independent/seed_7/wigner.png'><img src='2q_independent/seed_7/wigner.png' alt='wigner'></a>
+<a href='2q_independent/seed_7/optimization.png'><img src='2q_independent/seed_7/optimization.png' alt='optimization'></a>
+<a href='2q_independent/seed_7/actuator.png'><img src='2q_independent/seed_7/actuator.png' alt='actuator'></a>
+<a href='2q_independent/seed_7/populations.png'><img src='2q_independent/seed_7/populations.png' alt='populations'></a>
+<h2>2q_normalized_common</h2><p>Statistiche: {&quot;count&quot;: 8, &quot;probability_mean&quot;: 0.3114995630159564, &quot;probability_std_population&quot;: 0.08338771718745998, &quot;probability_median&quot;: 0.3281714515516675, &quot;probability_min&quot;: 0.17907951265501226, &quot;probability_max&quot;: 0.4421750405148969, &quot;numerically_valid_count&quot;: 0, &quot;validated_goal_count&quot;: 0, &quot;validated_goal_fraction&quot;: 0.0, &quot;probability_q25&quot;: 0.24820178677663307, &quot;probability_q75&quot;: 0.3710452247545214, &quot;selection_bias_top_only&quot;: false}</p>
+<p>Probabilità target senza modulazione: 0.00000000.</p>
+<h3>Seed 0</h3><p>Controlli falliti: time_grid</p><a href='2q_normalized_common/seed_0/result.json'>Dettagli</a>
+<p>Maximum number of function evaluations has been exceeded.; CONVERGENCE: RELATIVE REDUCTION OF F &lt;= FACTR*EPSMCH</p>
+<a href='2q_normalized_common/seed_0/dynamics.png'><img src='2q_normalized_common/seed_0/dynamics.png' alt='dynamics'></a>
+<a href='2q_normalized_common/seed_0/wigner.png'><img src='2q_normalized_common/seed_0/wigner.png' alt='wigner'></a>
+<a href='2q_normalized_common/seed_0/optimization.png'><img src='2q_normalized_common/seed_0/optimization.png' alt='optimization'></a>
+<a href='2q_normalized_common/seed_0/actuator.png'><img src='2q_normalized_common/seed_0/actuator.png' alt='actuator'></a>
+<a href='2q_normalized_common/seed_0/populations.png'><img src='2q_normalized_common/seed_0/populations.png' alt='populations'></a>
+<h3>Seed 1</h3><p>Controlli falliti: time_grid</p><a href='2q_normalized_common/seed_1/result.json'>Dettagli</a>
+<p>Maximum number of function evaluations has been exceeded.; CONVERGENCE: RELATIVE REDUCTION OF F &lt;= FACTR*EPSMCH</p>
+<a href='2q_normalized_common/seed_1/dynamics.png'><img src='2q_normalized_common/seed_1/dynamics.png' alt='dynamics'></a>
+<a href='2q_normalized_common/seed_1/wigner.png'><img src='2q_normalized_common/seed_1/wigner.png' alt='wigner'></a>
+<a href='2q_normalized_common/seed_1/optimization.png'><img src='2q_normalized_common/seed_1/optimization.png' alt='optimization'></a>
+<a href='2q_normalized_common/seed_1/actuator.png'><img src='2q_normalized_common/seed_1/actuator.png' alt='actuator'></a>
+<a href='2q_normalized_common/seed_1/populations.png'><img src='2q_normalized_common/seed_1/populations.png' alt='populations'></a>
+<h3>Seed 2</h3><p>Controlli falliti: time_grid</p><a href='2q_normalized_common/seed_2/result.json'>Dettagli</a>
+<p>Maximum number of function evaluations has been exceeded.; CONVERGENCE: RELATIVE REDUCTION OF F &lt;= FACTR*EPSMCH</p>
+<a href='2q_normalized_common/seed_2/dynamics.png'><img src='2q_normalized_common/seed_2/dynamics.png' alt='dynamics'></a>
+<a href='2q_normalized_common/seed_2/wigner.png'><img src='2q_normalized_common/seed_2/wigner.png' alt='wigner'></a>
+<a href='2q_normalized_common/seed_2/optimization.png'><img src='2q_normalized_common/seed_2/optimization.png' alt='optimization'></a>
+<a href='2q_normalized_common/seed_2/actuator.png'><img src='2q_normalized_common/seed_2/actuator.png' alt='actuator'></a>
+<a href='2q_normalized_common/seed_2/populations.png'><img src='2q_normalized_common/seed_2/populations.png' alt='populations'></a>
+<h3>Seed 3</h3><p>Controlli falliti: time_grid</p><a href='2q_normalized_common/seed_3/result.json'>Dettagli</a>
+<p>Maximum number of function evaluations has been exceeded.; CONVERGENCE: RELATIVE REDUCTION OF F &lt;= FACTR*EPSMCH</p>
+<a href='2q_normalized_common/seed_3/dynamics.png'><img src='2q_normalized_common/seed_3/dynamics.png' alt='dynamics'></a>
+<a href='2q_normalized_common/seed_3/wigner.png'><img src='2q_normalized_common/seed_3/wigner.png' alt='wigner'></a>
+<a href='2q_normalized_common/seed_3/optimization.png'><img src='2q_normalized_common/seed_3/optimization.png' alt='optimization'></a>
+<a href='2q_normalized_common/seed_3/actuator.png'><img src='2q_normalized_common/seed_3/actuator.png' alt='actuator'></a>
+<a href='2q_normalized_common/seed_3/populations.png'><img src='2q_normalized_common/seed_3/populations.png' alt='populations'></a>
+<h3>Seed 4</h3><p>Controlli falliti: time_grid</p><a href='2q_normalized_common/seed_4/result.json'>Dettagli</a>
+<p>Maximum number of function evaluations has been exceeded.; CONVERGENCE: RELATIVE REDUCTION OF F &lt;= FACTR*EPSMCH</p>
+<a href='2q_normalized_common/seed_4/dynamics.png'><img src='2q_normalized_common/seed_4/dynamics.png' alt='dynamics'></a>
+<a href='2q_normalized_common/seed_4/wigner.png'><img src='2q_normalized_common/seed_4/wigner.png' alt='wigner'></a>
+<a href='2q_normalized_common/seed_4/optimization.png'><img src='2q_normalized_common/seed_4/optimization.png' alt='optimization'></a>
+<a href='2q_normalized_common/seed_4/actuator.png'><img src='2q_normalized_common/seed_4/actuator.png' alt='actuator'></a>
+<a href='2q_normalized_common/seed_4/populations.png'><img src='2q_normalized_common/seed_4/populations.png' alt='populations'></a>
+<h3>Seed 5</h3><p>Controlli falliti: time_grid</p><a href='2q_normalized_common/seed_5/result.json'>Dettagli</a>
+<p>Maximum number of function evaluations has been exceeded.; CONVERGENCE: RELATIVE REDUCTION OF F &lt;= FACTR*EPSMCH</p>
+<a href='2q_normalized_common/seed_5/dynamics.png'><img src='2q_normalized_common/seed_5/dynamics.png' alt='dynamics'></a>
+<a href='2q_normalized_common/seed_5/wigner.png'><img src='2q_normalized_common/seed_5/wigner.png' alt='wigner'></a>
+<a href='2q_normalized_common/seed_5/optimization.png'><img src='2q_normalized_common/seed_5/optimization.png' alt='optimization'></a>
+<a href='2q_normalized_common/seed_5/actuator.png'><img src='2q_normalized_common/seed_5/actuator.png' alt='actuator'></a>
+<a href='2q_normalized_common/seed_5/populations.png'><img src='2q_normalized_common/seed_5/populations.png' alt='populations'></a>
+<h3>Seed 6</h3><p>Controlli falliti: time_grid</p><a href='2q_normalized_common/seed_6/result.json'>Dettagli</a>
+<p>Maximum number of function evaluations has been exceeded.; CONVERGENCE: RELATIVE REDUCTION OF F &lt;= FACTR*EPSMCH</p>
+<a href='2q_normalized_common/seed_6/dynamics.png'><img src='2q_normalized_common/seed_6/dynamics.png' alt='dynamics'></a>
+<a href='2q_normalized_common/seed_6/wigner.png'><img src='2q_normalized_common/seed_6/wigner.png' alt='wigner'></a>
+<a href='2q_normalized_common/seed_6/optimization.png'><img src='2q_normalized_common/seed_6/optimization.png' alt='optimization'></a>
+<a href='2q_normalized_common/seed_6/actuator.png'><img src='2q_normalized_common/seed_6/actuator.png' alt='actuator'></a>
+<a href='2q_normalized_common/seed_6/populations.png'><img src='2q_normalized_common/seed_6/populations.png' alt='populations'></a>
+<h3>Seed 7</h3><p>Controlli falliti: time_grid</p><a href='2q_normalized_common/seed_7/result.json'>Dettagli</a>
+<p>Maximum number of function evaluations has been exceeded.; CONVERGENCE: RELATIVE REDUCTION OF F &lt;= FACTR*EPSMCH</p>
+<a href='2q_normalized_common/seed_7/dynamics.png'><img src='2q_normalized_common/seed_7/dynamics.png' alt='dynamics'></a>
+<a href='2q_normalized_common/seed_7/wigner.png'><img src='2q_normalized_common/seed_7/wigner.png' alt='wigner'></a>
+<a href='2q_normalized_common/seed_7/optimization.png'><img src='2q_normalized_common/seed_7/optimization.png' alt='optimization'></a>
+<a href='2q_normalized_common/seed_7/actuator.png'><img src='2q_normalized_common/seed_7/actuator.png' alt='actuator'></a>
+<a href='2q_normalized_common/seed_7/populations.png'><img src='2q_normalized_common/seed_7/populations.png' alt='populations'></a>
+<h2>2q_normalized_independent</h2><p>Statistiche: {&quot;count&quot;: 8, &quot;probability_mean&quot;: 0.3635645809386664, &quot;probability_std_population&quot;: 0.06421767344828117, &quot;probability_median&quot;: 0.3551138776885536, &quot;probability_min&quot;: 0.2942680109670821, &quot;probability_max&quot;: 0.4679353878642804, &quot;numerically_valid_count&quot;: 0, &quot;validated_goal_count&quot;: 0, &quot;validated_goal_fraction&quot;: 0.0, &quot;probability_q25&quot;: 0.3027285268422588, &quot;probability_q75&quot;: 0.39450158763307874, &quot;selection_bias_top_only&quot;: false}</p>
+<p>Probabilità target senza modulazione: 0.00000000.</p>
+<h3>Seed 0</h3><p>Controlli falliti: time_grid</p><a href='2q_normalized_independent/seed_0/result.json'>Dettagli</a>
+<p>Maximum number of function evaluations has been exceeded.; STOP: TOTAL NO. OF ITERATIONS REACHED LIMIT</p>
+<a href='2q_normalized_independent/seed_0/dynamics.png'><img src='2q_normalized_independent/seed_0/dynamics.png' alt='dynamics'></a>
+<a href='2q_normalized_independent/seed_0/wigner.png'><img src='2q_normalized_independent/seed_0/wigner.png' alt='wigner'></a>
+<a href='2q_normalized_independent/seed_0/optimization.png'><img src='2q_normalized_independent/seed_0/optimization.png' alt='optimization'></a>
+<a href='2q_normalized_independent/seed_0/actuator.png'><img src='2q_normalized_independent/seed_0/actuator.png' alt='actuator'></a>
+<a href='2q_normalized_independent/seed_0/populations.png'><img src='2q_normalized_independent/seed_0/populations.png' alt='populations'></a>
+<h3>Seed 1</h3><p>Controlli falliti: time_grid</p><a href='2q_normalized_independent/seed_1/result.json'>Dettagli</a>
+<p>Maximum number of function evaluations has been exceeded.; CONVERGENCE: RELATIVE REDUCTION OF F &lt;= FACTR*EPSMCH</p>
+<a href='2q_normalized_independent/seed_1/dynamics.png'><img src='2q_normalized_independent/seed_1/dynamics.png' alt='dynamics'></a>
+<a href='2q_normalized_independent/seed_1/wigner.png'><img src='2q_normalized_independent/seed_1/wigner.png' alt='wigner'></a>
+<a href='2q_normalized_independent/seed_1/optimization.png'><img src='2q_normalized_independent/seed_1/optimization.png' alt='optimization'></a>
+<a href='2q_normalized_independent/seed_1/actuator.png'><img src='2q_normalized_independent/seed_1/actuator.png' alt='actuator'></a>
+<a href='2q_normalized_independent/seed_1/populations.png'><img src='2q_normalized_independent/seed_1/populations.png' alt='populations'></a>
+<h3>Seed 2</h3><p>Controlli falliti: time_grid</p><a href='2q_normalized_independent/seed_2/result.json'>Dettagli</a>
+<p>Maximum number of function evaluations has been exceeded.; CONVERGENCE: RELATIVE REDUCTION OF F &lt;= FACTR*EPSMCH</p>
+<a href='2q_normalized_independent/seed_2/dynamics.png'><img src='2q_normalized_independent/seed_2/dynamics.png' alt='dynamics'></a>
+<a href='2q_normalized_independent/seed_2/wigner.png'><img src='2q_normalized_independent/seed_2/wigner.png' alt='wigner'></a>
+<a href='2q_normalized_independent/seed_2/optimization.png'><img src='2q_normalized_independent/seed_2/optimization.png' alt='optimization'></a>
+<a href='2q_normalized_independent/seed_2/actuator.png'><img src='2q_normalized_independent/seed_2/actuator.png' alt='actuator'></a>
+<a href='2q_normalized_independent/seed_2/populations.png'><img src='2q_normalized_independent/seed_2/populations.png' alt='populations'></a>
+<h3>Seed 3</h3><p>Controlli falliti: time_grid</p><a href='2q_normalized_independent/seed_3/result.json'>Dettagli</a>
+<p>Maximum number of function evaluations has been exceeded.; CONVERGENCE: RELATIVE REDUCTION OF F &lt;= FACTR*EPSMCH</p>
+<a href='2q_normalized_independent/seed_3/dynamics.png'><img src='2q_normalized_independent/seed_3/dynamics.png' alt='dynamics'></a>
+<a href='2q_normalized_independent/seed_3/wigner.png'><img src='2q_normalized_independent/seed_3/wigner.png' alt='wigner'></a>
+<a href='2q_normalized_independent/seed_3/optimization.png'><img src='2q_normalized_independent/seed_3/optimization.png' alt='optimization'></a>
+<a href='2q_normalized_independent/seed_3/actuator.png'><img src='2q_normalized_independent/seed_3/actuator.png' alt='actuator'></a>
+<a href='2q_normalized_independent/seed_3/populations.png'><img src='2q_normalized_independent/seed_3/populations.png' alt='populations'></a>
+<h3>Seed 4</h3><p>Controlli falliti: time_grid</p><a href='2q_normalized_independent/seed_4/result.json'>Dettagli</a>
+<p>Maximum number of function evaluations has been exceeded.; CONVERGENCE: RELATIVE REDUCTION OF F &lt;= FACTR*EPSMCH</p>
+<a href='2q_normalized_independent/seed_4/dynamics.png'><img src='2q_normalized_independent/seed_4/dynamics.png' alt='dynamics'></a>
+<a href='2q_normalized_independent/seed_4/wigner.png'><img src='2q_normalized_independent/seed_4/wigner.png' alt='wigner'></a>
+<a href='2q_normalized_independent/seed_4/optimization.png'><img src='2q_normalized_independent/seed_4/optimization.png' alt='optimization'></a>
+<a href='2q_normalized_independent/seed_4/actuator.png'><img src='2q_normalized_independent/seed_4/actuator.png' alt='actuator'></a>
+<a href='2q_normalized_independent/seed_4/populations.png'><img src='2q_normalized_independent/seed_4/populations.png' alt='populations'></a>
+<h3>Seed 5</h3><p>Controlli falliti: time_grid</p><a href='2q_normalized_independent/seed_5/result.json'>Dettagli</a>
+<p>Maximum number of function evaluations has been exceeded.; STOP: TOTAL NO. OF ITERATIONS REACHED LIMIT</p>
+<a href='2q_normalized_independent/seed_5/dynamics.png'><img src='2q_normalized_independent/seed_5/dynamics.png' alt='dynamics'></a>
+<a href='2q_normalized_independent/seed_5/wigner.png'><img src='2q_normalized_independent/seed_5/wigner.png' alt='wigner'></a>
+<a href='2q_normalized_independent/seed_5/optimization.png'><img src='2q_normalized_independent/seed_5/optimization.png' alt='optimization'></a>
+<a href='2q_normalized_independent/seed_5/actuator.png'><img src='2q_normalized_independent/seed_5/actuator.png' alt='actuator'></a>
+<a href='2q_normalized_independent/seed_5/populations.png'><img src='2q_normalized_independent/seed_5/populations.png' alt='populations'></a>
+<h3>Seed 6</h3><p>Controlli falliti: time_grid</p><a href='2q_normalized_independent/seed_6/result.json'>Dettagli</a>
+<p>Maximum number of function evaluations has been exceeded.; CONVERGENCE: RELATIVE REDUCTION OF F &lt;= FACTR*EPSMCH</p>
+<a href='2q_normalized_independent/seed_6/dynamics.png'><img src='2q_normalized_independent/seed_6/dynamics.png' alt='dynamics'></a>
+<a href='2q_normalized_independent/seed_6/wigner.png'><img src='2q_normalized_independent/seed_6/wigner.png' alt='wigner'></a>
+<a href='2q_normalized_independent/seed_6/optimization.png'><img src='2q_normalized_independent/seed_6/optimization.png' alt='optimization'></a>
+<a href='2q_normalized_independent/seed_6/actuator.png'><img src='2q_normalized_independent/seed_6/actuator.png' alt='actuator'></a>
+<a href='2q_normalized_independent/seed_6/populations.png'><img src='2q_normalized_independent/seed_6/populations.png' alt='populations'></a>
+<h3>Seed 7</h3><p>Controlli falliti: time_grid</p><a href='2q_normalized_independent/seed_7/result.json'>Dettagli</a>
+<p>Maximum number of function evaluations has been exceeded.; CONVERGENCE: RELATIVE REDUCTION OF F &lt;= FACTR*EPSMCH</p>
+<a href='2q_normalized_independent/seed_7/dynamics.png'><img src='2q_normalized_independent/seed_7/dynamics.png' alt='dynamics'></a>
+<a href='2q_normalized_independent/seed_7/wigner.png'><img src='2q_normalized_independent/seed_7/wigner.png' alt='wigner'></a>
+<a href='2q_normalized_independent/seed_7/optimization.png'><img src='2q_normalized_independent/seed_7/optimization.png' alt='optimization'></a>
+<a href='2q_normalized_independent/seed_7/actuator.png'><img src='2q_normalized_independent/seed_7/actuator.png' alt='actuator'></a>
+<a href='2q_normalized_independent/seed_7/populations.png'><img src='2q_normalized_independent/seed_7/populations.png' alt='populations'></a></body></html>
