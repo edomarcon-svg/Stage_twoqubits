@@ -176,7 +176,7 @@ Qui nella fase GRAPE entrambi i sistemi raggiungevano una fedeltà sopra $0.999$
 \end{figure}
 
 \subsection{I problemi emersi guardando i risultati della v1}
-Analizzando questi numeri sono venuti fuori diversi problemi numerici e di impostazione che rendevano rischioso fidarsi dei confronti della v1:
+Analizzando questi numeri ho voluto provare a risolvere diverse problematiche:
 \begin{itemize}
     \item \textbf{Il crollo dopo lo smoothing PCHIP:} ottimizzare un controllo a gradini in GRAPE e lisciarlo solo alla fine cambiava il segnale quel tanto che bastava per far perdere dal 2\% fino al 10\% di fedeltà (come nel caso Cat). In più, anche la verifica del segnale PCHIP veniva fatta ripassandolo al propagatore a gradini su $2 N_t$ punti, e non integrando l'equazione di Schrödinger continua.
     \item \textbf{GRAPE che peggiorava il risultato CRAB (caso 1Q a $T=10\,\tau_s$):} in v1 CRAB integrava con \texttt{sesolve} su 400 punti, mentre GRAPE ricampionava l'impulso su 150 slot costanti a tratti. Inoltre, creando la griglia con \texttt{np.linspace(0, T, Nt)} e applicando $N_t$ passi di durata $dt = T/(N_t - 1)$, l'evoluzione in GRAPE durava in realtà $N_t \cdot T/(N_t-1) > T$. A questo si aggiungeva il fatto che il gradiente era calcolato al primo ordine in $dt$ (usando il commutatore $[H_k, \rho_t]$), un'approssimazione che può risultare imprecisa quando gli slot temporali sono larghi.
@@ -184,9 +184,10 @@ Analizzando questi numeri sono venuti fuori diversi problemi numerici e di impos
     \item \textbf{Mancanza di controlli sul troncamento di Fock:} con $n=10$ e $\text{dim}=40$, non avevo una verifica automatica che durante la dinamica la popolazione non andasse a sbattere sul bordo dello spazio troncato.
 \end{itemize}
 
+\newpage
 \section{Cosa ho cambiato nella v2 e perché}
 
-Per risolvere questi punti senza rattoppare gli script vecchi, ho riscritto la pipeline da zero nella cartella autonoma \texttt{v2/} (lasciando intatti tutti i file e i risultati della v1) e l'ho controllata con una suite di 46 test automatici (gradienti contro differenze finite, limiti fisici a $g=0$, conservazione di norma e parità). Le differenze principali sono riassunte nella Tabella~\ref{tab:cambiamenti_v2}.
+Per risolvere questi punti ho riscritto la pipeline da zero nella cartella autonoma \texttt{v2/} (lasciando intatti tutti i file e i risultati della v1) e l'ho controllata con una suite di 46 test automatici (gradienti contro differenze finite, limiti fisici a $g=0$, conservazione di norma e parità).
 
 \begin{table}[H]
 \centering
