@@ -60,73 +60,41 @@ Probabilità target senza modulazione: 0.00000000.
 Controlli numerici falliti: time_grid.
 CRAB: Maximum number of function evaluations has been exceeded.. GRAPE: CONVERGENCE: RELATIVE REDUCTION OF F <= FACTR*EPSMCH.
 [Metadati completi](1q/seed_0/result.json)
-![dynamics](1q/seed_0/dynamics.png)
-![wigner](1q/seed_0/wigner.png)
-![actuator](1q/seed_0/actuator.png)
-![populations](1q/seed_0/populations.png)
 
 ### random — 1
 Controlli numerici falliti: time_grid.
 CRAB: Maximum number of function evaluations has been exceeded.. GRAPE: CONVERGENCE: RELATIVE REDUCTION OF F <= FACTR*EPSMCH.
 [Metadati completi](1q/seed_1/result.json)
-![dynamics](1q/seed_1/dynamics.png)
-![wigner](1q/seed_1/wigner.png)
-![actuator](1q/seed_1/actuator.png)
-![populations](1q/seed_1/populations.png)
 
 ### random — 2
 Controlli numerici falliti: time_grid.
 CRAB: Maximum number of function evaluations has been exceeded.. GRAPE: CONVERGENCE: RELATIVE REDUCTION OF F <= FACTR*EPSMCH.
 [Metadati completi](1q/seed_2/result.json)
-![dynamics](1q/seed_2/dynamics.png)
-![wigner](1q/seed_2/wigner.png)
-![actuator](1q/seed_2/actuator.png)
-![populations](1q/seed_2/populations.png)
 
 ### random — 3
 Controlli numerici falliti: time_grid.
 CRAB: Maximum number of function evaluations has been exceeded.. GRAPE: CONVERGENCE: RELATIVE REDUCTION OF F <= FACTR*EPSMCH.
 [Metadati completi](1q/seed_3/result.json)
-![dynamics](1q/seed_3/dynamics.png)
-![wigner](1q/seed_3/wigner.png)
-![actuator](1q/seed_3/actuator.png)
-![populations](1q/seed_3/populations.png)
 
 ### random — 4
 Controlli numerici falliti: time_grid.
 CRAB: Maximum number of function evaluations has been exceeded.. GRAPE: CONVERGENCE: RELATIVE REDUCTION OF F <= FACTR*EPSMCH.
 [Metadati completi](1q/seed_4/result.json)
-![dynamics](1q/seed_4/dynamics.png)
-![wigner](1q/seed_4/wigner.png)
-![actuator](1q/seed_4/actuator.png)
-![populations](1q/seed_4/populations.png)
 
 ### random — 5
 Controlli numerici falliti: time_grid.
 CRAB: Maximum number of function evaluations has been exceeded.. GRAPE: CONVERGENCE: RELATIVE REDUCTION OF F <= FACTR*EPSMCH.
 [Metadati completi](1q/seed_5/result.json)
-![dynamics](1q/seed_5/dynamics.png)
-![wigner](1q/seed_5/wigner.png)
-![actuator](1q/seed_5/actuator.png)
-![populations](1q/seed_5/populations.png)
 
 ### random — 6
 Controlli numerici falliti: time_grid.
 CRAB: Maximum number of function evaluations has been exceeded.. GRAPE: CONVERGENCE: RELATIVE REDUCTION OF F <= FACTR*EPSMCH.
 [Metadati completi](1q/seed_6/result.json)
-![dynamics](1q/seed_6/dynamics.png)
-![wigner](1q/seed_6/wigner.png)
-![actuator](1q/seed_6/actuator.png)
-![populations](1q/seed_6/populations.png)
 
 ### random — 7
 Controlli numerici falliti: time_grid.
 CRAB: Maximum number of function evaluations has been exceeded.. GRAPE: CONVERGENCE: RELATIVE REDUCTION OF F <= FACTR*EPSMCH.
 [Metadati completi](1q/seed_7/result.json)
-![dynamics](1q/seed_7/dynamics.png)
-![wigner](1q/seed_7/wigner.png)
-![actuator](1q/seed_7/actuator.png)
-![populations](1q/seed_7/populations.png)
 
 ## 2q_common
 Distribuzione sulle 8 pipeline raffinate: {"count": 8, "probability_mean": 0.871286078702518, "probability_std_population": 0.043173433756312996, "probability_median": 0.8694448776212249, "probability_min": 0.802776611638942, "probability_max": 0.9363083458667326, "numerically_valid_count": 0, "validated_goal_count": 0, "validated_goal_fraction": 0.0, "probability_q25": 0.8449048061836344, "probability_q75": 0.9048265249940548, "selection_bias_top_only": false}.
@@ -137,73 +105,41 @@ Probabilità target senza modulazione: 0.00000037.
 Controlli numerici falliti: time_grid.
 CRAB: Maximum number of function evaluations has been exceeded.. GRAPE: CONVERGENCE: RELATIVE REDUCTION OF F <= FACTR*EPSMCH.
 [Metadati completi](2q_common/seed_0/result.json)
-![dynamics](2q_common/seed_0/dynamics.png)
-![wigner](2q_common/seed_0/wigner.png)
-![actuator](2q_common/seed_0/actuator.png)
-![populations](2q_common/seed_0/populations.png)
 
 ### random — 1
 Controlli numerici falliti: time_grid.
 CRAB: Maximum number of function evaluations has been exceeded.. GRAPE: CONVERGENCE: RELATIVE REDUCTION OF F <= FACTR*EPSMCH.
 [Metadati completi](2q_common/seed_1/result.json)
-![dynamics](2q_common/seed_1/dynamics.png)
-![wigner](2q_common/seed_1/wigner.png)
-![actuator](2q_common/seed_1/actuator.png)
-![populations](2q_common/seed_1/populations.png)
 
 ### random — 2
 Controlli numerici falliti: time_grid.
 CRAB: Maximum number of function evaluations has been exceeded.. GRAPE: CONVERGENCE: RELATIVE REDUCTION OF F <= FACTR*EPSMCH.
 [Metadati completi](2q_common/seed_2/result.json)
-![dynamics](2q_common/seed_2/dynamics.png)
-![wigner](2q_common/seed_2/wigner.png)
-![actuator](2q_common/seed_2/actuator.png)
-![populations](2q_common/seed_2/populations.png)
 
 ### random — 3
 Controlli numerici falliti: time_grid.
 CRAB: Maximum number of function evaluations has been exceeded.. GRAPE: CONVERGENCE: RELATIVE REDUCTION OF F <= FACTR*EPSMCH.
 [Metadati completi](2q_common/seed_3/result.json)
-![dynamics](2q_common/seed_3/dynamics.png)
-![wigner](2q_common/seed_3/wigner.png)
-![actuator](2q_common/seed_3/actuator.png)
-![populations](2q_common/seed_3/populations.png)
 
 ### random — 4
 Controlli numerici falliti: time_grid.
 CRAB: Maximum number of function evaluations has been exceeded.. GRAPE: CONVERGENCE: RELATIVE REDUCTION OF F <= FACTR*EPSMCH.
 [Metadati completi](2q_common/seed_4/result.json)
-![dynamics](2q_common/seed_4/dynamics.png)
-![wigner](2q_common/seed_4/wigner.png)
-![actuator](2q_common/seed_4/actuator.png)
-![populations](2q_common/seed_4/populations.png)
 
 ### random — 5
 Controlli numerici falliti: time_grid.
 CRAB: Maximum number of function evaluations has been exceeded.. GRAPE: CONVERGENCE: RELATIVE REDUCTION OF F <= FACTR*EPSMCH.
 [Metadati completi](2q_common/seed_5/result.json)
-![dynamics](2q_common/seed_5/dynamics.png)
-![wigner](2q_common/seed_5/wigner.png)
-![actuator](2q_common/seed_5/actuator.png)
-![populations](2q_common/seed_5/populations.png)
 
 ### random — 6
 Controlli numerici falliti: time_grid.
 CRAB: Maximum number of function evaluations has been exceeded.. GRAPE: ABNORMAL: .
 [Metadati completi](2q_common/seed_6/result.json)
-![dynamics](2q_common/seed_6/dynamics.png)
-![wigner](2q_common/seed_6/wigner.png)
-![actuator](2q_common/seed_6/actuator.png)
-![populations](2q_common/seed_6/populations.png)
 
 ### random — 7
 Controlli numerici falliti: time_grid.
 CRAB: Maximum number of function evaluations has been exceeded.. GRAPE: CONVERGENCE: RELATIVE REDUCTION OF F <= FACTR*EPSMCH.
 [Metadati completi](2q_common/seed_7/result.json)
-![dynamics](2q_common/seed_7/dynamics.png)
-![wigner](2q_common/seed_7/wigner.png)
-![actuator](2q_common/seed_7/actuator.png)
-![populations](2q_common/seed_7/populations.png)
 
 ## 2q_independent
 Distribuzione sulle 8 pipeline raffinate: {"count": 8, "probability_mean": 0.9334087044991091, "probability_std_population": 0.024736641943666333, "probability_median": 0.9409645847013651, "probability_min": 0.8755242812815439, "probability_max": 0.9617811136647558, "numerically_valid_count": 0, "validated_goal_count": 0, "validated_goal_fraction": 0.0, "probability_q25": 0.9273712687400184, "probability_q75": 0.9470442531822121, "selection_bias_top_only": false}.
@@ -214,73 +150,41 @@ Probabilità target senza modulazione: 0.00000037.
 Controlli numerici falliti: time_grid.
 CRAB: Maximum number of function evaluations has been exceeded.. GRAPE: STOP: TOTAL NO. OF ITERATIONS REACHED LIMIT.
 [Metadati completi](2q_independent/seed_0/result.json)
-![dynamics](2q_independent/seed_0/dynamics.png)
-![wigner](2q_independent/seed_0/wigner.png)
-![actuator](2q_independent/seed_0/actuator.png)
-![populations](2q_independent/seed_0/populations.png)
 
 ### random — 1
 Controlli numerici falliti: time_grid.
 CRAB: Maximum number of function evaluations has been exceeded.. GRAPE: CONVERGENCE: RELATIVE REDUCTION OF F <= FACTR*EPSMCH.
 [Metadati completi](2q_independent/seed_1/result.json)
-![dynamics](2q_independent/seed_1/dynamics.png)
-![wigner](2q_independent/seed_1/wigner.png)
-![actuator](2q_independent/seed_1/actuator.png)
-![populations](2q_independent/seed_1/populations.png)
 
 ### random — 2
 Controlli numerici falliti: time_grid.
 CRAB: Maximum number of function evaluations has been exceeded.. GRAPE: CONVERGENCE: RELATIVE REDUCTION OF F <= FACTR*EPSMCH.
 [Metadati completi](2q_independent/seed_2/result.json)
-![dynamics](2q_independent/seed_2/dynamics.png)
-![wigner](2q_independent/seed_2/wigner.png)
-![actuator](2q_independent/seed_2/actuator.png)
-![populations](2q_independent/seed_2/populations.png)
 
 ### random — 3
 Controlli numerici falliti: time_grid.
 CRAB: Maximum number of function evaluations has been exceeded.. GRAPE: CONVERGENCE: RELATIVE REDUCTION OF F <= FACTR*EPSMCH.
 [Metadati completi](2q_independent/seed_3/result.json)
-![dynamics](2q_independent/seed_3/dynamics.png)
-![wigner](2q_independent/seed_3/wigner.png)
-![actuator](2q_independent/seed_3/actuator.png)
-![populations](2q_independent/seed_3/populations.png)
 
 ### random — 4
 Controlli numerici falliti: time_grid.
 CRAB: Maximum number of function evaluations has been exceeded.. GRAPE: STOP: TOTAL NO. OF ITERATIONS REACHED LIMIT.
 [Metadati completi](2q_independent/seed_4/result.json)
-![dynamics](2q_independent/seed_4/dynamics.png)
-![wigner](2q_independent/seed_4/wigner.png)
-![actuator](2q_independent/seed_4/actuator.png)
-![populations](2q_independent/seed_4/populations.png)
 
 ### random — 5
 Controlli numerici falliti: time_grid.
 CRAB: Maximum number of function evaluations has been exceeded.. GRAPE: CONVERGENCE: RELATIVE REDUCTION OF F <= FACTR*EPSMCH.
 [Metadati completi](2q_independent/seed_5/result.json)
-![dynamics](2q_independent/seed_5/dynamics.png)
-![wigner](2q_independent/seed_5/wigner.png)
-![actuator](2q_independent/seed_5/actuator.png)
-![populations](2q_independent/seed_5/populations.png)
 
 ### random — 6
 Controlli numerici falliti: time_grid.
 CRAB: Maximum number of function evaluations has been exceeded.. GRAPE: CONVERGENCE: RELATIVE REDUCTION OF F <= FACTR*EPSMCH.
 [Metadati completi](2q_independent/seed_6/result.json)
-![dynamics](2q_independent/seed_6/dynamics.png)
-![wigner](2q_independent/seed_6/wigner.png)
-![actuator](2q_independent/seed_6/actuator.png)
-![populations](2q_independent/seed_6/populations.png)
 
 ### random — 7
 Controlli numerici falliti: time_grid.
 CRAB: Maximum number of function evaluations has been exceeded.. GRAPE: CONVERGENCE: RELATIVE REDUCTION OF F <= FACTR*EPSMCH.
 [Metadati completi](2q_independent/seed_7/result.json)
-![dynamics](2q_independent/seed_7/dynamics.png)
-![wigner](2q_independent/seed_7/wigner.png)
-![actuator](2q_independent/seed_7/actuator.png)
-![populations](2q_independent/seed_7/populations.png)
 
 ## 2q_normalized_common
 Distribuzione sulle 8 pipeline raffinate: {"count": 8, "probability_mean": 0.3114995630159564, "probability_std_population": 0.08338771718745998, "probability_median": 0.3281714515516675, "probability_min": 0.17907951265501226, "probability_max": 0.4421750405148969, "numerically_valid_count": 0, "validated_goal_count": 0, "validated_goal_fraction": 0.0, "probability_q25": 0.24820178677663307, "probability_q75": 0.3710452247545214, "selection_bias_top_only": false}.
@@ -291,73 +195,41 @@ Probabilità target senza modulazione: 0.00000000.
 Controlli numerici falliti: time_grid.
 CRAB: Maximum number of function evaluations has been exceeded.. GRAPE: CONVERGENCE: RELATIVE REDUCTION OF F <= FACTR*EPSMCH.
 [Metadati completi](2q_normalized_common/seed_0/result.json)
-![dynamics](2q_normalized_common/seed_0/dynamics.png)
-![wigner](2q_normalized_common/seed_0/wigner.png)
-![actuator](2q_normalized_common/seed_0/actuator.png)
-![populations](2q_normalized_common/seed_0/populations.png)
 
 ### random — 1
 Controlli numerici falliti: time_grid.
 CRAB: Maximum number of function evaluations has been exceeded.. GRAPE: CONVERGENCE: RELATIVE REDUCTION OF F <= FACTR*EPSMCH.
 [Metadati completi](2q_normalized_common/seed_1/result.json)
-![dynamics](2q_normalized_common/seed_1/dynamics.png)
-![wigner](2q_normalized_common/seed_1/wigner.png)
-![actuator](2q_normalized_common/seed_1/actuator.png)
-![populations](2q_normalized_common/seed_1/populations.png)
 
 ### random — 2
 Controlli numerici falliti: time_grid.
 CRAB: Maximum number of function evaluations has been exceeded.. GRAPE: CONVERGENCE: RELATIVE REDUCTION OF F <= FACTR*EPSMCH.
 [Metadati completi](2q_normalized_common/seed_2/result.json)
-![dynamics](2q_normalized_common/seed_2/dynamics.png)
-![wigner](2q_normalized_common/seed_2/wigner.png)
-![actuator](2q_normalized_common/seed_2/actuator.png)
-![populations](2q_normalized_common/seed_2/populations.png)
 
 ### random — 3
 Controlli numerici falliti: time_grid.
 CRAB: Maximum number of function evaluations has been exceeded.. GRAPE: CONVERGENCE: RELATIVE REDUCTION OF F <= FACTR*EPSMCH.
 [Metadati completi](2q_normalized_common/seed_3/result.json)
-![dynamics](2q_normalized_common/seed_3/dynamics.png)
-![wigner](2q_normalized_common/seed_3/wigner.png)
-![actuator](2q_normalized_common/seed_3/actuator.png)
-![populations](2q_normalized_common/seed_3/populations.png)
 
 ### random — 4
 Controlli numerici falliti: time_grid.
 CRAB: Maximum number of function evaluations has been exceeded.. GRAPE: CONVERGENCE: RELATIVE REDUCTION OF F <= FACTR*EPSMCH.
 [Metadati completi](2q_normalized_common/seed_4/result.json)
-![dynamics](2q_normalized_common/seed_4/dynamics.png)
-![wigner](2q_normalized_common/seed_4/wigner.png)
-![actuator](2q_normalized_common/seed_4/actuator.png)
-![populations](2q_normalized_common/seed_4/populations.png)
 
 ### random — 5
 Controlli numerici falliti: time_grid.
 CRAB: Maximum number of function evaluations has been exceeded.. GRAPE: CONVERGENCE: RELATIVE REDUCTION OF F <= FACTR*EPSMCH.
 [Metadati completi](2q_normalized_common/seed_5/result.json)
-![dynamics](2q_normalized_common/seed_5/dynamics.png)
-![wigner](2q_normalized_common/seed_5/wigner.png)
-![actuator](2q_normalized_common/seed_5/actuator.png)
-![populations](2q_normalized_common/seed_5/populations.png)
 
 ### random — 6
 Controlli numerici falliti: time_grid.
 CRAB: Maximum number of function evaluations has been exceeded.. GRAPE: CONVERGENCE: RELATIVE REDUCTION OF F <= FACTR*EPSMCH.
 [Metadati completi](2q_normalized_common/seed_6/result.json)
-![dynamics](2q_normalized_common/seed_6/dynamics.png)
-![wigner](2q_normalized_common/seed_6/wigner.png)
-![actuator](2q_normalized_common/seed_6/actuator.png)
-![populations](2q_normalized_common/seed_6/populations.png)
 
 ### random — 7
 Controlli numerici falliti: time_grid.
 CRAB: Maximum number of function evaluations has been exceeded.. GRAPE: CONVERGENCE: RELATIVE REDUCTION OF F <= FACTR*EPSMCH.
 [Metadati completi](2q_normalized_common/seed_7/result.json)
-![dynamics](2q_normalized_common/seed_7/dynamics.png)
-![wigner](2q_normalized_common/seed_7/wigner.png)
-![actuator](2q_normalized_common/seed_7/actuator.png)
-![populations](2q_normalized_common/seed_7/populations.png)
 
 ## 2q_normalized_independent
 Distribuzione sulle 8 pipeline raffinate: {"count": 8, "probability_mean": 0.3635645809386664, "probability_std_population": 0.06421767344828117, "probability_median": 0.3551138776885536, "probability_min": 0.2942680109670821, "probability_max": 0.4679353878642804, "numerically_valid_count": 0, "validated_goal_count": 0, "validated_goal_fraction": 0.0, "probability_q25": 0.3027285268422588, "probability_q75": 0.39450158763307874, "selection_bias_top_only": false}.
@@ -368,70 +240,38 @@ Probabilità target senza modulazione: 0.00000000.
 Controlli numerici falliti: time_grid.
 CRAB: Maximum number of function evaluations has been exceeded.. GRAPE: STOP: TOTAL NO. OF ITERATIONS REACHED LIMIT.
 [Metadati completi](2q_normalized_independent/seed_0/result.json)
-![dynamics](2q_normalized_independent/seed_0/dynamics.png)
-![wigner](2q_normalized_independent/seed_0/wigner.png)
-![actuator](2q_normalized_independent/seed_0/actuator.png)
-![populations](2q_normalized_independent/seed_0/populations.png)
 
 ### random — 1
 Controlli numerici falliti: time_grid.
 CRAB: Maximum number of function evaluations has been exceeded.. GRAPE: CONVERGENCE: RELATIVE REDUCTION OF F <= FACTR*EPSMCH.
 [Metadati completi](2q_normalized_independent/seed_1/result.json)
-![dynamics](2q_normalized_independent/seed_1/dynamics.png)
-![wigner](2q_normalized_independent/seed_1/wigner.png)
-![actuator](2q_normalized_independent/seed_1/actuator.png)
-![populations](2q_normalized_independent/seed_1/populations.png)
 
 ### random — 2
 Controlli numerici falliti: time_grid.
 CRAB: Maximum number of function evaluations has been exceeded.. GRAPE: CONVERGENCE: RELATIVE REDUCTION OF F <= FACTR*EPSMCH.
 [Metadati completi](2q_normalized_independent/seed_2/result.json)
-![dynamics](2q_normalized_independent/seed_2/dynamics.png)
-![wigner](2q_normalized_independent/seed_2/wigner.png)
-![actuator](2q_normalized_independent/seed_2/actuator.png)
-![populations](2q_normalized_independent/seed_2/populations.png)
 
 ### random — 3
 Controlli numerici falliti: time_grid.
 CRAB: Maximum number of function evaluations has been exceeded.. GRAPE: CONVERGENCE: RELATIVE REDUCTION OF F <= FACTR*EPSMCH.
 [Metadati completi](2q_normalized_independent/seed_3/result.json)
-![dynamics](2q_normalized_independent/seed_3/dynamics.png)
-![wigner](2q_normalized_independent/seed_3/wigner.png)
-![actuator](2q_normalized_independent/seed_3/actuator.png)
-![populations](2q_normalized_independent/seed_3/populations.png)
 
 ### random — 4
 Controlli numerici falliti: time_grid.
 CRAB: Maximum number of function evaluations has been exceeded.. GRAPE: CONVERGENCE: RELATIVE REDUCTION OF F <= FACTR*EPSMCH.
 [Metadati completi](2q_normalized_independent/seed_4/result.json)
-![dynamics](2q_normalized_independent/seed_4/dynamics.png)
-![wigner](2q_normalized_independent/seed_4/wigner.png)
-![actuator](2q_normalized_independent/seed_4/actuator.png)
-![populations](2q_normalized_independent/seed_4/populations.png)
 
 ### random — 5
 Controlli numerici falliti: time_grid.
 CRAB: Maximum number of function evaluations has been exceeded.. GRAPE: STOP: TOTAL NO. OF ITERATIONS REACHED LIMIT.
 [Metadati completi](2q_normalized_independent/seed_5/result.json)
-![dynamics](2q_normalized_independent/seed_5/dynamics.png)
-![wigner](2q_normalized_independent/seed_5/wigner.png)
-![actuator](2q_normalized_independent/seed_5/actuator.png)
-![populations](2q_normalized_independent/seed_5/populations.png)
 
 ### random — 6
 Controlli numerici falliti: time_grid.
 CRAB: Maximum number of function evaluations has been exceeded.. GRAPE: CONVERGENCE: RELATIVE REDUCTION OF F <= FACTR*EPSMCH.
 [Metadati completi](2q_normalized_independent/seed_6/result.json)
-![dynamics](2q_normalized_independent/seed_6/dynamics.png)
-![wigner](2q_normalized_independent/seed_6/wigner.png)
-![actuator](2q_normalized_independent/seed_6/actuator.png)
-![populations](2q_normalized_independent/seed_6/populations.png)
 
 ### random — 7
 Controlli numerici falliti: time_grid.
 CRAB: Maximum number of function evaluations has been exceeded.. GRAPE: CONVERGENCE: RELATIVE REDUCTION OF F <= FACTR*EPSMCH.
 [Metadati completi](2q_normalized_independent/seed_7/result.json)
-![dynamics](2q_normalized_independent/seed_7/dynamics.png)
-![wigner](2q_normalized_independent/seed_7/wigner.png)
-![actuator](2q_normalized_independent/seed_7/actuator.png)
-![populations](2q_normalized_independent/seed_7/populations.png)

@@ -60,73 +60,41 @@ Probabilità target senza modulazione: 0.00000000.
 Controlli numerici falliti: nessuno.
 CRAB: Maximum number of function evaluations has been exceeded.. GRAPE: STOP: TOTAL NO. OF ITERATIONS REACHED LIMIT.
 [Metadati completi](1q/seed_0/result.json)
-![dynamics](1q/seed_0/dynamics.png)
-![wigner](1q/seed_0/wigner.png)
-![actuator](1q/seed_0/actuator.png)
-![populations](1q/seed_0/populations.png)
 
 ### random — 1
 Controlli numerici falliti: nessuno.
 CRAB: Maximum number of function evaluations has been exceeded.. GRAPE: STOP: TOTAL NO. OF ITERATIONS REACHED LIMIT.
 [Metadati completi](1q/seed_1/result.json)
-![dynamics](1q/seed_1/dynamics.png)
-![wigner](1q/seed_1/wigner.png)
-![actuator](1q/seed_1/actuator.png)
-![populations](1q/seed_1/populations.png)
 
 ### random — 2
 Controlli numerici falliti: nessuno.
 CRAB: Maximum number of function evaluations has been exceeded.. GRAPE: STOP: TOTAL NO. OF ITERATIONS REACHED LIMIT.
 [Metadati completi](1q/seed_2/result.json)
-![dynamics](1q/seed_2/dynamics.png)
-![wigner](1q/seed_2/wigner.png)
-![actuator](1q/seed_2/actuator.png)
-![populations](1q/seed_2/populations.png)
 
 ### random — 3
 Controlli numerici falliti: nessuno.
 CRAB: Maximum number of function evaluations has been exceeded.. GRAPE: STOP: TOTAL NO. OF ITERATIONS REACHED LIMIT.
 [Metadati completi](1q/seed_3/result.json)
-![dynamics](1q/seed_3/dynamics.png)
-![wigner](1q/seed_3/wigner.png)
-![actuator](1q/seed_3/actuator.png)
-![populations](1q/seed_3/populations.png)
 
 ### random — 4
 Controlli numerici falliti: nessuno.
 CRAB: Maximum number of function evaluations has been exceeded.. GRAPE: STOP: TOTAL NO. OF ITERATIONS REACHED LIMIT.
 [Metadati completi](1q/seed_4/result.json)
-![dynamics](1q/seed_4/dynamics.png)
-![wigner](1q/seed_4/wigner.png)
-![actuator](1q/seed_4/actuator.png)
-![populations](1q/seed_4/populations.png)
 
 ### random — 5
 Controlli numerici falliti: nessuno.
 CRAB: Maximum number of function evaluations has been exceeded.. GRAPE: STOP: TOTAL NO. OF ITERATIONS REACHED LIMIT.
 [Metadati completi](1q/seed_5/result.json)
-![dynamics](1q/seed_5/dynamics.png)
-![wigner](1q/seed_5/wigner.png)
-![actuator](1q/seed_5/actuator.png)
-![populations](1q/seed_5/populations.png)
 
 ### random — 6
 Controlli numerici falliti: nessuno.
 CRAB: Maximum number of function evaluations has been exceeded.. GRAPE: STOP: TOTAL NO. OF ITERATIONS REACHED LIMIT.
 [Metadati completi](1q/seed_6/result.json)
-![dynamics](1q/seed_6/dynamics.png)
-![wigner](1q/seed_6/wigner.png)
-![actuator](1q/seed_6/actuator.png)
-![populations](1q/seed_6/populations.png)
 
 ### random — 7
 Controlli numerici falliti: nessuno.
 CRAB: Maximum number of function evaluations has been exceeded.. GRAPE: STOP: TOTAL NO. OF ITERATIONS REACHED LIMIT.
 [Metadati completi](1q/seed_7/result.json)
-![dynamics](1q/seed_7/dynamics.png)
-![wigner](1q/seed_7/wigner.png)
-![actuator](1q/seed_7/actuator.png)
-![populations](1q/seed_7/populations.png)
 
 ## 2q_common
 Distribuzione sulle 8 pipeline raffinate: {"count": 8, "probability_mean": 0.9999955253226189, "probability_std_population": 9.530149060977817e-07, "probability_median": 0.9999956301209365, "probability_min": 0.9999940003161687, "probability_max": 0.9999973102449298, "numerically_valid_count": 8, "validated_goal_count": 8, "validated_goal_fraction": 1.0, "probability_q25": 0.9999947922207844, "probability_q75": 0.9999959774518874, "selection_bias_top_only": false}.
@@ -137,73 +105,41 @@ Probabilità target senza modulazione: 0.00000096.
 Controlli numerici falliti: nessuno.
 CRAB: Maximum number of function evaluations has been exceeded.. GRAPE: STOP: TOTAL NO. OF ITERATIONS REACHED LIMIT.
 [Metadati completi](2q_common/seed_0/result.json)
-![dynamics](2q_common/seed_0/dynamics.png)
-![wigner](2q_common/seed_0/wigner.png)
-![actuator](2q_common/seed_0/actuator.png)
-![populations](2q_common/seed_0/populations.png)
 
 ### random — 1
 Controlli numerici falliti: nessuno.
 CRAB: Maximum number of function evaluations has been exceeded.. GRAPE: STOP: TOTAL NO. OF ITERATIONS REACHED LIMIT.
 [Metadati completi](2q_common/seed_1/result.json)
-![dynamics](2q_common/seed_1/dynamics.png)
-![wigner](2q_common/seed_1/wigner.png)
-![actuator](2q_common/seed_1/actuator.png)
-![populations](2q_common/seed_1/populations.png)
 
 ### random — 2
 Controlli numerici falliti: nessuno.
 CRAB: Maximum number of function evaluations has been exceeded.. GRAPE: STOP: TOTAL NO. OF ITERATIONS REACHED LIMIT.
 [Metadati completi](2q_common/seed_2/result.json)
-![dynamics](2q_common/seed_2/dynamics.png)
-![wigner](2q_common/seed_2/wigner.png)
-![actuator](2q_common/seed_2/actuator.png)
-![populations](2q_common/seed_2/populations.png)
 
 ### random — 3
 Controlli numerici falliti: nessuno.
 CRAB: Maximum number of function evaluations has been exceeded.. GRAPE: STOP: TOTAL NO. OF ITERATIONS REACHED LIMIT.
 [Metadati completi](2q_common/seed_3/result.json)
-![dynamics](2q_common/seed_3/dynamics.png)
-![wigner](2q_common/seed_3/wigner.png)
-![actuator](2q_common/seed_3/actuator.png)
-![populations](2q_common/seed_3/populations.png)
 
 ### random — 4
 Controlli numerici falliti: nessuno.
 CRAB: Maximum number of function evaluations has been exceeded.. GRAPE: STOP: TOTAL NO. OF ITERATIONS REACHED LIMIT.
 [Metadati completi](2q_common/seed_4/result.json)
-![dynamics](2q_common/seed_4/dynamics.png)
-![wigner](2q_common/seed_4/wigner.png)
-![actuator](2q_common/seed_4/actuator.png)
-![populations](2q_common/seed_4/populations.png)
 
 ### random — 5
 Controlli numerici falliti: nessuno.
 CRAB: Maximum number of function evaluations has been exceeded.. GRAPE: STOP: TOTAL NO. OF ITERATIONS REACHED LIMIT.
 [Metadati completi](2q_common/seed_5/result.json)
-![dynamics](2q_common/seed_5/dynamics.png)
-![wigner](2q_common/seed_5/wigner.png)
-![actuator](2q_common/seed_5/actuator.png)
-![populations](2q_common/seed_5/populations.png)
 
 ### random — 6
 Controlli numerici falliti: nessuno.
 CRAB: Maximum number of function evaluations has been exceeded.. GRAPE: STOP: TOTAL NO. OF ITERATIONS REACHED LIMIT.
 [Metadati completi](2q_common/seed_6/result.json)
-![dynamics](2q_common/seed_6/dynamics.png)
-![wigner](2q_common/seed_6/wigner.png)
-![actuator](2q_common/seed_6/actuator.png)
-![populations](2q_common/seed_6/populations.png)
 
 ### random — 7
 Controlli numerici falliti: nessuno.
 CRAB: Maximum number of function evaluations has been exceeded.. GRAPE: STOP: TOTAL NO. OF ITERATIONS REACHED LIMIT.
 [Metadati completi](2q_common/seed_7/result.json)
-![dynamics](2q_common/seed_7/dynamics.png)
-![wigner](2q_common/seed_7/wigner.png)
-![actuator](2q_common/seed_7/actuator.png)
-![populations](2q_common/seed_7/populations.png)
 
 ## 2q_independent
 Distribuzione sulle 8 pipeline raffinate: {"count": 8, "probability_mean": 0.9999935269944844, "probability_std_population": 1.7580701302655927e-06, "probability_median": 0.9999940338579822, "probability_min": 0.9999901416538093, "probability_max": 0.9999954310979026, "numerically_valid_count": 8, "validated_goal_count": 8, "validated_goal_fraction": 1.0, "probability_q25": 0.9999923503462796, "probability_q75": 0.9999950739220832, "selection_bias_top_only": false}.
@@ -214,73 +150,41 @@ Probabilità target senza modulazione: 0.00000096.
 Controlli numerici falliti: nessuno.
 CRAB: Maximum number of function evaluations has been exceeded.. GRAPE: STOP: TOTAL NO. OF ITERATIONS REACHED LIMIT.
 [Metadati completi](2q_independent/seed_0/result.json)
-![dynamics](2q_independent/seed_0/dynamics.png)
-![wigner](2q_independent/seed_0/wigner.png)
-![actuator](2q_independent/seed_0/actuator.png)
-![populations](2q_independent/seed_0/populations.png)
 
 ### random — 1
 Controlli numerici falliti: nessuno.
 CRAB: Maximum number of function evaluations has been exceeded.. GRAPE: STOP: TOTAL NO. OF ITERATIONS REACHED LIMIT.
 [Metadati completi](2q_independent/seed_1/result.json)
-![dynamics](2q_independent/seed_1/dynamics.png)
-![wigner](2q_independent/seed_1/wigner.png)
-![actuator](2q_independent/seed_1/actuator.png)
-![populations](2q_independent/seed_1/populations.png)
 
 ### random — 2
 Controlli numerici falliti: nessuno.
 CRAB: Maximum number of function evaluations has been exceeded.. GRAPE: STOP: TOTAL NO. OF ITERATIONS REACHED LIMIT.
 [Metadati completi](2q_independent/seed_2/result.json)
-![dynamics](2q_independent/seed_2/dynamics.png)
-![wigner](2q_independent/seed_2/wigner.png)
-![actuator](2q_independent/seed_2/actuator.png)
-![populations](2q_independent/seed_2/populations.png)
 
 ### random — 3
 Controlli numerici falliti: nessuno.
 CRAB: Maximum number of function evaluations has been exceeded.. GRAPE: STOP: TOTAL NO. OF ITERATIONS REACHED LIMIT.
 [Metadati completi](2q_independent/seed_3/result.json)
-![dynamics](2q_independent/seed_3/dynamics.png)
-![wigner](2q_independent/seed_3/wigner.png)
-![actuator](2q_independent/seed_3/actuator.png)
-![populations](2q_independent/seed_3/populations.png)
 
 ### random — 4
 Controlli numerici falliti: nessuno.
 CRAB: Maximum number of function evaluations has been exceeded.. GRAPE: STOP: TOTAL NO. OF ITERATIONS REACHED LIMIT.
 [Metadati completi](2q_independent/seed_4/result.json)
-![dynamics](2q_independent/seed_4/dynamics.png)
-![wigner](2q_independent/seed_4/wigner.png)
-![actuator](2q_independent/seed_4/actuator.png)
-![populations](2q_independent/seed_4/populations.png)
 
 ### random — 5
 Controlli numerici falliti: nessuno.
 CRAB: Maximum number of function evaluations has been exceeded.. GRAPE: STOP: TOTAL NO. OF ITERATIONS REACHED LIMIT.
 [Metadati completi](2q_independent/seed_5/result.json)
-![dynamics](2q_independent/seed_5/dynamics.png)
-![wigner](2q_independent/seed_5/wigner.png)
-![actuator](2q_independent/seed_5/actuator.png)
-![populations](2q_independent/seed_5/populations.png)
 
 ### random — 6
 Controlli numerici falliti: nessuno.
 CRAB: Maximum number of function evaluations has been exceeded.. GRAPE: STOP: TOTAL NO. OF ITERATIONS REACHED LIMIT.
 [Metadati completi](2q_independent/seed_6/result.json)
-![dynamics](2q_independent/seed_6/dynamics.png)
-![wigner](2q_independent/seed_6/wigner.png)
-![actuator](2q_independent/seed_6/actuator.png)
-![populations](2q_independent/seed_6/populations.png)
 
 ### random — 7
 Controlli numerici falliti: nessuno.
 CRAB: Maximum number of function evaluations has been exceeded.. GRAPE: STOP: TOTAL NO. OF ITERATIONS REACHED LIMIT.
 [Metadati completi](2q_independent/seed_7/result.json)
-![dynamics](2q_independent/seed_7/dynamics.png)
-![wigner](2q_independent/seed_7/wigner.png)
-![actuator](2q_independent/seed_7/actuator.png)
-![populations](2q_independent/seed_7/populations.png)
 
 ## 2q_normalized_common
 Distribuzione sulle 8 pipeline raffinate: {"count": 8, "probability_mean": 0.9934678043002435, "probability_std_population": 0.011258644937650424, "probability_median": 0.999955726676655, "probability_min": 0.9728107677603172, "probability_max": 0.9999852572372905, "numerically_valid_count": 6, "validated_goal_count": 6, "validated_goal_fraction": 0.75, "probability_q25": 0.9937191363650195, "probability_q75": 0.9999782190375827, "selection_bias_top_only": false}.
@@ -291,73 +195,41 @@ Probabilità target senza modulazione: 0.00000000.
 Controlli numerici falliti: nessuno.
 CRAB: Maximum number of function evaluations has been exceeded.. GRAPE: STOP: TOTAL NO. OF ITERATIONS REACHED LIMIT.
 [Metadati completi](2q_normalized_common/seed_0/result.json)
-![dynamics](2q_normalized_common/seed_0/dynamics.png)
-![wigner](2q_normalized_common/seed_0/wigner.png)
-![actuator](2q_normalized_common/seed_0/actuator.png)
-![populations](2q_normalized_common/seed_0/populations.png)
 
 ### random — 1
 Controlli numerici falliti: nessuno.
 CRAB: Maximum number of function evaluations has been exceeded.. GRAPE: STOP: TOTAL NO. OF ITERATIONS REACHED LIMIT.
 [Metadati completi](2q_normalized_common/seed_1/result.json)
-![dynamics](2q_normalized_common/seed_1/dynamics.png)
-![wigner](2q_normalized_common/seed_1/wigner.png)
-![actuator](2q_normalized_common/seed_1/actuator.png)
-![populations](2q_normalized_common/seed_1/populations.png)
 
 ### random — 2
 Controlli numerici falliti: time_grid.
 CRAB: Maximum number of function evaluations has been exceeded.. GRAPE: STOP: TOTAL NO. OF ITERATIONS REACHED LIMIT.
 [Metadati completi](2q_normalized_common/seed_2/result.json)
-![dynamics](2q_normalized_common/seed_2/dynamics.png)
-![wigner](2q_normalized_common/seed_2/wigner.png)
-![actuator](2q_normalized_common/seed_2/actuator.png)
-![populations](2q_normalized_common/seed_2/populations.png)
 
 ### random — 3
 Controlli numerici falliti: nessuno.
 CRAB: Maximum number of function evaluations has been exceeded.. GRAPE: STOP: TOTAL NO. OF ITERATIONS REACHED LIMIT.
 [Metadati completi](2q_normalized_common/seed_3/result.json)
-![dynamics](2q_normalized_common/seed_3/dynamics.png)
-![wigner](2q_normalized_common/seed_3/wigner.png)
-![actuator](2q_normalized_common/seed_3/actuator.png)
-![populations](2q_normalized_common/seed_3/populations.png)
 
 ### random — 4
 Controlli numerici falliti: nessuno.
 CRAB: Maximum number of function evaluations has been exceeded.. GRAPE: STOP: TOTAL NO. OF ITERATIONS REACHED LIMIT.
 [Metadati completi](2q_normalized_common/seed_4/result.json)
-![dynamics](2q_normalized_common/seed_4/dynamics.png)
-![wigner](2q_normalized_common/seed_4/wigner.png)
-![actuator](2q_normalized_common/seed_4/actuator.png)
-![populations](2q_normalized_common/seed_4/populations.png)
 
 ### random — 5
 Controlli numerici falliti: time_grid.
 CRAB: Maximum number of function evaluations has been exceeded.. GRAPE: STOP: TOTAL NO. OF ITERATIONS REACHED LIMIT.
 [Metadati completi](2q_normalized_common/seed_5/result.json)
-![dynamics](2q_normalized_common/seed_5/dynamics.png)
-![wigner](2q_normalized_common/seed_5/wigner.png)
-![actuator](2q_normalized_common/seed_5/actuator.png)
-![populations](2q_normalized_common/seed_5/populations.png)
 
 ### random — 6
 Controlli numerici falliti: nessuno.
 CRAB: Maximum number of function evaluations has been exceeded.. GRAPE: STOP: TOTAL NO. OF ITERATIONS REACHED LIMIT.
 [Metadati completi](2q_normalized_common/seed_6/result.json)
-![dynamics](2q_normalized_common/seed_6/dynamics.png)
-![wigner](2q_normalized_common/seed_6/wigner.png)
-![actuator](2q_normalized_common/seed_6/actuator.png)
-![populations](2q_normalized_common/seed_6/populations.png)
 
 ### random — 7
 Controlli numerici falliti: nessuno.
 CRAB: Maximum number of function evaluations has been exceeded.. GRAPE: STOP: TOTAL NO. OF ITERATIONS REACHED LIMIT.
 [Metadati completi](2q_normalized_common/seed_7/result.json)
-![dynamics](2q_normalized_common/seed_7/dynamics.png)
-![wigner](2q_normalized_common/seed_7/wigner.png)
-![actuator](2q_normalized_common/seed_7/actuator.png)
-![populations](2q_normalized_common/seed_7/populations.png)
 
 ## 2q_normalized_independent
 Distribuzione sulle 8 pipeline raffinate: {"count": 8, "probability_mean": 0.9999871637235724, "probability_std_population": 3.0280212058198138e-06, "probability_median": 0.9999862772933863, "probability_min": 0.999983830619265, "probability_max": 0.9999928570657491, "numerically_valid_count": 8, "validated_goal_count": 8, "validated_goal_fraction": 1.0, "probability_q25": 0.9999846057901948, "probability_q75": 0.9999889406022933, "selection_bias_top_only": false}.
@@ -368,70 +240,38 @@ Probabilità target senza modulazione: 0.00000000.
 Controlli numerici falliti: nessuno.
 CRAB: Maximum number of function evaluations has been exceeded.. GRAPE: STOP: TOTAL NO. OF ITERATIONS REACHED LIMIT.
 [Metadati completi](2q_normalized_independent/seed_0/result.json)
-![dynamics](2q_normalized_independent/seed_0/dynamics.png)
-![wigner](2q_normalized_independent/seed_0/wigner.png)
-![actuator](2q_normalized_independent/seed_0/actuator.png)
-![populations](2q_normalized_independent/seed_0/populations.png)
 
 ### random — 1
 Controlli numerici falliti: nessuno.
 CRAB: Maximum number of function evaluations has been exceeded.. GRAPE: STOP: TOTAL NO. OF ITERATIONS REACHED LIMIT.
 [Metadati completi](2q_normalized_independent/seed_1/result.json)
-![dynamics](2q_normalized_independent/seed_1/dynamics.png)
-![wigner](2q_normalized_independent/seed_1/wigner.png)
-![actuator](2q_normalized_independent/seed_1/actuator.png)
-![populations](2q_normalized_independent/seed_1/populations.png)
 
 ### random — 2
 Controlli numerici falliti: nessuno.
 CRAB: Maximum number of function evaluations has been exceeded.. GRAPE: STOP: TOTAL NO. OF ITERATIONS REACHED LIMIT.
 [Metadati completi](2q_normalized_independent/seed_2/result.json)
-![dynamics](2q_normalized_independent/seed_2/dynamics.png)
-![wigner](2q_normalized_independent/seed_2/wigner.png)
-![actuator](2q_normalized_independent/seed_2/actuator.png)
-![populations](2q_normalized_independent/seed_2/populations.png)
 
 ### random — 3
 Controlli numerici falliti: nessuno.
 CRAB: Maximum number of function evaluations has been exceeded.. GRAPE: STOP: TOTAL NO. OF ITERATIONS REACHED LIMIT.
 [Metadati completi](2q_normalized_independent/seed_3/result.json)
-![dynamics](2q_normalized_independent/seed_3/dynamics.png)
-![wigner](2q_normalized_independent/seed_3/wigner.png)
-![actuator](2q_normalized_independent/seed_3/actuator.png)
-![populations](2q_normalized_independent/seed_3/populations.png)
 
 ### random — 4
 Controlli numerici falliti: nessuno.
 CRAB: Maximum number of function evaluations has been exceeded.. GRAPE: STOP: TOTAL NO. OF ITERATIONS REACHED LIMIT.
 [Metadati completi](2q_normalized_independent/seed_4/result.json)
-![dynamics](2q_normalized_independent/seed_4/dynamics.png)
-![wigner](2q_normalized_independent/seed_4/wigner.png)
-![actuator](2q_normalized_independent/seed_4/actuator.png)
-![populations](2q_normalized_independent/seed_4/populations.png)
 
 ### random — 5
 Controlli numerici falliti: nessuno.
 CRAB: Maximum number of function evaluations has been exceeded.. GRAPE: STOP: TOTAL NO. OF ITERATIONS REACHED LIMIT.
 [Metadati completi](2q_normalized_independent/seed_5/result.json)
-![dynamics](2q_normalized_independent/seed_5/dynamics.png)
-![wigner](2q_normalized_independent/seed_5/wigner.png)
-![actuator](2q_normalized_independent/seed_5/actuator.png)
-![populations](2q_normalized_independent/seed_5/populations.png)
 
 ### random — 6
 Controlli numerici falliti: nessuno.
 CRAB: Maximum number of function evaluations has been exceeded.. GRAPE: STOP: TOTAL NO. OF ITERATIONS REACHED LIMIT.
 [Metadati completi](2q_normalized_independent/seed_6/result.json)
-![dynamics](2q_normalized_independent/seed_6/dynamics.png)
-![wigner](2q_normalized_independent/seed_6/wigner.png)
-![actuator](2q_normalized_independent/seed_6/actuator.png)
-![populations](2q_normalized_independent/seed_6/populations.png)
 
 ### random — 7
 Controlli numerici falliti: nessuno.
 CRAB: Maximum number of function evaluations has been exceeded.. GRAPE: STOP: TOTAL NO. OF ITERATIONS REACHED LIMIT.
 [Metadati completi](2q_normalized_independent/seed_7/result.json)
-![dynamics](2q_normalized_independent/seed_7/dynamics.png)
-![wigner](2q_normalized_independent/seed_7/wigner.png)
-![actuator](2q_normalized_independent/seed_7/actuator.png)
-![populations](2q_normalized_independent/seed_7/populations.png)

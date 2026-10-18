@@ -5,7 +5,6 @@ Durata fisica T = 104.7197551. T = 20 × tau_s; tau_s = pi/(2*g_ref) = 5.2359877
 Ogni riga usa la propagazione continua del controllo con il filtro configurato.
 P_target è la probabilità target; F_root = sqrt(P_target). Il reset dei qubit, se richiesto, entra in P_target.
 Una soluzione non validata non è evidenza di vantaggio fisico. La convergenza dell'ottimizzatore è distinta dalla validazione numerica.
-Le statistiche e il seed selezionato riguardano solo partenze casuali; i warm start sono separati.
 La banda 99% è una diagnostica del segnale finito, non un limite spettrale imposto. Le fluenze non sono calore dissipato.
 
 | Caso | Seed | P target | F radice | Purezza | Validato | Soglia raggiunta |
@@ -48,7 +47,7 @@ Distribuzione sulle 8 pipeline raffinate: {"count": 8, "probability_mean": 1.578
 Seed selezionato: 3. Selezione per costo continuo, dando precedenza alle soluzioni validate.
 Probabilità target senza modulazione: 0.00000000.
 
-### random — 0
+### Seed 0
 Controlli numerici falliti: nessuno.
 CRAB: Maximum number of function evaluations has been exceeded.. GRAPE: CONVERGENCE: NORM OF PROJECTED GRADIENT <= PGTOL.
 [Metadati completi](1q/seed_0/result.json)
@@ -56,7 +55,7 @@ CRAB: Maximum number of function evaluations has been exceeded.. GRAPE: CONVERGE
 ![wigner](1q/seed_0/wigner.png)
 ![actuator](1q/seed_0/actuator.png)
 
-### random — 1
+### Seed 1
 Controlli numerici falliti: nessuno.
 CRAB: Maximum number of function evaluations has been exceeded.. GRAPE: CONVERGENCE: NORM OF PROJECTED GRADIENT <= PGTOL.
 [Metadati completi](1q/seed_1/result.json)
@@ -64,7 +63,7 @@ CRAB: Maximum number of function evaluations has been exceeded.. GRAPE: CONVERGE
 ![wigner](1q/seed_1/wigner.png)
 ![actuator](1q/seed_1/actuator.png)
 
-### random — 2
+### Seed 2
 Controlli numerici falliti: nessuno.
 CRAB: Maximum number of function evaluations has been exceeded.. GRAPE: CONVERGENCE: NORM OF PROJECTED GRADIENT <= PGTOL.
 [Metadati completi](1q/seed_2/result.json)
@@ -72,7 +71,7 @@ CRAB: Maximum number of function evaluations has been exceeded.. GRAPE: CONVERGE
 ![wigner](1q/seed_2/wigner.png)
 ![actuator](1q/seed_2/actuator.png)
 
-### random — 3
+### Seed 3
 Controlli numerici falliti: nessuno.
 CRAB: Maximum number of function evaluations has been exceeded.. GRAPE: CONVERGENCE: RELATIVE REDUCTION OF F <= FACTR*EPSMCH.
 [Metadati completi](1q/seed_3/result.json)
@@ -80,7 +79,7 @@ CRAB: Maximum number of function evaluations has been exceeded.. GRAPE: CONVERGE
 ![wigner](1q/seed_3/wigner.png)
 ![actuator](1q/seed_3/actuator.png)
 
-### random — 4
+### Seed 4
 Controlli numerici falliti: nessuno.
 CRAB: Maximum number of function evaluations has been exceeded.. GRAPE: CONVERGENCE: NORM OF PROJECTED GRADIENT <= PGTOL.
 [Metadati completi](1q/seed_4/result.json)
@@ -88,7 +87,7 @@ CRAB: Maximum number of function evaluations has been exceeded.. GRAPE: CONVERGE
 ![wigner](1q/seed_4/wigner.png)
 ![actuator](1q/seed_4/actuator.png)
 
-### random — 5
+### Seed 5
 Controlli numerici falliti: nessuno.
 CRAB: Maximum number of function evaluations has been exceeded.. GRAPE: CONVERGENCE: NORM OF PROJECTED GRADIENT <= PGTOL.
 [Metadati completi](1q/seed_5/result.json)
@@ -96,7 +95,7 @@ CRAB: Maximum number of function evaluations has been exceeded.. GRAPE: CONVERGE
 ![wigner](1q/seed_5/wigner.png)
 ![actuator](1q/seed_5/actuator.png)
 
-### random — 6
+### Seed 6
 Controlli numerici falliti: nessuno.
 CRAB: Maximum number of function evaluations has been exceeded.. GRAPE: CONVERGENCE: NORM OF PROJECTED GRADIENT <= PGTOL.
 [Metadati completi](1q/seed_6/result.json)
@@ -104,7 +103,7 @@ CRAB: Maximum number of function evaluations has been exceeded.. GRAPE: CONVERGE
 ![wigner](1q/seed_6/wigner.png)
 ![actuator](1q/seed_6/actuator.png)
 
-### random — 7
+### Seed 7
 Controlli numerici falliti: nessuno.
 CRAB: Maximum number of function evaluations has been exceeded.. GRAPE: CONVERGENCE: NORM OF PROJECTED GRADIENT <= PGTOL.
 [Metadati completi](1q/seed_7/result.json)
@@ -117,7 +116,7 @@ Distribuzione sulle 8 pipeline raffinate: {"count": 8, "probability_mean": 1.153
 Seed selezionato: 6. Selezione per costo continuo, dando precedenza alle soluzioni validate.
 Probabilità target senza modulazione: 0.00000000.
 
-### random — 0
+### Seed 0
 Controlli numerici falliti: nessuno.
 CRAB: Maximum number of function evaluations has been exceeded.. GRAPE: CONVERGENCE: NORM OF PROJECTED GRADIENT <= PGTOL.
 [Metadati completi](2q_independent_normalized/seed_0/result.json)
@@ -125,7 +124,7 @@ CRAB: Maximum number of function evaluations has been exceeded.. GRAPE: CONVERGE
 ![wigner](2q_independent_normalized/seed_0/wigner.png)
 ![actuator](2q_independent_normalized/seed_0/actuator.png)
 
-### random — 1
+### Seed 1
 Controlli numerici falliti: nessuno.
 CRAB: Maximum number of function evaluations has been exceeded.. GRAPE: CONVERGENCE: NORM OF PROJECTED GRADIENT <= PGTOL.
 [Metadati completi](2q_independent_normalized/seed_1/result.json)
@@ -133,7 +132,7 @@ CRAB: Maximum number of function evaluations has been exceeded.. GRAPE: CONVERGE
 ![wigner](2q_independent_normalized/seed_1/wigner.png)
 ![actuator](2q_independent_normalized/seed_1/actuator.png)
 
-### random — 2
+### Seed 2
 Controlli numerici falliti: nessuno.
 CRAB: Maximum number of function evaluations has been exceeded.. GRAPE: CONVERGENCE: NORM OF PROJECTED GRADIENT <= PGTOL.
 [Metadati completi](2q_independent_normalized/seed_2/result.json)
@@ -141,7 +140,7 @@ CRAB: Maximum number of function evaluations has been exceeded.. GRAPE: CONVERGE
 ![wigner](2q_independent_normalized/seed_2/wigner.png)
 ![actuator](2q_independent_normalized/seed_2/actuator.png)
 
-### random — 3
+### Seed 3
 Controlli numerici falliti: nessuno.
 CRAB: Maximum number of function evaluations has been exceeded.. GRAPE: CONVERGENCE: NORM OF PROJECTED GRADIENT <= PGTOL.
 [Metadati completi](2q_independent_normalized/seed_3/result.json)
@@ -149,7 +148,7 @@ CRAB: Maximum number of function evaluations has been exceeded.. GRAPE: CONVERGE
 ![wigner](2q_independent_normalized/seed_3/wigner.png)
 ![actuator](2q_independent_normalized/seed_3/actuator.png)
 
-### random — 4
+### Seed 4
 Controlli numerici falliti: nessuno.
 CRAB: Maximum number of function evaluations has been exceeded.. GRAPE: CONVERGENCE: NORM OF PROJECTED GRADIENT <= PGTOL.
 [Metadati completi](2q_independent_normalized/seed_4/result.json)
@@ -157,7 +156,7 @@ CRAB: Maximum number of function evaluations has been exceeded.. GRAPE: CONVERGE
 ![wigner](2q_independent_normalized/seed_4/wigner.png)
 ![actuator](2q_independent_normalized/seed_4/actuator.png)
 
-### random — 5
+### Seed 5
 Controlli numerici falliti: nessuno.
 CRAB: Maximum number of function evaluations has been exceeded.. GRAPE: CONVERGENCE: NORM OF PROJECTED GRADIENT <= PGTOL.
 [Metadati completi](2q_independent_normalized/seed_5/result.json)
@@ -165,7 +164,7 @@ CRAB: Maximum number of function evaluations has been exceeded.. GRAPE: CONVERGE
 ![wigner](2q_independent_normalized/seed_5/wigner.png)
 ![actuator](2q_independent_normalized/seed_5/actuator.png)
 
-### random — 6
+### Seed 6
 Controlli numerici falliti: nessuno.
 CRAB: Maximum number of function evaluations has been exceeded.. GRAPE: CONVERGENCE: NORM OF PROJECTED GRADIENT <= PGTOL.
 [Metadati completi](2q_independent_normalized/seed_6/result.json)
@@ -173,7 +172,7 @@ CRAB: Maximum number of function evaluations has been exceeded.. GRAPE: CONVERGE
 ![wigner](2q_independent_normalized/seed_6/wigner.png)
 ![actuator](2q_independent_normalized/seed_6/actuator.png)
 
-### random — 7
+### Seed 7
 Controlli numerici falliti: nessuno.
 CRAB: Maximum number of function evaluations has been exceeded.. GRAPE: CONVERGENCE: NORM OF PROJECTED GRADIENT <= PGTOL.
 [Metadati completi](2q_independent_normalized/seed_7/result.json)
@@ -186,7 +185,7 @@ Distribuzione sulle 8 pipeline raffinate: {"count": 8, "probability_mean": 0.999
 Seed selezionato: 0. Selezione per costo continuo, dando precedenza alle soluzioni validate.
 Probabilità target senza modulazione: 0.00000096.
 
-### random — 0
+### Seed 0
 Controlli numerici falliti: dimension, norm, parity.
 CRAB: Maximum number of function evaluations has been exceeded.. GRAPE: STOP: TOTAL NO. OF ITERATIONS REACHED LIMIT.
 [Metadati completi](2q_independent/seed_0/result.json)
@@ -194,7 +193,7 @@ CRAB: Maximum number of function evaluations has been exceeded.. GRAPE: STOP: TO
 ![wigner](2q_independent/seed_0/wigner.png)
 ![actuator](2q_independent/seed_0/actuator.png)
 
-### random — 1
+### Seed 1
 Controlli numerici falliti: dimension, norm, parity.
 CRAB: Maximum number of function evaluations has been exceeded.. GRAPE: STOP: TOTAL NO. OF ITERATIONS REACHED LIMIT.
 [Metadati completi](2q_independent/seed_1/result.json)
@@ -202,7 +201,7 @@ CRAB: Maximum number of function evaluations has been exceeded.. GRAPE: STOP: TO
 ![wigner](2q_independent/seed_1/wigner.png)
 ![actuator](2q_independent/seed_1/actuator.png)
 
-### random — 2
+### Seed 2
 Controlli numerici falliti: dimension, norm, parity.
 CRAB: Maximum number of function evaluations has been exceeded.. GRAPE: STOP: TOTAL NO. OF ITERATIONS REACHED LIMIT.
 [Metadati completi](2q_independent/seed_2/result.json)
@@ -210,7 +209,7 @@ CRAB: Maximum number of function evaluations has been exceeded.. GRAPE: STOP: TO
 ![wigner](2q_independent/seed_2/wigner.png)
 ![actuator](2q_independent/seed_2/actuator.png)
 
-### random — 3
+### Seed 3
 Controlli numerici falliti: dimension, norm, parity.
 CRAB: Maximum number of function evaluations has been exceeded.. GRAPE: STOP: TOTAL NO. OF ITERATIONS REACHED LIMIT.
 [Metadati completi](2q_independent/seed_3/result.json)
@@ -218,7 +217,7 @@ CRAB: Maximum number of function evaluations has been exceeded.. GRAPE: STOP: TO
 ![wigner](2q_independent/seed_3/wigner.png)
 ![actuator](2q_independent/seed_3/actuator.png)
 
-### random — 4
+### Seed 4
 Controlli numerici falliti: dimension, norm, parity.
 CRAB: Maximum number of function evaluations has been exceeded.. GRAPE: STOP: TOTAL NO. OF ITERATIONS REACHED LIMIT.
 [Metadati completi](2q_independent/seed_4/result.json)
@@ -226,7 +225,7 @@ CRAB: Maximum number of function evaluations has been exceeded.. GRAPE: STOP: TO
 ![wigner](2q_independent/seed_4/wigner.png)
 ![actuator](2q_independent/seed_4/actuator.png)
 
-### random — 5
+### Seed 5
 Controlli numerici falliti: dimension, norm, parity.
 CRAB: Maximum number of function evaluations has been exceeded.. GRAPE: STOP: TOTAL NO. OF ITERATIONS REACHED LIMIT.
 [Metadati completi](2q_independent/seed_5/result.json)
@@ -234,7 +233,7 @@ CRAB: Maximum number of function evaluations has been exceeded.. GRAPE: STOP: TO
 ![wigner](2q_independent/seed_5/wigner.png)
 ![actuator](2q_independent/seed_5/actuator.png)
 
-### random — 6
+### Seed 6
 Controlli numerici falliti: dimension, norm, parity.
 CRAB: Maximum number of function evaluations has been exceeded.. GRAPE: STOP: TOTAL NO. OF ITERATIONS REACHED LIMIT.
 [Metadati completi](2q_independent/seed_6/result.json)
@@ -242,7 +241,7 @@ CRAB: Maximum number of function evaluations has been exceeded.. GRAPE: STOP: TO
 ![wigner](2q_independent/seed_6/wigner.png)
 ![actuator](2q_independent/seed_6/actuator.png)
 
-### random — 7
+### Seed 7
 Controlli numerici falliti: dimension, norm, parity.
 CRAB: Maximum number of function evaluations has been exceeded.. GRAPE: STOP: TOTAL NO. OF ITERATIONS REACHED LIMIT.
 [Metadati completi](2q_independent/seed_7/result.json)
@@ -255,7 +254,7 @@ Distribuzione sulle 8 pipeline raffinate: {"count": 8, "probability_mean": 0.999
 Seed selezionato: 0. Selezione per costo continuo, dando precedenza alle soluzioni validate.
 Probabilità target senza modulazione: 0.00000096.
 
-### random — 0
+### Seed 0
 Controlli numerici falliti: dimension, norm, parity.
 CRAB: Maximum number of function evaluations has been exceeded.. GRAPE: STOP: TOTAL NO. OF ITERATIONS REACHED LIMIT.
 [Metadati completi](2q_common/seed_0/result.json)
@@ -263,7 +262,7 @@ CRAB: Maximum number of function evaluations has been exceeded.. GRAPE: STOP: TO
 ![wigner](2q_common/seed_0/wigner.png)
 ![actuator](2q_common/seed_0/actuator.png)
 
-### random — 1
+### Seed 1
 Controlli numerici falliti: dimension, norm, parity.
 CRAB: Maximum number of function evaluations has been exceeded.. GRAPE: STOP: TOTAL NO. OF ITERATIONS REACHED LIMIT.
 [Metadati completi](2q_common/seed_1/result.json)
@@ -271,7 +270,7 @@ CRAB: Maximum number of function evaluations has been exceeded.. GRAPE: STOP: TO
 ![wigner](2q_common/seed_1/wigner.png)
 ![actuator](2q_common/seed_1/actuator.png)
 
-### random — 2
+### Seed 2
 Controlli numerici falliti: dimension, norm, parity.
 CRAB: Maximum number of function evaluations has been exceeded.. GRAPE: STOP: TOTAL NO. OF ITERATIONS REACHED LIMIT.
 [Metadati completi](2q_common/seed_2/result.json)
@@ -279,7 +278,7 @@ CRAB: Maximum number of function evaluations has been exceeded.. GRAPE: STOP: TO
 ![wigner](2q_common/seed_2/wigner.png)
 ![actuator](2q_common/seed_2/actuator.png)
 
-### random — 3
+### Seed 3
 Controlli numerici falliti: dimension, norm, parity.
 CRAB: Maximum number of function evaluations has been exceeded.. GRAPE: STOP: TOTAL NO. OF ITERATIONS REACHED LIMIT.
 [Metadati completi](2q_common/seed_3/result.json)
@@ -287,7 +286,7 @@ CRAB: Maximum number of function evaluations has been exceeded.. GRAPE: STOP: TO
 ![wigner](2q_common/seed_3/wigner.png)
 ![actuator](2q_common/seed_3/actuator.png)
 
-### random — 4
+### Seed 4
 Controlli numerici falliti: dimension, norm, parity.
 CRAB: Maximum number of function evaluations has been exceeded.. GRAPE: STOP: TOTAL NO. OF ITERATIONS REACHED LIMIT.
 [Metadati completi](2q_common/seed_4/result.json)
@@ -295,7 +294,7 @@ CRAB: Maximum number of function evaluations has been exceeded.. GRAPE: STOP: TO
 ![wigner](2q_common/seed_4/wigner.png)
 ![actuator](2q_common/seed_4/actuator.png)
 
-### random — 5
+### Seed 5
 Controlli numerici falliti: dimension, norm, parity.
 CRAB: Maximum number of function evaluations has been exceeded.. GRAPE: STOP: TOTAL NO. OF ITERATIONS REACHED LIMIT.
 [Metadati completi](2q_common/seed_5/result.json)
@@ -303,7 +302,7 @@ CRAB: Maximum number of function evaluations has been exceeded.. GRAPE: STOP: TO
 ![wigner](2q_common/seed_5/wigner.png)
 ![actuator](2q_common/seed_5/actuator.png)
 
-### random — 6
+### Seed 6
 Controlli numerici falliti: dimension, norm, parity.
 CRAB: Maximum number of function evaluations has been exceeded.. GRAPE: STOP: TOTAL NO. OF ITERATIONS REACHED LIMIT.
 [Metadati completi](2q_common/seed_6/result.json)
@@ -311,7 +310,7 @@ CRAB: Maximum number of function evaluations has been exceeded.. GRAPE: STOP: TO
 ![wigner](2q_common/seed_6/wigner.png)
 ![actuator](2q_common/seed_6/actuator.png)
 
-### random — 7
+### Seed 7
 Controlli numerici falliti: dimension, norm, parity.
 CRAB: Maximum number of function evaluations has been exceeded.. GRAPE: STOP: TOTAL NO. OF ITERATIONS REACHED LIMIT.
 [Metadati completi](2q_common/seed_7/result.json)

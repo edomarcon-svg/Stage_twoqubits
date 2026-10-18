@@ -42,8 +42,6 @@
 \noindent
 L'obiettivo dello stage è estendere questo schema a due qubit accoppiati alla stessa cavità per capire se, e in quali condizioni, due qubit permettano di preparare gli stati target meglio o in tempi più brevi rispetto a un qubit solo, oppure con controlli meno impegnativi in termini di escursione, rapidità di variazione e banda.
 
-\noindent
-Fin dall'inizio il punto delicato è stato distinguere due effetti fisici che nel caso a due qubit si sovrappongono:
 \begin{enumerate}
     \item \textbf{L'aumento dell'accoppiamento collettivo efficace (effetto superradiante di dipolo):} nella cavità entrambi i qubit interagiscono con lo stesso modo del campo elettromagnetico attraverso l'operatore di dipolo collettivo $D_x = g_1 \sigma_{x,1} + g_2 \sigma_{x,2}$:
     \begin{equation}
@@ -60,7 +58,7 @@ Fin dall'inizio il punto delicato è stato distinguere due effetti fisici che ne
 \noindent
 Proprio per separare questi due contributi, nella v2 ho affiancato ai casi con $g_1 = g_2 = g$ anche i casi normalizzati con $g_1 = g_2 = g/\sqrt{2} \approx 0.2121$, che riportano l'accoppiamento collettivo del primo gradino a $g_{\text{eff}} = \sqrt{g_1^2+g_2^2} = g = 0.3$, uguale a quello del singolo qubit.
 
-\section{Sviluppo preliminare (v1) e risultati ottenuti prima della v2}
+\section{Sviluppo preliminare e risultati ottenuti prima della v2}
 
 Nella prima fase ho costruito il modulo per il sistema cavità + 2 qubit (\texttt{two\_qubit\_system.py}, su spazio $\mathcal{H}_{\text{cav}} \otimes \mathcal{H}_{q1} \otimes \mathcal{H}_{q2}$) e il runner unificato \texttt{run\_simulation.py}, mantenendo la stessa struttura a tre passaggi del codice di partenza:
 \begin{enumerate}
@@ -70,10 +68,10 @@ Nella prima fase ho costruito il modulo per il sistema cavità + 2 qubit (\textt
 \end{enumerate}
 
 \noindent
-Nel portare GRAPE a due qubit senza imporre il reset delle ancille, ho dovuto fare attenzione alla normalizzazione dell'operatore target nello spazio completo: il proiettore $O_{\text{target}} = \rho_{\text{cav}} \otimes \mathbb{I}_2 \otimes \mathbb{I}_2$ non va diviso per la traccia dell'identità dei qubit ($\operatorname{Tr}[\mathbb{I}_4] = 4$), altrimenti l'overlap $\operatorname{Tr}[O_{\text{target}}\rho(T)]$ si blocca artificialmente a un massimo di $0.25$.
+Nel portare GRAPE a due qubit senza imporre il reset delle qubit, ho dovuto fare attenzione alla normalizzazione dell'operatore target nello spazio completo: il proiettore $O_{\text{target}} = \rho_{\text{cav}} \otimes \mathbb{I}_2 \otimes \mathbb{I}_2$ non va diviso per la traccia dell'identità dei qubit ($\operatorname{Tr}[\mathbb{I}_4] = 4$), altrimenti l'overlap $\operatorname{Tr}[O_{\text{target}}\rho(T)]$ si blocca artificialmente a un massimo di $0.25$.
 
 \noindent
-Con questa prima pipeline (v1) ho eseguito quattro simulazioni principali a dimensione di Fock $\text{dim}=40$ (dove $\tau_s = \pi/(2g) \approx 5.236\,\omega_c^{-1}$), riassunte nella Tabella~\ref{tab:risultati_v1}.
+Con questa prima pipeline (v1) ho eseguito quattro simulazioni principali a dimensione di Fock $\text{dim}=40$.
 
 \begin{table}[H]
 \centering
@@ -98,13 +96,12 @@ Con questa prima pipeline (v1) ho eseguito quattro simulazioni principali a dime
 \bottomrule
 \end{tabular}%
 }
-\label{tab:risultati_v1}
 \end{table}
 
-\subsection{Analisi dettagliata delle run v1 e grafici delle simulazioni}
+\subsection{Analisi delle run v1 e grafici delle simulazioni}
 
 \paragraph{1. Confronto 1Q vs 2Q su Fock $|n=10\rangle$ a tempo dimezzato $T=10\,\tau_s$:}
-Nella run \texttt{run\_2026-10-02\_16-53-17} ho dimezzato il tempo di evoluzione a $T = 10\,\tau_s \approx 52.36\,\omega_c^{-1}$ (6 seed CRAB, 150 slot GRAPE) per testare il limite di velocità nella preparazione di 10 fotoni. Qui sono emersi tre fatti interessanti:
+Nella run \texttt{run\_2026-10-02\_16-53-17} ho dimezzato il tempo di evoluzione a $T = 10\,\tau_s \approx 52.36\,\omega_c^{-1}$ (6 seed CRAB, 150 slot GRAPE) per testare il limite di velocità nella preparazione di 10 fotoni:
 \begin{itemize}
     \item In CRAB i migliori seed dei due sistemi partivano vicini ($0.9698$ per 1Q contro $0.9578$ per 2Q), ma la distribuzione sui 6 seed di 2Q era molto più stretta ($0.9433 \pm 0.0201$ contro $0.9097 \pm 0.0579$ per 1Q).
     \item Passando a GRAPE (150 iterazioni su 150 slot), il sistema a 2 qubit convergeva a $0.99876$ e dopo lo smoothing PCHIP manteneva una fedeltà di $0.96225$.
@@ -142,8 +139,8 @@ Nella run \texttt{run\_2026-10-02\_16-53-17} ho dimezzato il tempo di evoluzione
 \end{figure}
 
 \paragraph{2. Confronto 1Q vs 2Q sullo stato Cat a 4 componenti ($\alpha = 2.0$, $T=15\,\tau_s$):}
-Nella run \texttt{run\_2026-10-03\_15-06-31} ho confrontato 1Q e 2Q sulla preparazione della sovrapposizione di stati gatto su assi ortogonali $|\psi_{\text{cat}}\rangle \propto |C_\alpha^+\rangle - |C_{i\alpha}^+\rangle$ con $\alpha = 2.0$ ($\langle n \rangle \approx 3.80$) a $T = 15\,\tau_s \approx 78.54\,\omega_c^{-1}$ (8 seed CRAB, 150 slot GRAPE).
-Qui nella fase GRAPE entrambi i sistemi raggiungevano una fedeltà sopra $0.999$ ($0.99935$ per 1Q in 76 iterazioni e $0.99956$ per 2Q in 150 iterazioni), con slew rate più bassi sui due canali di 2Q ($\text{SR}_{\max} = 5.12$ e $6.24$ contro $6.33$ di 1Q). Tuttavia, appena applicata l'interpolazione PCHIP finale per rendere continuo il controllo a gradini, entrambi i sistemi crollavano di circa il 10\%, scendendo a $0.8945$ (1Q) e $0.8989$ (2Q). Con 150 slot su $T \approx 78.54$, il passo di GRAPE era largo ($\Delta t \approx 0.52\,\omega_c^{-1}$) e la struttura di interferenza a scacchiera dello stato Cat nello spazio delle fasi veniva compromessa dal cambio di forma d'onda tra gradini e spline cubica.
+Nella run \texttt{run\_2026-10-03\_15-06-31} ho confrontato 1Q e 2Q sulla preparazione degli stati Cat con $\alpha = 2.0$ a $T = 15\,\tau_s$ (8 seed CRAB, 150 slot GRAPE).
+Qui nella fase GRAPE entrambi i sistemi raggiungevano una fedeltà sopra $0.999$, con slew rate più bassi sui due canali di 2Q ($\text{SR}_{\max} = 5.12$ e $6.24$ contro $6.33$ di 1Q). Tuttavia, appena applicata l'interpolazione PCHIP finale per rendere continuo il controllo a gradini, entrambi i sistemi crollavano di circa il 10\%, scendendo a $0.8945$ (1Q) e $0.8989$ (2Q).
 
 \begin{figure}[H]
     \centering
@@ -176,19 +173,18 @@ Qui nella fase GRAPE entrambi i sistemi raggiungevano una fedeltà sopra $0.999$
 \end{figure}
 
 \subsection{I problemi emersi guardando i risultati della v1}
-Analizzando questi numeri ho voluto provare a risolvere diverse problematiche:
+Analizzando questi risultati ho provato a risolvere alcuni aspetti che ritenevo problematici:
 \begin{itemize}
-    \item \textbf{Il crollo dopo lo smoothing PCHIP:} ottimizzare un controllo a gradini in GRAPE e lisciarlo solo alla fine cambiava il segnale quel tanto che bastava per far perdere dal 2\% fino al 10\% di fedeltà (come nel caso Cat). In più, anche la verifica del segnale PCHIP veniva fatta ripassandolo al propagatore a gradini su $2 N_t$ punti, e non integrando l'equazione di Schrödinger continua.
-    \item \textbf{GRAPE che peggiorava il risultato CRAB (caso 1Q a $T=10\,\tau_s$):} in v1 CRAB integrava con \texttt{sesolve} su 400 punti, mentre GRAPE ricampionava l'impulso su 150 slot costanti a tratti. Inoltre, creando la griglia con \texttt{np.linspace(0, T, Nt)} e applicando $N_t$ passi di durata $dt = T/(N_t - 1)$, l'evoluzione in GRAPE durava in realtà $N_t \cdot T/(N_t-1) > T$. A questo si aggiungeva il fatto che il gradiente era calcolato al primo ordine in $dt$ (usando il commutatore $[H_k, \rho_t]$), un'approssimazione che può risultare imprecisa quando gli slot temporali sono larghi.
+    \item \textbf{Il crollo dopo lo smoothing PCHIP:} ottimizzare un controllo a gradini in GRAPE e lisciarlo solo alla fine cambiava il segnale in modo da far perdere dal 2\% fino al 10\% di fedeltà (come nel caso Cat). In più, anche la verifica del segnale PCHIP veniva fatta ripassandolo al propagatore a gradini su $2 N_t$ punti, e non integrando l'equazione di Schrödinger continua.
+    \item \textbf{GRAPE che peggiorava il risultato CRAB (caso 1Q a $T=10\,\tau_s$):} in v1 CRAB integrava con \texttt{sesolve} su 400 punti, mentre GRAPE ricampionava l'impulso su 150 slot costanti a tratti. Inoltre, creando la griglia con \texttt{np.linspace(0, T, Nt)} e applicando $N_t$ passi di durata $dt = T/(N_t - 1)$, l'evoluzione in GRAPE durava in realtà $N_t \cdot T/(N_t-1) > T$. A questo si aggiungeva il fatto che il gradiente era calcolato al primo ordine in $dt$ (usando il commutatore $[H_k, \rho_t]$).
     \item \textbf{Ambiguità nelle metriche:} in CRAB e dopo PCHIP veniva usata \texttt{qutip.fidelity}, che restituisce la radice dell'overlap $F_{\text{root}} = \sqrt{P_{\text{target}}}$, mentre GRAPE massimizzava direttamente la probabilità $P_{\text{target}} = \operatorname{Tr}[O_{\text{target}}\rho]$. Anche il costo $C^2$ integrava la frequenza totale $\Omega_j(t)^2$ (includendo quindi l'offset costante $\omega_q = 2$) invece della sola modulazione.
-    \item \textbf{Mancanza di controlli sul troncamento di Fock:} con $n=10$ e $\text{dim}=40$, non avevo una verifica automatica che durante la dinamica la popolazione non andasse a sbattere sul bordo dello spazio troncato.
+    \item \textbf{Mancanza di controlli sul troncamento di Fock:} con $n=10$ e $\text{dim}=40$, non era sicuro che la dimensione dello spazio fosse abbastanza grande per non imbattersi in effetti di troncamento.
 \end{itemize}
 
 \newpage
 \section{Cosa ho cambiato nella v2 e perché}
 
-Per risolvere questi punti ho riscritto la pipeline da zero nella cartella autonoma \texttt{v2/} (lasciando intatti tutti i file e i risultati della v1) e l'ho controllata con una suite di 46 test automatici (gradienti contro differenze finite, limiti fisici a $g=0$, conservazione di norma e parità).
-
+Per risolvere questi punti ho rivisto la pipeline da zero nella cartella autonoma \texttt{v2/} (lasciando intatti tutti i file e i risultati della v1), implementando diversi test automatici per validare i risultato ottenuti.
 \begin{table}[H]
 \centering
 \small
@@ -203,14 +199,13 @@ Per risolvere questi punti ho riscritto la pipeline da zero nella cartella auton
 \addlinespace
 \textbf{Gradiente GRAPE} & Approssimazione al primo ordine nel passo $dt$ tramite commutatore. & Derivata esatta (Fréchet) dell'esponenziale di matrice nella base degli autovettori di ciascun passo. & \texttt{L-BFGS-B} riceve il gradiente esatto del costo discretizzato e conserva sempre il miglior punto visitato. \\
 \addlinespace
-\textbf{Validazione numerica} & Assente (solo rivalutazione a gradini su $2 N_t$ punti). & Propagazione continua indipendente (\texttt{sesolve}) confrontata con midpoint a $N$ e $2N$ passi (\texttt{time\_grid}), tolleranze ODE ridotte di $10\times$ e dimensione aumentata di $+20$ livelli (\texttt{dimension}, distanza di traccia e popolazione di bordo). & Un risultato viene accettato (\texttt{Validato = True}) solo se il segnale continuo riproduce la fedeltà discreta e non risente del troncamento di Fock. \\
+\textbf{Validazione numerica} & Assente (solo rivalutazione a gradini su $2 N_t$ punti). & Propagazione continua indipendente (\texttt{sesolve}) confrontata con midpoint a $N$ e $2N$ passi (\texttt{time\_grid}), tolleranze ridotte di $10\times$ e dimensione aumentata di $+20$ livelli. & Un risultato viene accettato solo se il segnale continuo riproduce la fedeltà discreta e non risente del troncamento di Fock. \\
 \addlinespace
 \textbf{Definizione di fedeltà} & Mista tra $P_{\text{target}}$ e $\sqrt{P_{\text{target}}}$. & Salvataggio separato di $P_{\text{target}}$ e $F_{\text{root}} = \sqrt{P_{\text{target}}}$. Soglia di successo ($0.99$) posta su $P_{\text{target}}$. & Evita ambiguità tra probabilità e radice della probabilità. \\
 \addlinespace
 \textbf{Statistica sui seed e casi} & 1Q vs 2Q; solo il miglior seed CRAB veniva passato a GRAPE. & 5 casi fisici confrontati; tutti gli 8 seed vengono raffinati con GRAPE. & Valuta la frequenza di successo reale e separa accoppiamento collettivo e numero di canali. \\
 \bottomrule
 \end{tabular}
-\label{tab:cambiamenti_v2}
 \end{table}
 
 \subsection*{Nota sul calcolo esatto del gradiente (derivata di Fréchet)}
@@ -256,149 +251,180 @@ Per rendere equo il confronto tra uno e due qubit, ogni esperimento in v2 mette 
     \item \texttt{2q\_normalized\_independent}: due qubit con $g_1 = g_2 = 0.3/\sqrt{2}$ e 2 canali indipendenti.
 \end{enumerate}
 
-\section{Risultati della campagna v2 (stato attuale)}
+\subsection*{Paragone del costo energetico del controllo vs fluenza (richiesto da Maristella)}
+Alla fine di pagina~2 del paper ad un solo qubit, per quantificare il costo energetico dei campi di controllo viene introdotto il funzionale:
+\begin{equation}
+    C_2(T) := \int_0^T ds\,\|H_D(s)\|_2^2, \qquad \|X\|_2 = \sqrt{\operatorname{Tr}[X^\dagger X]},
+\end{equation}
+per l'Hamiltoniana di pilotaggio $H_D(t) = \frac{\Omega_D(t)}{2}\sigma_z$. Poiché nello spazio $2\times 2$ del singolo qubit vale $\sigma_z^2 = \mathbb{I}_2$ e $\operatorname{Tr}[\sigma_z^2] = 2$, la norma di Frobenius al quadrato dell'operatore di drive su un singolo qubit è:
+\begin{equation}
+    \|H_{D,j}(t)\|_2^2 = \operatorname{Tr}_{\mathcal{H}_q}\!\left[\left(\frac{\Omega_{D,j}(t)}{2}\sigma_z\right)^{\!2}\right] = \frac{\Omega_{D,j}(t)^2}{4}\operatorname{Tr}[\mathbb{I}_2] = \frac{1}{2}\Omega_{D,j}(t)^2.
+\end{equation}
+Di conseguenza, rispetto alla fluenza di modulazione $\mathcal{F}_{\text{mod}} = \sum_j \int_0^T \Omega_{D,j}(t)^2\,dt$ salvata in v2 (e al costo di controllo di Hilbert--Schmidt normalizzato per la dimensione dello spazio di spin, $\frac{1}{d_q}\operatorname{Tr}[H_D^2] = \frac{1}{4}\mathcal{F}_{\text{mod}}$), il funzionale $C_2$ del paper differisce esattamente per un fattore $1/2$ (e sottrae l'offset statico $\omega_q = 2\omega_c$, che invece nella v1 veniva incluso in $\int \Omega_{\text{tot}}(t)^2 dt$ aggiungendo un contributo passivo $\omega_q^2 T \approx 418.9$ a $T=20\,\tau_s$):
+\begin{equation}
+    C_{2,\text{ch}}^{(j)} = \frac{1}{2}\int_0^T \Omega_{D,j}(t)^2\,dt = \frac{1}{2}\mathcal{F}_{\text{mod}}^{(j)}, \qquad
+    C_{2,\text{tot}} = \sum_{j} C_{2,\text{ch}}^{(j)} = \frac{1}{2}\mathcal{F}_{\text{mod,tot}}.
+\end{equation}
+Con questa convenzione (senza moltiplicare per la dimensione di troncamento artificiale della cavità $\operatorname{Tr}[\mathbb{I}_{\text{cav}}] = \text{dim}$ né per le identità degli altri qubit, così da mantenere la metrica \emph{setup-independent} come dichiarato nel paper), i valori ottenuti per 1Q a $T=20\,\tau_s$ ($C_2/\omega_c^2 \approx 13.6$ per $n=2$, $20.9$ per $n=6$, $26.4$ per $n=10$) coincidono esattamente con la scala $C_2/\omega_c^2 \approx 15\text{--}35$ riportata nella Fig.~3(b) del paper per i protocolli GRAPE. In ogni caso, sia $C_2$ sia la fluenza misurano l'energia matematica integrata dell'impulso di frequenza ($\propto \omega_c^2 T$).
 
-La campagna principale comprende 320 pipeline (8 seed $\times$ 5 sistemi $\times$ 8 esperimenti):
+\section{Risultati completi della campagna v2}
+
+La campagna principale comprende 320 pipeline (8 seed $\times$ 5 sistemi $\times$ 8 esperimenti), precedute da una fase di collaudo (\texttt{pilot\_000}--\texttt{pilot\_003} su seed disgiunti $\{100,101\}$, che ha selezionato il profilo \texttt{root\_std0.1}):
 \begin{itemize}
     \item \textbf{Blocco filtrato ($\omega_{\text{cut}} = 3.0$):} stati di Fock $n = 2, 6, 10$ a due durate, $T = 10\,\tau_s$ ($1000$ intervalli, $101$ nodi) e $T = 20\,\tau_s$ ($2000$ intervalli, $201$ nodi).
-    \item \textbf{Blocco diagnostico senza filtro ($\omega_{\text{cut}} = \text{null}$):} stato di Fock $n = 10$ a $T = 10\,\tau_s$ e $T = 20\,\tau_s$, per isolare quanto del limite a tempi brevi dipenda dal filtro passa-basso e quanto dalla dinamica del sistema.
+    \item \textbf{Blocco diagnostico senza filtro ($\omega_{\text{cut}} = \text{null}$):} stato di Fock $n = 10$ a $T = 10\,\tau_s$ e $T = 20\,\tau_s$, per isolare quanto del limite a tempi brevi dipenda dal filtro passa-basso e quanto dalla dinamica intrinseca del sistema.
 \end{itemize}
-
-Al momento sono terminati 7 esperimenti principali su 8 (\texttt{main\_004}--\texttt{main\_010}); manca solo \texttt{main\_011} (Fock 10 a $T = 20\,\tau_s$ senza filtro). I risultati completi dei blocchi filtrati sono riassunti nella Figura~\ref{fig:panoramica_campagna} e nella Tabella~\ref{tab:risultati_campagna}.
 
 \begin{figure}[H]
     \centering
     \includegraphics[width=\textwidth]{figure/fig1_panoramica_campagna.pdf}
-    \caption{Panoramica dei 6 blocchi principali con filtro causale ($\omega_{\text{cut}}=3.0$): probabilità target continua $P_{\text{target}}$ (mediana e intervallo interquartile su 8 seed) a durata breve $T=10\,\tau_s$ (\texttt{main\_004}, \texttt{main\_006}, \texttt{main\_008}, a sinistra) e a durata standard $T=20\,\tau_s$ (\texttt{main\_005}, \texttt{main\_007}, \texttt{main\_009}, a destra). Sopra o dentro ogni barra è indicato il numero di seed (su 8) che superano sia la soglia $P \ge 0.99$ sia tutti i controlli di validazione numerica.}
+    \caption{Panoramica dei 6 blocchi principali con filtro causale ($\omega_{\text{cut}}=3.0$): probabilità target continua $P_{\text{target}}$ (mediana e intervallo interquartile su 8 seed) a durata breve $T=10\,\tau_s$ (\texttt{main\_004}, \texttt{main\_006}, \texttt{main\_008}, a sinistra) e a durata standard $T=20\,\tau_s$ (\texttt{main\_005}, \texttt{main\_007}, \texttt{main\_009}, a destra).}
     \label{fig:panoramica_campagna}
 \end{figure}
 
 \begin{table}[H]
 \centering
-\footnotesize
-\setlength{\tabcolsep}{4pt}
-\renewcommand{\arraystretch}{1.15}
+\scriptsize
+\setlength{\tabcolsep}{3.2pt}
+\renewcommand{\arraystretch}{1.13}
 \resizebox{\textwidth}{!}{%
-\begin{tabular}{llcccl}
+\begin{tabular}{llccccccc}
 \toprule
-\textbf{Esperimento} & \textbf{Sistema} & \textbf{Successi validati} & \textbf{$P_{\text{target}}$ mediana} & \textbf{$P_{\text{target}}$ $[\min, \max]$} & \textbf{Esito validazione numerica} \\
+\textbf{Esperimento} & \textbf{Sistema} & \textbf{Successi} & \textbf{$P_{\text{target}}$ med.} & \textbf{$P_{\text{target}}$ $[\min, \max]$} & \textbf{Fluenza $\mathcal{F}_{\text{mod}}$} & \textbf{Costo paper $C_2/\omega_c^2$} & \textbf{$\text{SR}_{\max}$ / $\omega_{99\%}$} & \textbf{Validazione numerica} \\
+ & & \textbf{validati} & & & \textbf{tot (max ch)} & \textbf{tot (max ch)} & \textbf{(mediana)} & \\
 \midrule
 \multirow{5}{*}{\shortstack[l]{\textbf{Fock $n=2$, $T=10\,\tau_s$}\\filtro $3.0$ (\texttt{main\_004})}}
- & \texttt{1q} & \textbf{8/8} & 0.999997 & $[0.999996, 0.999998]$ & 8/8 validati \\
- & \texttt{2q\_common} & \textbf{8/8} & 0.999996 & $[0.999993, 0.999998]$ & 8/8 validati \\
- & \texttt{2q\_independent} & \textbf{8/8} & 0.999997 & $[0.999996, 0.999998]$ & 8/8 validati \\
- & \texttt{2q\_norm\_common} & \textbf{8/8} & 0.999990 & $[0.999693, 0.999996]$ & 8/8 validati \\
- & \texttt{2q\_norm\_independent} & \textbf{8/8} & 0.999994 & $[0.999991, 0.999996]$ & 8/8 validati \\
+ & \texttt{1q} & \textbf{8/8} & 0.999997 & $[0.999996, 0.999998]$ & $22.27$ ($22.27$) & $11.13$ ($11.13$) & $3.64$ / $4.86$ & 8/8 validati (seed~4: $C_2=12.05$) \\
+ & \texttt{2q\_common} & \textbf{8/8} & 0.999996 & $[0.999993, 0.999998]$ & $33.00$ ($16.50$) & $16.50$ ($8.25$) & $3.39$ / $4.20$ & 8/8 validati (seed~7: $C_2=14.87$) \\
+ & \texttt{2q\_independent} & \textbf{8/8} & 0.999997 & $[0.999996, 0.999998]$ & $30.82$ ($16.64$) & $15.41$ ($8.32$) & $3.42$ / $4.20$ & 8/8 validati (seed~3: $C_2=17.67$) \\
+ & \texttt{2q\_norm\_common} & \textbf{8/8} & 0.999990 & $[0.999693, 0.999996]$ & $40.05$ ($20.03$) & $20.03$ ($10.01$) & $3.62$ / $4.62$ & 8/8 validati (seed~2: $C_2=17.27$) \\
+ & \texttt{2q\_norm\_independent} & \textbf{8/8} & 0.999994 & $[0.999991, 0.999996]$ & $36.97$ ($20.04$) & $18.49$ ($10.02$) & $3.63$ / $4.86$ & 8/8 validati (seed~5: $C_2=21.88$) \\
 \midrule
-\textbf{Fock $n=2$, $T=20\,\tau_s$} (\texttt{main\_005}) & Tutti i 5 sistemi & \textbf{8/8} & $\ge 0.999997$ & $[\ge 0.999995, 0.999999]$ & 8/8 validati in ogni caso \\
+\multirow{5}{*}{\shortstack[l]{\textbf{Fock $n=2$, $T=20\,\tau_s$}\\filtro $3.0$ (\texttt{main\_005})}}
+ & \texttt{1q} & \textbf{8/8} & 0.999998 & $[0.999997, 0.999998]$ & $27.12$ ($27.12$) & $13.56$ ($13.56$) & $3.03$ / $3.54$ & 8/8 validati (seed~3: $C_2=13.13$) \\
+ & \texttt{2q\_common} & \textbf{8/8} & 0.999999 & $[0.999997, 1.000000]$ & $36.21$ ($18.10$) & $18.10$ ($9.05$) & $2.27$ / $3.09$ & 8/8 validati (seed~5: $C_2=17.82$) \\
+ & \texttt{2q\_independent} & \textbf{8/8} & 0.999999 & $[0.999999, 0.999999]$ & $22.13$ ($12.56$) & $11.06$ ($6.28$) & $2.22$ / $3.24$ & 8/8 validati (seed~5: $C_2=11.97$) \\
+ & \texttt{2q\_norm\_common} & \textbf{8/8} & 0.999997 & $[0.999995, 0.999998]$ & $45.09$ ($22.55$) & $22.55$ ($11.27$) & $3.03$ / $3.48$ & 8/8 validati (seed~1: $C_2=22.15$) \\
+ & \texttt{2q\_norm\_independent} & \textbf{8/8} & 0.999997 & $[0.999997, 0.999998]$ & $34.44$ ($20.58$) & $17.22$ ($10.29$) & $3.14$ / $3.42$ & 8/8 validati (seed~4: $C_2=15.28$) \\
 \midrule
 \multirow{5}{*}{\shortstack[l]{\textbf{Fock $n=6$, $T=10\,\tau_s$}\\filtro $3.0$ (\texttt{main\_006})}}
- & \texttt{1q} & \textbf{0/8} & 0.698929 & $[0.596857, 0.776816]$ & 0/8 (fallisce \texttt{time\_grid}) \\
- & \texttt{2q\_common} & \textbf{7/8} & 0.998268 & $[0.986730, 0.999982]$ & 8/8 validati (1 seed a 0.987) \\
- & \texttt{2q\_independent} & \textbf{8/8} & 0.999987 & $[0.999963, 0.999994]$ & 8/8 validati \\
- & \texttt{2q\_norm\_common} & \textbf{0/8} & 0.609237 & $[0.393262, 0.750650]$ & 0/8 (fallisce \texttt{time\_grid}) \\
- & \texttt{2q\_norm\_independent} & \textbf{0/8} & 0.749373 & $[0.577314, 0.837847]$ & 0/8 (fallisce \texttt{time\_grid}) \\
+ & \texttt{1q} & \textbf{0/8} & 0.698929 & $[0.596857, 0.776816]$ & $35.30$ ($35.30$) & $17.65$ ($17.65$) & $3.78$ / $4.38$ & 0/8 (fallisce \texttt{time\_grid}) \\
+ & \texttt{2q\_common} & \textbf{7/8} & 0.998268 & $[0.986730, 0.999982]$ & $56.26$ ($28.13$) & $28.13$ ($14.07$) & $3.78$ / $5.10$ & 8/8 validati (seed~7: $C_2=26.27$) \\
+ & \texttt{2q\_independent} & \textbf{8/8} & 0.999987 & $[0.999963, 0.999994]$ & $47.25$ ($24.58$) & $23.62$ ($12.29$) & $3.74$ / $5.16$ & 8/8 validati (seed~2: $C_2=21.84$) \\
+ & \texttt{2q\_norm\_common} & \textbf{0/8} & 0.609237 & $[0.393262, 0.750650]$ & $78.21$ ($39.10$) & $39.10$ ($19.55$) & $3.78$ / $4.74$ & 0/8 (fallisce \texttt{time\_grid}) \\
+ & \texttt{2q\_norm\_independent} & \textbf{0/8} & 0.749373 & $[0.577314, 0.837847]$ & $76.63$ ($39.96$) & $38.32$ ($19.98$) & $3.78$ / $4.62$ & 0/8 (fallisce \texttt{time\_grid}) \\
 \midrule
 \multirow{5}{*}{\shortstack[l]{\textbf{Fock $n=6$, $T=20\,\tau_s$}\\filtro $3.0$ (\texttt{main\_007})}}
- & \texttt{1q} & \textbf{8/8} & 0.999996 & $[0.999996, 0.999997]$ & 8/8 validati \\
- & \texttt{2q\_common} & \textbf{8/8} & 0.999997 & $[0.999996, 0.999998]$ & 8/8 validati \\
- & \texttt{2q\_independent} & \textbf{8/8} & 0.999996 & $[0.999993, 0.999998]$ & 8/8 validati \\
- & \texttt{2q\_norm\_common} & \textbf{8/8} & 0.999989 & $[0.999982, 0.999992]$ & 8/8 validati \\
- & \texttt{2q\_norm\_independent} & \textbf{8/8} & 0.999993 & $[0.999989, 0.999994]$ & 8/8 validati \\
+ & \texttt{1q} & \textbf{8/8} & 0.999996 & $[0.999996, 0.999997]$ & $41.78$ ($41.78$) & $20.89$ ($20.89$) & $3.62$ / $4.11$ & 8/8 validati (seed~4: $C_2=18.16$) \\
+ & \texttt{2q\_common} & \textbf{8/8} & 0.999997 & $[0.999996, 0.999998]$ & $49.98$ ($24.99$) & $24.99$ ($12.50$) & $3.04$ / $3.60$ & 8/8 validati (seed~5: $C_2=21.48$) \\
+ & \texttt{2q\_independent} & \textbf{8/8} & 0.999996 & $[0.999993, 0.999998]$ & $47.15$ ($25.23$) & $23.57$ ($12.62$) & $3.08$ / $3.81$ & 8/8 validati (seed~7: $C_2=18.14$) \\
+ & \texttt{2q\_norm\_common} & \textbf{8/8} & 0.999989 & $[0.999982, 0.999992]$ & $93.43$ ($46.72$) & $46.72$ ($23.36$) & $3.72$ / $4.32$ & 8/8 validati (seed~3: $C_2=54.03$) \\
+ & \texttt{2q\_norm\_independent} & \textbf{8/8} & 0.999993 & $[0.999989, 0.999994]$ & $85.54$ ($48.05$) & $42.77$ ($24.03$) & $3.69$ / $4.44$ & 8/8 validati (seed~1: $C_2=38.06$) \\
 \midrule
 \multirow{5}{*}{\shortstack[l]{\textbf{Fock $n=10$, $T=10\,\tau_s$}\\filtro $3.0$ (\texttt{main\_008})}}
- & \texttt{1q} & \textbf{0/8} & 0.310186 & $[0.271406, 0.352806]$ & 0/8 (fallisce \texttt{time\_grid}) \\
- & \texttt{2q\_common} & \textbf{0/8} & 0.869445 & $[0.802777, 0.936308]$ & 0/8 (fallisce \texttt{time\_grid}) \\
- & \texttt{2q\_independent} & \textbf{0/8} & 0.940965 & $[0.875524, 0.961781]$ & 0/8 (fallisce \texttt{time\_grid}) \\
- & \texttt{2q\_norm\_common} & \textbf{0/8} & 0.328171 & $[0.179080, 0.442175]$ & 0/8 (fallisce \texttt{time\_grid}) \\
- & \texttt{2q\_norm\_independent} & \textbf{0/8} & 0.355114 & $[0.294268, 0.467935]$ & 0/8 (fallisce \texttt{time\_grid}) \\
+ & \texttt{1q} & \textbf{0/8} & 0.310186 & $[0.271406, 0.352806]$ & $39.50$ ($39.50$) & $19.75$ ($19.75$) & $3.78$ / $4.80$ & 0/8 (fallisce \texttt{time\_grid}) \\
+ & \texttt{2q\_common} & \textbf{0/8} & 0.869445 & $[0.802777, 0.936308]$ & $63.45$ ($31.72$) & $31.72$ ($15.86$) & $3.78$ / $5.28$ & 0/8 (fallisce \texttt{time\_grid}) \\
+ & \texttt{2q\_independent} & \textbf{0/8} & 0.940965 & $[0.875524, 0.961781]$ & $68.81$ ($35.30$) & $34.40$ ($17.65$) & $3.78$ / $5.22$ & 0/8 (fallisce \texttt{time\_grid}) \\
+ & \texttt{2q\_norm\_common} & \textbf{0/8} & 0.328171 & $[0.179080, 0.442175]$ & $72.90$ ($36.45$) & $36.45$ ($18.22$) & $3.78$ / $4.68$ & 0/8 (fallisce \texttt{time\_grid}) \\
+ & \texttt{2q\_norm\_independent} & \textbf{0/8} & 0.355114 & $[0.294268, 0.467935]$ & $79.15$ ($41.36$) & $39.58$ ($20.68$) & $3.78$ / $4.56$ & 0/8 (fallisce \texttt{time\_grid}) \\
 \midrule
 \multirow{5}{*}{\shortstack[l]{\textbf{Fock $n=10$, $T=20\,\tau_s$}\\filtro $3.0$ (\texttt{main\_009})}}
- & \texttt{1q} & \textbf{8/8} & 0.999992 & $[0.999982, 0.999995]$ & 8/8 validati \\
- & \texttt{2q\_common} & \textbf{8/8} & 0.999996 & $[0.999994, 0.999997]$ & 8/8 validati \\
- & \texttt{2q\_independent} & \textbf{8/8} & 0.999994 & $[0.999990, 0.999995]$ & 8/8 validati \\
- & \texttt{2q\_norm\_common} & \textbf{6/8} & 0.999956 & $[0.972811, 0.999985]$ & 6/8 validati (2 falliscono \texttt{time\_grid}) \\
- & \texttt{2q\_norm\_independent} & \textbf{8/8} & 0.999986 & $[0.999984, 0.999993]$ & 8/8 validati \\
+ & \texttt{1q} & \textbf{8/8} & 0.999992 & $[0.999982, 0.999995]$ & $52.87$ ($52.87$) & $26.43$ ($26.43$) & $3.77$ / $4.77$ & 8/8 validati (seed~3: $C_2=25.93$) \\
+ & \texttt{2q\_common} & \textbf{8/8} & 0.999996 & $[0.999994, 0.999997]$ & $70.06$ ($35.03$) & $35.03$ ($17.52$) & $3.63$ / $4.11$ & 8/8 validati (seed~0: $C_2=36.59$) \\
+ & \texttt{2q\_independent} & \textbf{8/8} & 0.999994 & $[0.999990, 0.999995]$ & $53.52$ ($29.52$) & $26.76$ ($14.76$) & $3.49$ / $4.26$ & 8/8 validati (seed~4: $C_2=26.68$) \\
+ & \texttt{2q\_norm\_common} & \textbf{6/8} & 0.999956 & $[0.972811, 0.999985]$ & $111.49$ ($55.74$) & $55.74$ ($27.87$) & $3.77$ / $4.92$ & 6/8 validati (seed~4: $C_2=55.73$) \\
+ & \texttt{2q\_norm\_independent} & \textbf{8/8} & 0.999986 & $[0.999984, 0.999993]$ & $102.53$ ($54.35$) & $51.26$ ($27.18$) & $3.75$ / $4.74$ & 8/8 validati (seed~3: $C_2=58.08$) \\
 \midrule
 \multirow{5}{*}{\shortstack[l]{\textbf{Fock $n=10$, $T=10\,\tau_s$}\\senza filtro (\texttt{main\_010})}}
- & \texttt{1q} & \textbf{0/8} & 0.635531 & $[0.573466, 0.703158]$ & 0/8 (fallisce \texttt{time\_grid}) \\
- & \texttt{2q\_common} & \textbf{2/8} & 0.981896 & $[0.967130, 0.999879]$ & 2/8 validati (6 falliscono \texttt{time\_grid}) \\
- & \texttt{2q\_independent} & \textbf{8/8} & 0.999937 & $[0.999414, 0.999970]$ & 8/8 validati \\
- & \texttt{2q\_norm\_common} & \textbf{0/8} & 0.561297 & $[0.506857, 0.676184]$ & 0/8 (fallisce \texttt{time\_grid}) \\
- & \texttt{2q\_norm\_independent} & \textbf{0/8} & 0.730965 & $[0.598527, 0.829199]$ & 0/8 (fallisce \texttt{time\_grid}) \\
+ & \texttt{1q} & \textbf{0/8} & 0.635531 & $[0.573466, 0.703158]$ & $54.74$ ($54.74$) & $27.37$ ($27.37$) & $4.77$ / $7.80$ & 0/8 (fallisce \texttt{time\_grid}) \\
+ & \texttt{2q\_common} & \textbf{2/8} & 0.981896 & $[0.967130, 0.999879]$ & $80.38$ ($40.19$) & $40.19$ ($20.10$) & $4.77$ / $7.98$ & 2/8 validati (seed~7: $C_2=37.25$) \\
+ & \texttt{2q\_independent} & \textbf{8/8} & 0.999937 & $[0.999414, 0.999970]$ & $78.46$ ($41.31$) & $39.23$ ($20.65$) & $4.77$ / $7.98$ & 8/8 validati (seed~5: $C_2=36.80$) \\
+ & \texttt{2q\_norm\_common} & \textbf{0/8} & 0.561297 & $[0.506857, 0.676184]$ & $98.35$ ($49.17$) & $49.17$ ($24.59$) & $4.77$ / $7.80$ & 0/8 (fallisce \texttt{time\_grid}) \\
+ & \texttt{2q\_norm\_independent} & \textbf{0/8} & 0.730965 & $[0.598527, 0.829199]$ & $106.75$ ($55.62$) & $53.38$ ($27.81$) & $4.77$ / $7.74$ & 0/8 (fallisce \texttt{time\_grid}) \\
 \midrule
-\textbf{Fock $n=10$, $T=20\,\tau_s$} (\texttt{main\_011}) & Tutti i 5 sistemi & \emph{[In corso]} & \emph{[In corso]} & \emph{[In corso]} & \todo{inserire esiti \texttt{main\_011}} \\
+\multirow{5}{*}{\shortstack[l]{\textbf{Fock $n=10$, $T=20\,\tau_s$}\\senza filtro (\texttt{main\_011})}}
+ & \texttt{1q} & \textbf{8/8} & 0.999974 & $[0.999967, 0.999979]$ & $55.58$ ($55.58$) & $27.79$ ($27.79$) & $4.70$ / $7.44$ & 8/8 validati (seed~5: $C_2=28.24$) \\
+ & \texttt{2q\_common} & \textbf{8/8} & 0.999983 & $[0.999979, 0.999990]$ & $70.82$ ($35.41$) & $35.41$ ($17.71$) & $3.70$ / $5.10$ & 8/8 validati (seed~0: $C_2=37.81$) \\
+ & \texttt{2q\_independent} & \textbf{8/8} & 0.999979 & $[0.999974, 0.999987]$ & $49.53$ ($28.53$) & $24.77$ ($14.26$) & $3.97$ / $7.23$ & 8/8 validati (seed~4: $C_2=27.86$) \\
+ & \texttt{2q\_norm\_common} & \textbf{8/8} & 0.999978 & $[0.999951, 0.999985]$ & $118.78$ ($59.39$) & $59.39$ ($29.70$) & $4.76$ / $7.23$ & 8/8 validati (seed~2: $C_2=53.93$) \\
+ & \texttt{2q\_norm\_independent} & \textbf{8/8} & 0.999972 & $[0.999946, 0.999977]$ & $114.15$ ($61.40$) & $57.08$ ($30.70$) & $4.76$ / $7.38$ & 8/8 validati (seed~5: $C_2=50.67$) \\
 \bottomrule
 \end{tabular}%
 }
-\caption{Risultati della campagna v2 sui blocchi completati (\texttt{main\_004}--\texttt{main\_010}).}
+\caption{Risultati completi della campagna v2 su tutti gli 8 blocchi principali (\texttt{main\_004}--\texttt{main\_011}). I valori di fluenza di modulazione $\mathcal{F}_{\text{mod}}$, costo del paper $C_2/\omega_c^2 = \mathcal{F}_{\text{mod}}/2$, slew rate massimo $\text{SR}_{\max}$ e banda al 99\% $\omega_{99\%}$ sono le mediane sugli 8 seed (con il valore del seed selezionato indicato nell'ultima colonna).}
 \label{tab:risultati_campagna}
 \end{table}
 
-\subsection*{Cosa indicano questi dati sul confronto 1Q vs 2Q}
+\subsection*{Analisi dei dati sul confronto 1Q vs 2Q}
 
 \begin{enumerate}
     \item \textbf{A tempi lunghi ($T = 20\,\tau_s$) tutti i sistemi preparano lo stato, anche 1Q e i casi normalizzati:}
-    Sia per $n=2$, sia per $n=6$, sia per $n=10$, a $T=20\,\tau_s$ con filtro attivo il singolo qubit (\texttt{1q}) e i due qubit con accoppiamento normalizzato (\texttt{2q\_normalized\_independent}) centrano l'obiettivo su \textbf{8/8 seed}, con probabilità certificate superiori a $0.99998$ (Figura~\ref{fig:wigner_main009}). Soltanto \texttt{2q\_normalized\_common} su $n=10$ fallisce su 2 seed su 8 (fermandosi comunque a $P \approx 0.973 - 0.975$). Quindi, quando il tempo di interazione è $20\,\tau_s$, un singolo qubit è perfettamente in grado di generare anche Fock $|n=10\rangle$ con il filtro attivo.
+    Sia per $n=2$, sia per $n=6$, sia per $n=10$, a $T=20\,\tau_s$ con filtro attivo il singolo qubit (\texttt{1q}) e i due qubit con accoppiamento normalizzato (\texttt{2q\_normalized\_independent}) centrano l'obiettivo su 8/8 seed, con probabilità certificate superiori a $0.99998$. Soltanto \texttt{2q\_normalized\_common} su $n=10$ fallisce su 2 seed su 8 (fermandosi comunque a $P \approx 0.973 - 0.975$, mentre raggiunge 8/8 senza filtro in \texttt{main\_011}). Quindi, quando il tempo di interazione è $20\,\tau_s$, un singolo qubit è perfettamente in grado di generare anche Fock $|n=10\rangle$ con il filtro attivo.
 
     \item \textbf{A tempi brevi ($T = 10\,\tau_s$) emerge un vantaggio netto dei 2 qubit, ma legato soprattutto all'accoppiamento collettivo $\sqrt{2}g$:}
-    Guardando \texttt{main\_006} (Fock $n=6$ a $T=10\,\tau_s$, Figura~\ref{fig:dinamica_fock6_t10}), i due sistemi con accoppiamento pieno per singolo qubit ($g_1=g_2=0.3$) raggiungono la soglia in modo certificato (\texttt{2q\_independent} con \textbf{8/8} seed e mediana $0.999987$; \texttt{2q\_common} con \textbf{7/8} seed e mediana $0.998268$). Al contrario, \texttt{1q} si ferma a una mediana di $0.6989$ (0/8), e i due sistemi a due qubit con accoppiamento riscalato $g_j = 0.3/\sqrt{2}$ (\texttt{2q\_normalized\_common} a $0.6092$ e \texttt{2q\_normalized\_independent} a $0.7494$) restano anch'essi a 0/8 su valori molto vicini a \texttt{1q}.
+    Guardando \texttt{main\_006} (Fock $n=6$ a $T=10\,\tau_s$, Figura~\ref{fig:dinamica_fock6_t10}), i due sistemi con accoppiamento pieno per singolo qubit ($g_1=g_2=0.3$) raggiungono la soglia in modo certificato (\texttt{2q\_independent} con 8/8 seed e mediana $0.999987$; \texttt{2q\_common} con 7/8 seed e mediana $0.998268$). Al contrario, \texttt{1q} si ferma a una mediana di $0.6989$ (0/8), e i due sistemi a due qubit con accoppiamento riscalato $g_j = 0.3/\sqrt{2}$ (\texttt{2q\_normalized\_common} a $0.6092$ e \texttt{2q\_normalized\_independent} a $0.7494$) restano anch'essi a 0/8 su valori molto vicini a \texttt{1q}.
     Lo stesso schema si ripete su Fock $n=10$ a $T=10\,\tau_s$ (\texttt{main\_008} e \texttt{main\_010}): i casi \texttt{2q\_normalized} hanno sempre prestazioni paragonabili a \texttt{1q} e molto lontane da quelle di \texttt{2q\_common} e \texttt{2q\_independent}. Questo mostra chiaramente che la possibilità di dimezzare il tempo di preparazione da $20\,\tau_s$ a $10\,\tau_s$ per stati ad alto numero di fotoni dipende prima di tutto dall'aumento dell'accoppiamento efficace ($\sqrt{g_1^2+g_2^2} = \sqrt{2}g$).
+
+    \begin{figure}[H]
+        \centering
+        \includegraphics[width=0.95\textwidth]{figure/fig4_dinamica_fock6_t10.pdf}
+        \caption{Dinamica temporale della probabilità target $P_{|n=6\rangle}(t)$ (in alto) e del numero medio di fotoni $\langle n \rangle(t)$ (in basso) per Fock $|n=6\rangle$ a durata dimezzata $T = 10\,\tau_s$ (\texttt{main\_006}). Mentre \texttt{1q} e \texttt{2q\_normalized\_independent} non riescono a pompare in media i 6 fotoni entro $10\,\tau_s$, sia \texttt{2q\_common} sia \texttt{2q\_independent} raggiungono $P > 0.99998$ a $t=T$. Dopo $t=10\,\tau_s$ (linea tratteggiata verticale) è visibile la fase di \texttt{hold\_time} a comando spento, in cui lo stato scambia energia con i qubit a causa dell'accoppiamento $g$ sempre attivo.}
+        \label{fig:dinamica_fock6_t10}
+    \end{figure}
 
     \item \textbf{Il ruolo del secondo canale indipendente (\texttt{2q\_independent} vs \texttt{2q\_common}):}
     A parità di accoppiamento fisico ($g_1=g_2=0.3$), avere due controlli indipendenti invece di un controllo comune dà un vantaggio visibile quando il problema diventa più stretto:
     \begin{itemize}
         \item su Fock $n=6$ a $T=10\,\tau_s$ (\texttt{main\_006}), \texttt{2q\_independent} porta a termine 8/8 seed con mediana $0.999987$ contro i 7/8 di \texttt{2q\_common} (mediana $0.998268$);
-        \item su Fock $n=10$ a $T=10\,\tau_s$ senza filtro (\texttt{main\_010}, Figura~\ref{fig:filtro_vs_nofiltro}), \texttt{2q\_independent} valida \textbf{8/8} seed sopra soglia (mediana $0.999937$), mentre \texttt{2q\_common} si ferma a \textbf{2/8} seed validati (mediana $0.981896$).
+        \item su Fock $n=10$ a $T=10\,\tau_s$ senza filtro (\texttt{main\_010}, Figura~\ref{fig:filtro_vs_nofiltro}), \texttt{2q\_independent} valida \textbf{8/8} seed sopra soglia (mediana $0.999937$), mentre \texttt{2q\_common} si ferma a 2/8 seed validati (mediana $0.981896$).
     \end{itemize}
-    Anche a parità di accoppiamento normalizzato ($g_j = 0.3/\sqrt{2}$), \texttt{2q\_normalized\_independent} ottiene sistematicamente mediane più alte di \texttt{2q\_normalized\_common} nei regimi non conversi a $10\,\tau_s$ ($0.749$ vs $0.609$ su $n=6$; $0.731$ vs $0.561$ su $n=10$ senza filtro) e 8/8 contro 6/8 su $n=10$ a $20\,\tau_s$. Tuttavia, da solo (senza l'aumento di $g_{\text{eff}}$), il secondo canale non basta a far raggiungere la soglia $0.99$ a $T=10\,\tau_s$ per $n=6$ o $n=10$.
+    Anche a parità di accoppiamento normalizzato ($g_j = 0.3/\sqrt{2}$), \texttt{2q\_normalized\_independent} ottiene sistematicamente mediane più alte di \texttt{2q\_normalized\_common} nei regimi a $10\,\tau_s$ ($0.749$ vs $0.609$ su $n=6$; $0.731$ vs $0.561$ su $n=10$ senza filtro) e 8/8 contro 6/8 su $n=10$ a $20\,\tau_s$. Tuttavia, da solo (senza l'aumento di $g_{\text{eff}}$), il secondo canale non basta a far raggiungere la soglia $0.99$ a $T=10\,\tau_s$ per $n=6$ o $n=10$.
 
-    \item \textbf{L'effetto del filtro passa-basso a $T = 10\,\tau_s$ su Fock $n=10$ (\texttt{main\_008} vs \texttt{main\_010}):}
-    Confrontando \texttt{main\_008} (con filtro $\omega_{\text{cut}}=3.0$) e \texttt{main\_010} (senza filtro) in Figura~\ref{fig:filtro_vs_nofiltro}, si vede perché a $T=10\,\tau_s$ con filtro nemmeno \texttt{2q\_independent} superava $0.99$ (fermandosi a mediana $0.9410$, max $0.9618$): il filtro con polo a $3\omega_c$ attenua le variazioni rapide sui 101 nodi di comando. Togliendo il filtro (\texttt{main\_010}), \texttt{2q\_independent} sale subito a \textbf{8/8} successi validati ($P_{\text{mediana}} = 0.999937$), usando una banda $\omega_{99\%} \approx 7.6 - 8.4\,\omega_c$. Invece \texttt{1q} e \texttt{2q\_normalized}, anche togliendo il filtro, salgono da $\sim 0.31 - 0.35$ a $\sim 0.56 - 0.73$ ma restano lontani dalla soglia $0.99$.
+    \item \textbf{L'effetto del filtro passa-basso a $T = 10\,\tau_s$ e $T = 20\,\tau_s$ (\texttt{main\_008}--\texttt{main\_011}):}
+    Confrontando \texttt{main\_008} (con filtro $\omega_{\text{cut}}=3.0$) e \texttt{main\_010} (senza filtro) in Figura~\ref{fig:spettro_filtro}, si vede perché a $T=10\,\tau_s$ con filtro nemmeno \texttt{2q\_independent} superava $0.99$ (fermandosi a mediana $0.9410$, max $0.9618$): il filtro con polo a $3\omega_c$ attenua le variazioni rapide sui 101 nodi di comando. Togliendo il filtro (\texttt{main\_010}), \texttt{2q\_independent} sale subito a 8/8 successi validati ($P_{\text{mediana}} = 0.999937$), usando una banda $\omega_{99\%} \approx 7.6 - 8.4\,\omega_c$. Al contrario, a $T=20\,\tau_s$ (\texttt{main\_009} vs \texttt{main\_011}, Figura~\ref{fig:spettro_filtro}b), il filtro $\omega_{\text{cut}}=3.0$ è del tutto vantaggioso: riduce la banda $\omega_{99\%}$ da $\sim 7.2\text{--}8.1\,\omega_c$ a $\sim 4.1\text{--}4.8\,\omega_c$ e lo slew rate da $\sim 4.7$ a $\sim 3.5\text{--}3.8$, mantenendo $P > 0.99999$.
+
+    \begin{figure}[H]
+        \centering
+        \includegraphics[width=0.90\textwidth]{figure/fig2_fock10_t10_filtro_vs_nofiltro.pdf}
+        \caption{Confronto su Fock $|n=10\rangle$ a $T = 10\,\tau_s$ tra il blocco con filtro causale $\omega_{\text{cut}}=3.0$ (\texttt{main\_008}, barre piene) e il blocco senza filtro (\texttt{main\_010}, barre tratteggiate). Togliendo il filtro, \texttt{2q\_independent} passa da 0/8 a 8/8 seed validati sopra soglia ($P_{\text{mediana}} = 0.999937$), mentre \texttt{1q} e i casi \texttt{2q\_normalized} restano sotto $0.83$ anche senza filtro.}
+        \label{fig:filtro_vs_nofiltro}
+    \end{figure}
+
+    \begin{figure}[H]
+        \centering
+        \includegraphics[width=0.96\textwidth]{figure/fig7_spettro_filtro_main009_vs_011.pdf}
+        \caption{Effetto del filtro causale ($\omega_{\text{cut}}=3.0\,\omega_c$) su Fock $|n=10\rangle$ per \texttt{2q\_independent}: (a) profilo temporale della modulazione applicata $\Omega_{D,1}(t)$ nei primi $5\,\tau_s$ con e senza filtro; (b) frazione cumulativa della potenza spettrale AC in funzione della frequenza $\omega/\omega_c$, che illustra la riduzione della banda al 99\% ($\omega_{99\%}$) da $\sim 8\,\omega_c$ a $\sim 4.4\text{--}5.5\,\omega_c$.}
+        \label{fig:spettro_filtro}
+    \end{figure}
+
+    \item \textbf{Costo energetico $C_2$ totale vs per singolo canale (Figura~\ref{fig:scaling_costo_C2}):}
+    Confrontando lo scaling del costo energetico $C_2/\omega_c^2$ a $T=20\,\tau_s$ (\texttt{main\_005}, \texttt{main\_007}, \texttt{main\_009} in Figura~\ref{fig:scaling_costo_C2}), si osserva che \texttt{2q\_independent} ($g=0.3$) richiede un costo energetico totale $C_{2,\text{tot}}$ uguale o persino inferiore a quello del singolo qubit \texttt{1q} ($11.1$ contro $13.6$ per $n=2$; $23.6$ contro $20.9$ per $n=6$; $26.8$ contro $26.4$ per $n=10$), ma ripartendolo su due canali riduce del \textbf{$40\%\text{--}54\%$} il carico massimo sulla singola linea di controllo ($C_{2,\text{max ch}} = 6.3$ vs $13.6$ su $n=2$; $12.6$ vs $20.9$ su $n=6$; $14.8$ vs $26.4$ su $n=10$). Nei casi normalizzati ($g=0.3/\sqrt{2}$), invece, per compensare il minore accoppiamento individuale ogni canale deve modulare quanto \texttt{1q} ($C_{2,\text{max ch}} \approx 23\text{--}28$), raddoppiando il costo totale ($C_{2,\text{tot}} \approx 43\text{--}56$).
+
+    \begin{figure}[H]
+        \centering
+        \includegraphics[width=0.98\textwidth]{figure/fig5_scaling_costo_C2.pdf}
+        \caption{Scaling del costo energetico di controllo $C_2/\omega_c^2$ (Eq.~4 del paper, mediana e quartili su 8 seed) a $T = 20\,\tau_s$ con filtro $\omega_{\text{cut}}=3.0$ (\texttt{main\_005}, \texttt{main\_007}, \texttt{main\_009}): (a) costo totale del sistema $C_{2,\text{tot}}$ sommato sui canali; (b) costo massimo per singolo canale $C_{2,\text{max ch}}$. Il caso \texttt{2q\_independent} mantiene lo stesso costo totale di \texttt{1q} ma dimezza quasi il carico per singolo canale.}
+        \label{fig:scaling_costo_C2}
+    \end{figure}
+
+    \item \textbf{Singoletto ``dark'' $|D\rangle$:}
+Attivazione dello stato ``dark'' di singoletto $|D\rangle = (|g,e\rangle - |e,g\rangle)/\sqrt{2}$: in \texttt{2q\_common} la popolazione di singoletto è identicamente nulla ($\sim 10^{-21}$) per simmetria di scambio. In \texttt{2q\_independent}, invece, la modulazione differenziale $\Omega_1(t) \neq \Omega_2(t)$ trasferisce fino al $40\text{--}56\%$ della popolazione nello stato antisimmetrico $|D\rangle$ a metà evoluzione, per poi svuotarlo completamente a $t=T$ ($P_{|D\rangle}(T) \sim 10^{-6}$).
+
+    \begin{figure}[H]
+        \centering
+        \includegraphics[width=0.95\textwidth]{figure/image.png}
+        \caption{Meccanismo fisico interno durante la preparazione di Fock $|n=10\rangle$ a $T=10\,\tau_s$ (\texttt{main\_010}): popolazione del tripletto luminoso $|B\rangle$ e del singoletto dark $|D\rangle$, attivo solo in \texttt{2q\_independent}.}
+        \label{fig:meccanismo_dicke}
+    \end{figure}
 \end{enumerate}
 
-\begin{figure}[H]
-    \centering
-    \includegraphics[width=0.96\textwidth]{figure/fig4_dinamica_fock6_t10.pdf}
-    \caption{Dinamica temporale della probabilità target $P_{|n=6\rangle}(t)$ (in alto) e del numero medio di fotoni $\langle n \rangle(t)$ (in basso) per Fock $|n=6\rangle$ a durata dimezzata $T = 10\,\tau_s$ (\texttt{main\_006}). Mentre \texttt{1q} e \texttt{2q\_normalized\_independent} non riescono a pompare in media i 6 fotoni entro $10\,\tau_s$, sia \texttt{2q\_common} sia \texttt{2q\_independent} raggiungono $P > 0.99998$ a $t=T$. Dopo $t=10\,\tau_s$ (linea tratteggiata verticale) è visibile la fase di \texttt{hold\_time} a comando spento, in cui lo stato scambia energia con i qubit a causa dell'accoppiamento $g$ sempre attivo.}
-    \label{fig:dinamica_fock6_t10}
-\end{figure}
+\section{Confronto tra risultati v1 e v2 (e ruolo di CRAB)}
+
+Nella Tabella~\ref{tab:confronto_v1_v2} (e Figura~\ref{fig:confronto_v1_v2}) sono affiancati i casi di Fock simulati sia in v1 sia in v2. In v1 il valore finale riguardava il solo miglior seed dopo smoothing PCHIP a posteriori ($\text{dim}=40$, senza filtro in ottimizzazione); in v2 è la probabilità continua da \texttt{sesolve} su 8 seed tutti raffinati e validati ($\text{dim}=60$ vs $80$).
 
 \begin{figure}[H]
     \centering
-    \includegraphics[width=0.92\textwidth]{figure/fig2_fock10_t10_filtro_vs_nofiltro.pdf}
-    \caption{Confronto su Fock $|n=10\rangle$ a $T = 10\,\tau_s$ tra il blocco con filtro causale $\omega_{\text{cut}}=3.0$ (\texttt{main\_008}, barre piene) e il blocco diagnostico senza filtro (\texttt{main\_010}, barre tratteggiate). Togliendo il filtro, \texttt{2q\_independent} passa da 0/8 a 8/8 seed validati sopra soglia ($P_{\text{mediana}} = 0.999937$), mentre \texttt{1q} e i casi \texttt{2q\_normalized} restano sotto $0.83$ anche senza filtro.}
-    \label{fig:filtro_vs_nofiltro}
-\end{figure}
-
-\begin{figure}[H]
-    \centering
-    \begin{subfigure}[b]{0.48\textwidth}
-        \centering
-        \includegraphics[width=\textwidth]{figure/main009_1q_seed3_wigner.png}
-        \caption{\texttt{1q} (seed 3, $T=20\,\tau_s$): $P_{\text{target}} = 0.999995$}
-    \end{subfigure}
-    \hfill
-    \begin{subfigure}[b]{0.48\textwidth}
-        \centering
-        \includegraphics[width=\textwidth]{figure/main009_2q_ind_seed4_wigner.png}
-        \caption{\texttt{2q\_independent} (seed 4, $T=20\,\tau_s$): $P_{\text{target}} = 0.999995$}
-    \end{subfigure}
-    \caption{Funzioni di Wigner (target vs stato finale preparato) per Fock $|n=10\rangle$ a $T=20\,\tau_s$ con filtro $\omega_{\text{cut}}=3.0$ (\texttt{main\_009}): usando l'obiettivo \texttt{root} e portando lo spazio a $\text{dim}=60$, sia il singolo qubit sia i due qubit riproducono i 10 anelli concentrici con precisione certificata.}
-    \label{fig:wigner_main009}
-\end{figure}
-
-\section{Confronto diretto tra risultati v1 e v2}
-
-Per confrontare i numeri ottenuti prima e dopo il passaggio alla v2, nella Tabella~\ref{tab:confronto_v1_v2} (e in Figura~\ref{fig:confronto_v1_v2}) ho affiancato i casi di Fock che avevo già simulato nella v1. Nel leggere la tabella bisogna tenere conto che:
-\begin{itemize}
-    \item in \textbf{v1} il valore riportato nei report era la fedeltà radice $F_{\text{root}} = \sqrt{P_{\text{target}}}$ del solo miglior seed CRAB raffinato con GRAPE e poi interpolato con PCHIP (senza filtro nell'ottimizzazione e con $\text{dim}=40$); per un confronto omogeneo ho calcolato anche il quadrato $P_{\text{target}} \approx F_{\text{root}}^2$;
-    \item in \textbf{v2} il valore proviene dalla propagazione continua \texttt{sesolve} con filtro causale $\omega_{\text{cut}}=3.0$ incluso nell'ottimizzazione (più il caso senza filtro per $n=10, T=10\,\tau_s$), su 8 seed tutti raffinati e validati a $\text{dim}=60$ vs $80$.
-\end{itemize}
-
-\begin{figure}[H]
-    \centering
-    \includegraphics[width=0.78\textwidth]{figure/fig3_confronto_v1_v2.pdf}
+    \includegraphics[width=0.76\textwidth]{figure/fig3_confronto_v1_v2.pdf}
     \caption{Confronto diretto della probabilità target $P_{\text{target}}$ tra le run della v1 (dopo smoothing PCHIP) e le mediane della campagna v2 (con e senza filtro).}
     \label{fig:confronto_v1_v2}
 \end{figure}
@@ -407,7 +433,7 @@ Per confrontare i numeri ottenuti prima e dopo il passaggio alla v2, nella Tabel
 \centering
 \footnotesize
 \setlength{\tabcolsep}{4pt}
-\renewcommand{\arraystretch}{1.2}
+\renewcommand{\arraystretch}{1.15}
 \resizebox{\textwidth}{!}{%
 \begin{tabular}{llccc}
 \toprule
@@ -418,8 +444,8 @@ Per confrontare i numeri ottenuti prima e dopo il passaggio alla v2, nella Tabel
  & $P_{\text{target}}$ (best / med.) & $\approx 0.9817$ & $0.999998$ (med. $0.999996$, \textbf{8/8}) & — \\
 \midrule
 \multirow{2}{*}{\textbf{Fock $n=10$, $T=20\,\tau_s$ — 2Q ind.}}
- & $F_{\text{root}}$ (best / med.) & $0.987673$ (GRAPE $0.999906$) & $0.999998$ (med. $0.999997$) & \emph{[In corso: \texttt{main\_011}]} \\
- & $P_{\text{target}}$ (best / med.) & $\approx 0.9755$ & $0.999995$ (med. $0.999994$, \textbf{8/8}) & \emph{[In corso: \texttt{main\_011}]} \\
+ & $F_{\text{root}}$ (best / med.) & $0.987673$ (GRAPE $0.999906$) & $0.999998$ (med. $0.999997$) & $0.999993$ (med. $0.999989$) \\
+ & $P_{\text{target}}$ (best / med.) & $\approx 0.9755$ & $0.999995$ (med. $0.999994$, \textbf{8/8}) & $0.999987$ (med. $0.999979$, \textbf{8/8}) \\
 \midrule
 \multirow{2}{*}{\textbf{Fock $n=10$, $T=10\,\tau_s$ — 1Q}}
  & $F_{\text{root}}$ (best / med.) & $0.839708$ (GRAPE $0.872035$) & $0.593975$ (med. $0.5569$) & $0.838545$ (med. $0.7972$) \\
@@ -435,24 +461,50 @@ Per confrontare i numeri ottenuti prima e dopo il passaggio alla v2, nella Tabel
 \label{tab:confronto_v1_v2}
 \end{table}
 
-\paragraph{Cosa è migliorato, cosa è peggiorato e cosa è rimasto uguale:}
 \begin{itemize}
-    \item \textbf{Eliminazione della perdita post-smoothing:} in v1, anche quando GRAPE arrivava a $0.9999$, il passaggio a una curva continua con PCHIP faceva scendere $P_{\text{target}}$ a $\approx 0.975 - 0.982$ (a $T=20\,\tau_s$) e a $\approx 0.926$ (a $T=10\,\tau_s$). In v2, ottimizzando direttamente il comando continuo con gradiente esatto, la probabilità continua effettiva resta sopra $0.99999$ a $T=20\,\tau_s$ (anche col filtro attivo) e sopra $0.9999$ a $T=10\,\tau_s$ senza filtro.
-    \item \textbf{Coerenza sul caso 1Q a $T=10\,\tau_s$ ($n=10$):} nel caso senza filtro (\texttt{main\_010}) il miglior seed 1Q della v2 ottiene $F_{\text{root}} = 0.8385$ ($P = 0.7032$), cioè praticamente lo stesso valore finale che usciva in v1 dopo PCHIP ($F_{\text{root}} = 0.8397$, $P \approx 0.7051$). La differenza è che in v1 quel risultato nasceva da un passo GRAPE difettoso che aveva peggiorato CRAB, mentre in v2 so che l'ottimizzatore è migliorato rispetto a CRAB ma che l'impulso trovato non supera il controllo \texttt{time\_grid} (sfrutta oscillazioni troppo rapide rispetto al passo di discretizzazione). Con il filtro attivo a $\omega_{\text{cut}}=3.0$ (\texttt{main\_008}), la prestazione di 1Q a $10\,\tau_s$ scende ulteriormente ($P_{\text{mediana}} = 0.310$), perché il filtro impedisce quelle oscillazioni ad alta frequenza.
-    \item \textbf{Interpretazione fisica più chiara:} il risultato qualitativo che avevo intravisto in v1 su Fock 10 a $T=10\,\tau_s$ (1Q non ce la fa, 2Q sì) è confermato anche in v2, ma ora posso distinguere il perché: grazie ai casi \texttt{2q\_normalized} introdotti in v2, vedo che il salto di prestazioni a $T=10\,\tau_s$ non dipende semplicemente dall'avere due qubit, ma dal fatto che con $g_1=g_2=0.3$ l'accoppiamento complessivo è $\sqrt{2}$ volte più grande, coadiuvato dalla maggiore libertà dei due canali indipendenti.
+    \item \textbf{Eliminazione del crollo post-smoothing e coerenza fisica:} ottimizzando direttamente il comando continuo filtrato con gradiente esatto, in v2 sparisce la perdita del $2\%\text{--}7\%$ causata in v1 dallo smoothing PCHIP a posteriori ($P_{\text{target}}$ passa da $\approx 0.976$ a $0.999995$ a $20\,\tau_s$, e da $\approx 0.926$ a $0.99997$ a $10\,\tau_s$ senza filtro). Sul caso 1Q a $10\,\tau_s$ senza filtro (\texttt{main\_010}), il miglior seed v2 riproduce lo stesso limite di v1 ($F_{\text{root}} = 0.8385$ vs $0.8397$), ma chiarisce che tale soluzione non supera il check \texttt{time\_grid}.
+    \item \textbf{Perché in v2 la fase CRAB si ferma a probabilità basse mentre in v1 arrivava a $F \approx 0.95\text{--}0.99$:}
+    Nei report della v2 si nota che dopo il solo passo CRAB la probabilità target $P_{\text{CRAB}}$ è piccola (ad es.\ $\sim 10^{-4}\text{--}10^{-2}$ su $n=10$, per poi salire a $>0.99999$ in GRAPE), mentre in v1 CRAB arrivava a $F_{\text{root}} \approx 0.96\text{--}0.99$. Le cause sono quattro scelte progettuali precise della v2:
+    \begin{enumerate}
+        \item \emph{Vincoli di ampiezza imposti già durante CRAB (\texttt{feasible\_nodes}):} in v1 la ricerca CRAB era completamente \textbf{non vincolata} (\texttt{clip\_neg=False}, \texttt{clip\_pos=False}) e Nelder--Mead raggiungeva $F \approx 0.98$ solo spingendo i drive a escursioni non fisiche $\Omega_D/\omega_c \in [-2.8, +7.5]$ (incluse frequenze totali negative!), che poi dovevano essere tagliate bruscamente passandole a GRAPE in $[0.5, 3.0]$. In v2, invece, ogni tentativo CRAB viene riscalato globalmente da \texttt{feasible\_nodes} per restare sempre dentro i limiti fisici $\Omega_j(t) \in [0.5, 3.0]$ ($\delta_j \in [-1.5, +1.0]$): se la somma delle 20 armoniche presenta anche un solo picco sopra $+1.0$, l'intera forma d'onda viene contratta verso zero, limitando l'energia media pompata da CRAB.
+        \item \emph{Inizializzazione vicina a zero e budget fisso:} in v2 i coefficienti iniziali di Fourier sono estratti con deviazione standard piccola ($\sigma_0 = 0.1$, contro $[-0.5, 0.5]$ in v1) e Nelder--Mead ha un tetto fisso di $6000$ valutazioni (mentre in v1 \texttt{max\_iter=None} su 80 parametri arrivava a $16\,000$ valutazioni), oltre all'inviluppo $\sin^2(\pi t/T)$ e all'attenuazione del filtro passa-basso $\omega_{\text{cut}}=3.0$.
+        \item \emph{Metrica riportata ($P$ vs $\sqrt{P}$):} in v1 CRAB riportava la radice $F_{\text{root}} = \sqrt{P}$, mentre le tabelle v2 riportano $P = F_{\text{root}}^2$ (ad es.\ $P_{\text{CRAB}} = 0.01$ corrisponde a $F_{\text{root}} = 0.10$).
+        \item \emph{Cambio di ruolo tra CRAB e GRAPE:} grazie al gradiente analitico esatto (Fréchet) e all'obiettivo \texttt{root} (che amplifica il gradiente di $1/(2\sqrt{P+\varepsilon})$ quando $P \ll 1$), in v2 non serve più che CRAB trovi già la soluzione finale con ampiezze non fisiche: a GRAPE basta che CRAB rompa la simmetria del vuoto dentro il dominio ammissibile ($P_{\text{CRAB}} \sim 10^{-4}\text{--}10^{-1}$) per convergere in poche centinaia di iterazioni a $P > 0.99999$.
+    \end{enumerate}
 \end{itemize}
 
-\section{Aspetti ancora aperti e cosa valuterò dopo l'ultimo main}
+\section{Aspetti residui, ottimizzazione dei tempi di calcolo e prossimi passi}
 
-\begin{enumerate}
-    \item \textbf{Completamento di \texttt{main\_011} (Fock $n=10$, $T=20\,\tau_s$, senza filtro):}
-    \todo{inserire qui i risultati di \texttt{main\_011} e verificare se anche \texttt{2q\_normalized\_common} raggiunge 8/8 senza filtro, oltre a confrontare fluenza e banda rispetto a \texttt{main\_009}.}
-    \item \textbf{Fallimento del check \texttt{time\_grid} nei tentativi che non raggiungono il target a $T=10\,\tau_s$:}
-    In tutti i casi a $T=10\,\tau_s$ dove l'ottimizzatore resta lontano da $P=0.99$ (\texttt{1q} e \texttt{2q\_normalized} in \texttt{main\_006}, \texttt{main\_008}, \texttt{main\_010}, e \texttt{2q} filtrati in \texttt{main\_008}), il controllo \texttt{time\_grid} fallisce perché la differenza di fedeltà tra il propagatore midpoint a $N=1000$ intervalli e l'evoluzione continua \texttt{sesolve} supera la soglia di $10^{-4}$. Quando non riesce a salire di probabilità con una dinamica regolare, GRAPE spinge i nodi a variare rapidamente tra uno step e l'altro per spremere qualche punto percentuale nel propagatore discreto. Per quei casi i numeri continui ($P_{\text{target}}$ da \texttt{sesolve}) indicano chiaramente che il target non viene raggiunto, ma se volessi certificare fino alla quarta cifra decimale il valore massimo ottenibile a $T=10\,\tau_s$ con filtro per \texttt{2q\_independent} ($P \approx 0.96$), dovrei testare quel singolo caso raddoppiando gli intervalli ($N=2000$).
+\subsection*{1. Questioni fisiche e numeriche emerse dalla campagna}
+\begin{itemize}
+    \item \textbf{Fallimento del check \texttt{time\_grid} nei soli tentativi non conversi a $T=10\,\tau_s$:}
+    In tutte le configurazioni che raggiungono il target tutti gli 11 controlli numerici sono superati con ampio margine (incluso il troncamento $\text{dim}=60$ vs $80$, con errore $\sim 10^{-10}\text{--}10^{-9}$). Nei soli casi a $T=10\,\tau_s$ lontani dalla soglia (\texttt{1q} e \texttt{2q\_normalized} in \texttt{main\_006}/\texttt{008}/\texttt{010}, e \texttt{2q} filtrati in \texttt{main\_008}), fallisce \texttt{time\_grid} (scarto $\sim 2\times 10^{-4}\text{--}10^{-3} > 10^{-4}$ tra midpoint a $N=1000$ e \texttt{sesolve}) perché GRAPE, in assenza di penalità sullo slew rate, forza variazioni rapide tra nodi adiacenti.
     \item \textbf{Tenuta dello stato dopo $T$ (\texttt{hold\_time}):}
-    Nelle simulazioni v2 osservo il sistema per ulteriori $2\,\tau_s$ dopo $T$ a comando spento (come mostrato nella parte destra della Figura~\ref{fig:dinamica_fock6_t10}). Poiché in regime USC l'accoppiamento $g$ con i qubit non viene spento a $t=T$ (e con il filtro attivo c'è anche la coda esponenziale del filtro che si scarica), lo stato di Fock preparato a $t=T$ scambia rapidamente energia con i qubit e la probabilità $P_{\text{target}}$ scende già durante l'hold (arrivando a minimi di $\sim 0.02 - 0.28$ per $n=6$ e $n=10$). Questo è un aspetto fisico del modello con $g$ fisso di cui tener conto.
-    \item \textbf{Target Cat e Squeezed in v2:}
-    I blocchi per lo stato Cat ($\alpha = 2.0$) e lo stato Squeezed ($3\text{ dB}$) sono già predisposti in \texttt{configurazione\_campagna.jsonc} ma sono stati tenuti disattivati per completare prima lo studio sistematico sugli stati di Fock. Visto quanto lo stato Cat soffriva lo smoothing PCHIP in v1 ($0.999 \to 0.899$), sarà molto interessante vedere quanto guadagna nella v2 con il filtro incluso nell'ottimizzazione.
+    Durante i $2\,\tau_s$ di \texttt{hold\_time} a comando spento dopo $T$ (Figura~\ref{fig:dinamica_fock6_t10}), poiché in regime USC l'accoppiamento $g$ con i qubit resta attivo (e si scarica la coda esponenziale del filtro), lo stato di Fock scambia rapidamente energia con i qubit ($P_{\text{target}}$ scende fino a minimi di $\sim 0.02\text{--}0.28$ per $n=6, 10$).
+\end{itemize}
+
+\subsection*{2. Analisi post-processing sui dati già salvati (\texttt{analyze\_run.py})}
+Prima di avviare nuove campagne di ottimizzazione, i polsi ottimali già salvati e validati permettono tre verifiche rapide:
+\begin{enumerate}
+    \item \textbf{Robustezza a errori statici di calibrazione (\texttt{static\_noise\_ensemble}):} campionare fluttuazioni gaussiane dell'$1\%\text{--}2\%$ sul guadagno dei canali, detuning statico sulle frequenze bare $\omega_{q,j}$ e asimmetrie sugli accoppiamenti $g_1 \neq g_2$ su \texttt{main\_007} ($n=6$) e \texttt{main\_009} ($n=10$), confrontando la tenuta di \texttt{1q}, \texttt{2q\_common} e \texttt{2q\_independent}.
+    \item \textbf{Sensibilità alla larghezza di banda dell'attuatore (\texttt{filter\_scan}):} applicare a posteriori frequenze di taglio $\omega_{\text{cut}} \in [1.5, 6.0]\,\omega_c$ agli impulsi salvati per tracciare la curva di degradazione $P_{\text{target}}(\omega_{\text{cut}})$.
+    \item \textbf{Evoluzione dissipativa in sistema aperto (\texttt{dressed\_bath\_evolution}, cfr.\ Fig.~4b del paper):} nel paper, su Fock $|6\rangle$ a $T=20\,\tau_s$ con bagno Ohmico a $\eta = 10^{-4}$, la fedeltà di \texttt{1q} scende da $0.995$ a $0.901$. Propagando sotto lo stesso bagno dissipativo l'impulso di \texttt{2q\_independent} a durata dimezzata $T=10\,\tau_s$ (\texttt{main\_006}, dove 1Q non converge) contro l'impulso di \texttt{1q} a $T=20\,\tau_s$ (\texttt{main\_007}), si può verificare direttamente quanto il dimezzamento del tempo $T$ riduca le perdite fotoniche in cavità.
+\end{enumerate}
+
+\subsection*{3. Riduzione dei tempi di simulazione per le run future (senza perdita di affidabilità)}
+Dall'analisi dei tempi di esecuzione e delle storie di convergenza (\texttt{accepted\_iterations}) delle 320 pipeline emergono margini di velocizzazione di un fattore $3\times\text{--}5\times$:
+\begin{enumerate}
+    \item \textbf{Taglio delle valutazioni CRAB da $6000$ a $1200\text{--}1500$ ($-65\%$ del tempo totale):} nella campagna la fase CRAB ha assorbito l'$83\%\text{--}92\%$ del tempo di calcolo (ad es.\ in \texttt{main\_009} su \texttt{2q\_independent}: $790\text{ min}$ per CRAB contro $146\text{ min}$ per GRAPE e $0.3\text{ min}$ per la validazione), perché ogni valutazione CRAB esegue $N=2000$ diagonalizzazioni midpoint. Il collaudo \texttt{pilot\_002} sullo stesso Fock $|10\rangle$ a $20\,\tau_s$ dimostra però che con sole \textbf{$1200$ valutazioni CRAB e $80$ iterazioni GRAPE} tutti i seed raggiungono già $P \ge 0.9990$ validato in $78\text{ min}$ invece di $898\text{ min}$ ($11.5\times$ più veloce).
+    \item \textbf{Riduzione delle iterazioni GRAPE da $600$ a $250\text{--}300$:} le storie di accettazione mostrano che in tutti i casi validati GRAPE supera la soglia $P \ge 0.99$ entro $10\text{--}70$ iterazioni, $P \ge 0.999$ entro $25\text{--}130$ iterazioni e $P \ge 0.9999$ entro $50\text{--}250$ iterazioni (a $300$ iterazioni la mediana è già $\ge 0.99996$). Le iterazioni $300\text{--}600$ servono solo a limare la quinta cifra decimale o, nei casi non conversi a $10\,\tau_s$, ad accentuare le oscillazioni ad alta frequenza.
+    \item \textbf{Adeguamento di \texttt{dimension} al numero medio di fotoni:} per target con $\langle n\rangle \le 4$ (come Squeezed $3\text{ dB}$ e Cat $\alpha=2.0$), usare $\text{dim}=45\text{--}50$ (validato a $65\text{--}70$) invece di $60\to 80$ mantiene intatta la precisione sul troncamento riducendo il costo cubico $\mathcal{O}(D^3)$ delle diagonalizzazioni di circa il $45\%$.
+\end{enumerate}
+
+\subsection*{4. Piccoli interventi migliorativi sul codice v2 e nuove simulazioni (Cat e Squeezed)}
+\begin{enumerate}
+    \item \textbf{Griglia temporale dedicata per CRAB (\texttt{crab\_intervals}):} valutare CRAB su una griglia più rada (es.\ $N_{\text{CRAB}} = 400\text{--}500$, ampiamente sufficiente per armoniche $\omega \le 3\omega_c$ filtrate) passando alla griglia fine $N=2000$ solo in GRAPE ridurrebbe di un ulteriore fattore $4\times$ il costo di CRAB.
+    \item \textbf{Criterio di \emph{early stopping} in GRAPE e regolarizzazione leggera:} fermare GRAPE quando $P_{\text{target}}$ supera una soglia di saturazione (es.\ $0.99995$ a penalità nulle) e introdurre un peso minimo $\texttt{slew\_weight} \sim 10^{-5}$ a $T=10\,\tau_s$ per evitare che L-BFGS-B insegua guadagni spurii di discretizzazione che fanno fallire \texttt{time\_grid}.
+    \item \textbf{Salvataggio nativo di $C_2$ in \texttt{qoc/metrics.py} e \texttt{reporting.py}:} includere direttamente $C_{2,\text{tot}}$ e $C_{2,\text{max ch}}$ nei JSON e nei CSV generati dalla pipeline.
+    \item \textbf{Avvio del blocco Cat ($\alpha=2.0$) e Squeezed ($3\text{ dB}$) in v2:} con i budget ottimizzati, attivare il blocco \texttt{optional\_cat\_squeezed} in \texttt{configurazione\_campagna.jsonc} per verificare il recupero della perdita post-PCHIP ($\sim 0.999 \to 0.899$) osservata in v1 sullo stato Cat.
 \end{enumerate}
 
 \end{document}
