@@ -31,7 +31,7 @@
 \newcommand{\todo}[1]{\textcolor{red!75!black}{\textbf{[Da aggiornare: #1]}}}
 
 \title{\textbf{Resoconto del lavoro svolto:\\estensione a due qubit e passaggio alla pipeline v2}}
-\date{Ottobre 2026}
+\date{}
 
 \begin{document}
 
@@ -40,7 +40,7 @@
 \section{Introduzione}
 
 \noindent
-L'obiettivo dello stage è estendere questo schema a due qubit accoppiati alla stessa cavità per capire se, e in quali condizioni, due qubit permettano di preparare gli stati target meglio o in tempi più brevi rispetto a un qubit solo, oppure con controlli meno impegnativi in termini di escursione, rapidità di variazione e banda.
+L'obiettivo dello stage è estendere  a due qubit accoppiati alla stessa cavità il sistema per capire se, e in quali condizioni, due qubit permettano di preparare gli stati target meglio o in tempi più brevi rispetto a un qubit solo, oppure con controlli meno impegnativi in termini di escursione, rapidità di variazione e banda.
 
 \begin{enumerate}
     \item \textbf{L'aumento dell'accoppiamento collettivo efficace (effetto superradiante di dipolo):} nella cavità entrambi i qubit interagiscono con lo stesso modo del campo elettromagnetico attraverso l'operatore di dipolo collettivo $D_x = g_1 \sigma_{x,1} + g_2 \sigma_{x,2}$:
@@ -230,7 +230,7 @@ dove $\operatorname{sinc}(x) = \sin(\pi x)/(\pi x)$ vale $1$ per $x=0$, rendendo
 (Articoli di riferimento, ho utilizzato gemini per capire se e come implementarli nel nostro caso).
 
 \subsection*{Scelta della funzione obiettivo \texttt{root} e configurazione dei 5 casi}
-Quando si cercano stati di Fock ad alto numero di fotoni (come $|n=10\rangle$) partendo dal vuoto $|0,g\rangle$, all'inizio della ricerca la probabilità di occupazione del target $P_{\text{target}}$ è prossima a zero ($\sim 10^{-8}$). Usando la funzione costo lineare nella probabilità $J_{\text{prob}} = 1 - P_{\text{target}}$, in quella regione il paesaggio è quasi piatto e il gradiente è così piccolo da far fermare subito \texttt{L-BFGS-B} per tolleranza sul gradiente. Per evitare questo blocco ho introdotto nella campagna v2 l'obiettivo radice regolarizzato (\texttt{root}):
+Ho notato che con stati di Fock ad alto numero di fotoni (come $|n=10\rangle$) partendo dal vuoto $|0,g\rangle$, all'inizio della ricerca la probabilità di occupazione del target $P_{\text{target}}$ è prossima a zero ($\sim 10^{-8}$). Usando la funzione costo lineare nella probabilità $J_{\text{prob}} = 1 - P_{\text{target}}$, in quella regione il gradiente è così piccolo da far fermare subito \texttt{L-BFGS-B} per tolleranza sul gradiente. Per evitare questo blocco ho introdotto nella campagna v2 l'obiettivo radice regolarizzato (\texttt{root}):
 \begin{equation}
     J_{\text{root}} = \sqrt{1 + \varepsilon} - \sqrt{P_{\text{target}} + \varepsilon} + \text{penalità}, \qquad \varepsilon = 10^{-12},
 \end{equation}
@@ -368,7 +368,7 @@ La campagna principale comprende 320 pipeline (8 seed $\times$ 5 sistemi $\times
     \begin{figure}[H]
         \centering
         \includegraphics[width=0.95\textwidth]{figure/fig4_dinamica_fock6_t10.pdf}
-        \caption{Dinamica temporale della probabilità target $P_{|n=6\rangle}(t)$ (in alto) e del numero medio di fotoni $\langle n \rangle(t)$ (in basso) per Fock $|n=6\rangle$ a durata dimezzata $T = 10\,\tau_s$ (\texttt{main\_006}). Mentre \texttt{1q} e \texttt{2q\_normalized\_independent} non riescono a pompare in media i 6 fotoni entro $10\,\tau_s$, sia \texttt{2q\_common} sia \texttt{2q\_independent} raggiungono $P > 0.99998$ a $t=T$. Dopo $t=10\,\tau_s$ (linea tratteggiata verticale) è visibile la fase di \texttt{hold\_time} a comando spento, in cui lo stato scambia energia con i qubit a causa dell'accoppiamento $g$ sempre attivo.}
+        \caption{Dinamica temporale della probabilità target $P_{|n=6\rangle}(t)$ (in alto) e del numero medio di fotoni $\langle n \rangle(t)$ (in basso) per Fock $|n=6\rangle$ a durata dimezzata $T = 10\,\tau_s$ (\texttt{main\_006}). è visibile la fase di \texttt{hold\_time} a comando spento, in cui lo stato scambia energia con i qubit a causa dell'accoppiamento $g$ sempre attivo.}
         \label{fig:dinamica_fock6_t10}
     \end{figure}
 
@@ -376,7 +376,7 @@ La campagna principale comprende 320 pipeline (8 seed $\times$ 5 sistemi $\times
     A parità di accoppiamento fisico ($g_1=g_2=0.3$), avere due controlli indipendenti invece di un controllo comune dà un vantaggio visibile quando il problema diventa più stretto:
     \begin{itemize}
         \item su Fock $n=6$ a $T=10\,\tau_s$ (\texttt{main\_006}), \texttt{2q\_independent} porta a termine 8/8 seed con mediana $0.999987$ contro i 7/8 di \texttt{2q\_common} (mediana $0.998268$);
-        \item su Fock $n=10$ a $T=10\,\tau_s$ senza filtro (\texttt{main\_010}, Figura~\ref{fig:filtro_vs_nofiltro}), \texttt{2q\_independent} valida \textbf{8/8} seed sopra soglia (mediana $0.999937$), mentre \texttt{2q\_common} si ferma a 2/8 seed validati (mediana $0.981896$).
+        \item su Fock $n=10$ a $T=10\,\tau_s$ senza filtro (\texttt{main\_010}, Figura~\ref{fig:filtro_vs_nofiltro}), \texttt{2q\_independent} valida 8/8 seed sopra soglia (mediana $0.999937$), mentre \texttt{2q\_common} si ferma a 2/8 seed validati (mediana $0.981896$).
     \end{itemize}
     Anche a parità di accoppiamento normalizzato ($g_j = 0.3/\sqrt{2}$), \texttt{2q\_normalized\_independent} ottiene sistematicamente mediane più alte di \texttt{2q\_normalized\_common} nei regimi a $10\,\tau_s$ ($0.749$ vs $0.609$ su $n=6$; $0.731$ vs $0.561$ su $n=10$ senza filtro) e 8/8 contro 6/8 su $n=10$ a $20\,\tau_s$. Tuttavia, da solo (senza l'aumento di $g_{\text{eff}}$), il secondo canale non basta a far raggiungere la soglia $0.99$ a $T=10\,\tau_s$ per $n=6$ o $n=10$.
 
@@ -425,7 +425,7 @@ Nella Tabella~\ref{tab:confronto_v1_v2} (e Figura~\ref{fig:confronto_v1_v2}) son
 \begin{figure}[H]
     \centering
     \includegraphics[width=0.76\textwidth]{figure/fig3_confronto_v1_v2.pdf}
-    \caption{Confronto diretto della probabilità target $P_{\text{target}}$ tra le run della v1 (dopo smoothing PCHIP) e le mediane della campagna v2 (con e senza filtro).}
+    \caption{}
     \label{fig:confronto_v1_v2}
 \end{figure}
 
@@ -457,54 +457,57 @@ Nella Tabella~\ref{tab:confronto_v1_v2} (e Figura~\ref{fig:confronto_v1_v2}) son
 \bottomrule
 \end{tabular}%
 }
-\caption{Confronto diretto tra i risultati della pipeline preliminare v1 e quelli della campagna v2.}
+\caption{}
 \label{tab:confronto_v1_v2}
 \end{table}
 
 \begin{itemize}
-    \item \textbf{Eliminazione del crollo post-smoothing e coerenza fisica:} ottimizzando direttamente il comando continuo filtrato con gradiente esatto, in v2 sparisce la perdita del $2\%\text{--}7\%$ causata in v1 dallo smoothing PCHIP a posteriori ($P_{\text{target}}$ passa da $\approx 0.976$ a $0.999995$ a $20\,\tau_s$, e da $\approx 0.926$ a $0.99997$ a $10\,\tau_s$ senza filtro). Sul caso 1Q a $10\,\tau_s$ senza filtro (\texttt{main\_010}), il miglior seed v2 riproduce lo stesso limite di v1 ($F_{\text{root}} = 0.8385$ vs $0.8397$), ma chiarisce che tale soluzione non supera il check \texttt{time\_grid}.
+    \item \textbf{Eliminazione del crollo post-smoothing e coerenza fisica:} ottimizzando direttamente il comando continuo filtrato con gradiente esatto, in v2 sparisce la perdita del $2\%\text{--}7\%$ causata in v1 dallo smoothing PCHIP a posteriori. Sul caso 1Q a $10\,\tau_s$ senza filtro (\texttt{main\_010}), il miglior seed v2 riproduce lo stesso limite di v1 ($F_{\text{root}} = 0.8385$ vs $0.8397$).
     \item \textbf{Perché in v2 la fase CRAB si ferma a probabilità basse mentre in v1 arrivava a $F \approx 0.95\text{--}0.99$:}
-    Nei report della v2 si nota che dopo il solo passo CRAB la probabilità target $P_{\text{CRAB}}$ è piccola (ad es.\ $\sim 10^{-4}\text{--}10^{-2}$ su $n=10$, per poi salire a $>0.99999$ in GRAPE), mentre in v1 CRAB arrivava a $F_{\text{root}} \approx 0.96\text{--}0.99$. Le cause sono quattro scelte progettuali precise della v2:
+    Nei report della v2 si nota che dopo il solo passo CRAB la probabilità target $P_{\text{CRAB}}$ è piccola (ad es.\ $\sim 10^{-4}\text{--}10^{-2}$ su $n=10$, per poi salire a $>0.99999$ in GRAPE), mentre in v1 CRAB arrivava a $F_{\text{root}} \approx 0.96\text{--}0.99$. Elenco di seguito le probabili cause:
     \begin{enumerate}
-        \item \emph{Vincoli di ampiezza imposti già durante CRAB (\texttt{feasible\_nodes}):} in v1 la ricerca CRAB era completamente \textbf{non vincolata} (\texttt{clip\_neg=False}, \texttt{clip\_pos=False}) e Nelder--Mead raggiungeva $F \approx 0.98$ solo spingendo i drive a escursioni non fisiche $\Omega_D/\omega_c \in [-2.8, +7.5]$ (incluse frequenze totali negative!), che poi dovevano essere tagliate bruscamente passandole a GRAPE in $[0.5, 3.0]$. In v2, invece, ogni tentativo CRAB viene riscalato globalmente da \texttt{feasible\_nodes} per restare sempre dentro i limiti fisici $\Omega_j(t) \in [0.5, 3.0]$ ($\delta_j \in [-1.5, +1.0]$): se la somma delle 20 armoniche presenta anche un solo picco sopra $+1.0$, l'intera forma d'onda viene contratta verso zero, limitando l'energia media pompata da CRAB.
-        \item \emph{Inizializzazione vicina a zero e budget fisso:} in v2 i coefficienti iniziali di Fourier sono estratti con deviazione standard piccola ($\sigma_0 = 0.1$, contro $[-0.5, 0.5]$ in v1) e Nelder--Mead ha un tetto fisso di $6000$ valutazioni (mentre in v1 \texttt{max\_iter=None} su 80 parametri arrivava a $16\,000$ valutazioni), oltre all'inviluppo $\sin^2(\pi t/T)$ e all'attenuazione del filtro passa-basso $\omega_{\text{cut}}=3.0$.
-        \item \emph{Metrica riportata ($P$ vs $\sqrt{P}$):} in v1 CRAB riportava la radice $F_{\text{root}} = \sqrt{P}$, mentre le tabelle v2 riportano $P = F_{\text{root}}^2$ (ad es.\ $P_{\text{CRAB}} = 0.01$ corrisponde a $F_{\text{root}} = 0.10$).
-        \item \emph{Cambio di ruolo tra CRAB e GRAPE:} grazie al gradiente analitico esatto (Fréchet) e all'obiettivo \texttt{root} (che amplifica il gradiente di $1/(2\sqrt{P+\varepsilon})$ quando $P \ll 1$), in v2 non serve più che CRAB trovi già la soluzione finale con ampiezze non fisiche: a GRAPE basta che CRAB rompa la simmetria del vuoto dentro il dominio ammissibile ($P_{\text{CRAB}} \sim 10^{-4}\text{--}10^{-1}$) per convergere in poche centinaia di iterazioni a $P > 0.99999$.
+        \item In v1 la ricerca CRAB era completamente non vincolata e Nelder--Mead raggiungeva $F \approx 0.98$ solo spingendo i drive a escursioni non fisiche $\Omega_D/\omega_c \in [-2.8, +7.5]$ (incluse frequenze totali negative), che poi dovevano essere tagliate passandole a GRAPE in $[0.5, 3.0]$. In v2, invece, ogni tentativo CRAB viene riscalato globalmente da \texttt{feasible\_nodes} per restare sempre dentro i limiti fisici $\Omega_j(t) \in [0.5, 3.0]$ ($\delta_j \in [-1.5, +1.0]$): se la somma delle 20 armoniche presenta anche un solo picco sopra $+1.0$, l'intera forma d'onda viene contratta verso zero, limitando l'energia media.
+        \item In v2 i coefficienti iniziali di Fourier sono estratti con deviazione standard piccola ($\sigma_0 = 0.1$, contro $[-0.5, 0.5]$ in v1) e Nelder--Mead ha un tetto fisso di $6000$ valutazioni (mentre in v1 \texttt{max\_iter=None} su 80 parametri arrivava a $16\,000$ valutazioni).
+        \item In v1 CRAB riportava la radice $F_{\text{root}} = \sqrt{P}$, mentre le tabelle v2 riportano $P = F_{\text{root}}^2$.
     \end{enumerate}
 \end{itemize}
 
-\section{Aspetti residui, ottimizzazione dei tempi di calcolo e prossimi passi}
+\section{Ultime considerazioni, ottimizzazione dei tempi di calcolo e prossimi passi}
 
 \subsection*{1. Questioni fisiche e numeriche emerse dalla campagna}
 \begin{itemize}
-    \item \textbf{Fallimento del check \texttt{time\_grid} nei soli tentativi non conversi a $T=10\,\tau_s$:}
-    In tutte le configurazioni che raggiungono il target tutti gli 11 controlli numerici sono superati con ampio margine (incluso il troncamento $\text{dim}=60$ vs $80$, con errore $\sim 10^{-10}\text{--}10^{-9}$). Nei soli casi a $T=10\,\tau_s$ lontani dalla soglia (\texttt{1q} e \texttt{2q\_normalized} in \texttt{main\_006}/\texttt{008}/\texttt{010}, e \texttt{2q} filtrati in \texttt{main\_008}), fallisce \texttt{time\_grid} (scarto $\sim 2\times 10^{-4}\text{--}10^{-3} > 10^{-4}$ tra midpoint a $N=1000$ e \texttt{sesolve}) perché GRAPE, in assenza di penalità sullo slew rate, forza variazioni rapide tra nodi adiacenti.
-    \item \textbf{Tenuta dello stato dopo $T$ (\texttt{hold\_time}):}
-    Durante i $2\,\tau_s$ di \texttt{hold\_time} a comando spento dopo $T$ (Figura~\ref{fig:dinamica_fock6_t10}), poiché in regime USC l'accoppiamento $g$ con i qubit resta attivo (e si scarica la coda esponenziale del filtro), lo stato di Fock scambia rapidamente energia con i qubit ($P_{\text{target}}$ scende fino a minimi di $\sim 0.02\text{--}0.28$ per $n=6, 10$).
+    \item \textbf{Fallimento del check \texttt{time\_grid} nei tentativi che non raggiungono il target a $T=10\,\tau_s$:}
+In tutti i casi a $T=10\,\tau_s$ dove l'ottimizzatore resta lontano da $P=0.99$ (\texttt{1q} e \texttt{2q\_normalized} in \texttt{main\_006}, \texttt{main\_008}, \texttt{main\_010}, e \texttt{2q} filtrati in \texttt{main\_008}), il controllo \texttt{time\_grid} fallisce perché la differenza di fedeltà tra il propagatore midpoint a $N=1000$ intervalli e l'evoluzione continua \texttt{sesolve} supera la soglia di $10^{-4}$. Probabilmente quando non riesce a salire di probabilità con una dinamica regolare, GRAPE spinge i nodi a variare rapidamente tra uno step e l'altro. Per quei casi comunque i numeri continui ($P_{\text{target}}$ da \texttt{sesolve}) indicano chiaramente che il target non viene raggiunto.
+\item \textbf{Tenuta dello stato dopo $T$ (\texttt{hold\_time}):}
+Nelle simulazioni v2 osservo il sistema per ulteriori $2\,\tau_s$ dopo $T$, con il comando in ingresso posto a zero (come mostrato nella parte destra della Figura~\ref{fig:dinamica_fock6_t10}). Tuttavia, in regime USC l'accoppiamento $g$ con i qubit resta attivo anche per $t>T$ e, con il filtro attivo, il comando effettivo presenta inoltre una coda esponenziale che si esaurisce durante l'hold. Di conseguenza, lo stato di Fock preparato a $t=T$ scambia rapidamente energia con i qubit e la probabilità $P_{\text{target}}$ può diminuire già durante l'hold, raggiungendo minimi compresi tra $\sim 0.02$ e $0.28$ per $n=6$ e $n=10$.
 \end{itemize}
 
-\subsection*{2. Analisi post-processing sui dati già salvati (\texttt{analyze\_run.py})}
-Prima di avviare nuove campagne di ottimizzazione, i polsi ottimali già salvati e validati permettono tre verifiche rapide:
+\subsection*{2. Possibili analisi sui dati già salvati}
+Prima di avviare nuove campagne di simulazione possiamo usare i dati già salvati per simulare scenari più realistici:
 \begin{enumerate}
-    \item \textbf{Robustezza a errori statici di calibrazione (\texttt{static\_noise\_ensemble}):} campionare fluttuazioni gaussiane dell'$1\%\text{--}2\%$ sul guadagno dei canali, detuning statico sulle frequenze bare $\omega_{q,j}$ e asimmetrie sugli accoppiamenti $g_1 \neq g_2$ su \texttt{main\_007} ($n=6$) e \texttt{main\_009} ($n=10$), confrontando la tenuta di \texttt{1q}, \texttt{2q\_common} e \texttt{2q\_independent}.
-    \item \textbf{Sensibilità alla larghezza di banda dell'attuatore (\texttt{filter\_scan}):} applicare a posteriori frequenze di taglio $\omega_{\text{cut}} \in [1.5, 6.0]\,\omega_c$ agli impulsi salvati per tracciare la curva di degradazione $P_{\text{target}}(\omega_{\text{cut}})$.
-    \item \textbf{Evoluzione dissipativa in sistema aperto (\texttt{dressed\_bath\_evolution}, cfr.\ Fig.~4b del paper):} nel paper, su Fock $|6\rangle$ a $T=20\,\tau_s$ con bagno Ohmico a $\eta = 10^{-4}$, la fedeltà di \texttt{1q} scende da $0.995$ a $0.901$. Propagando sotto lo stesso bagno dissipativo l'impulso di \texttt{2q\_independent} a durata dimezzata $T=10\,\tau_s$ (\texttt{main\_006}, dove 1Q non converge) contro l'impulso di \texttt{1q} a $T=20\,\tau_s$ (\texttt{main\_007}), si può verificare direttamente quanto il dimezzamento del tempo $T$ riduca le perdite fotoniche in cavità.
+    \item Applicare errori di offset statico, errori di guadagno e offset di fase sui due canali degli attuatori.
+    \item Applicare a posteriori frequenze di taglio $\omega_{\text{cut}}$
+    \item \text{Evoluzione dissipativa in sistema aperto}
 \end{enumerate}
 
-\subsection*{3. Riduzione dei tempi di simulazione per le run future (senza perdita di affidabilità)}
-Dall'analisi dei tempi di esecuzione e delle storie di convergenza (\texttt{accepted\_iterations}) delle 320 pipeline emergono margini di velocizzazione di un fattore $3\times\text{--}5\times$:
+\subsection*{3. Considerazioni per ridurre i tempi di simulazioni per le run future}
 \begin{enumerate}
-    \item \textbf{Taglio delle valutazioni CRAB da $6000$ a $1200\text{--}1500$ ($-65\%$ del tempo totale):} nella campagna la fase CRAB ha assorbito l'$83\%\text{--}92\%$ del tempo di calcolo (ad es.\ in \texttt{main\_009} su \texttt{2q\_independent}: $790\text{ min}$ per CRAB contro $146\text{ min}$ per GRAPE e $0.3\text{ min}$ per la validazione), perché ogni valutazione CRAB esegue $N=2000$ diagonalizzazioni midpoint. Il collaudo \texttt{pilot\_002} sullo stesso Fock $|10\rangle$ a $20\,\tau_s$ dimostra però che con sole \textbf{$1200$ valutazioni CRAB e $80$ iterazioni GRAPE} tutti i seed raggiungono già $P \ge 0.9990$ validato in $78\text{ min}$ invece di $898\text{ min}$ ($11.5\times$ più veloce).
-    \item \textbf{Riduzione delle iterazioni GRAPE da $600$ a $250\text{--}300$:} le storie di accettazione mostrano che in tutti i casi validati GRAPE supera la soglia $P \ge 0.99$ entro $10\text{--}70$ iterazioni, $P \ge 0.999$ entro $25\text{--}130$ iterazioni e $P \ge 0.9999$ entro $50\text{--}250$ iterazioni (a $300$ iterazioni la mediana è già $\ge 0.99996$). Le iterazioni $300\text{--}600$ servono solo a limare la quinta cifra decimale o, nei casi non conversi a $10\,\tau_s$, ad accentuare le oscillazioni ad alta frequenza.
-    \item \textbf{Adeguamento di \texttt{dimension} al numero medio di fotoni:} per target con $\langle n\rangle \le 4$ (come Squeezed $3\text{ dB}$ e Cat $\alpha=2.0$), usare $\text{dim}=45\text{--}50$ (validato a $65\text{--}70$) invece di $60\to 80$ mantiene intatta la precisione sul troncamento riducendo il costo cubico $\mathcal{O}(D^3)$ delle diagonalizzazioni di circa il $45\%$.
+    \item Taglio delle valutazioni CRAB da $6000$ a $1200\text{--}1500$: nella campagna la fase CRAB ha assorbito l'$83\%\text{--}92\%$ del tempo di calcolo (ad es.\ in \texttt{main\_009} su \texttt{2q\_independent}: $790\text{ min}$ per CRAB contro $146\text{ min}$ per GRAPE e $0.3\text{ min}$ per la validazione), perché ogni valutazione CRAB esegue $N=2000$ diagonalizzazioni midpoint. Il collaudo \texttt{pilot\_002} sullo stesso Fock $|10\rangle$ a $20\,\tau_s$ dimostra però che con sole $1200$ valutazioni CRAB e $80$ iterazioni GRAPE tutti i seed raggiungono già $P \ge 0.9990$ validato in $78\text{ min}$ invece di $898\text{ min}$ ($11.5\times$ più veloce).
+    \item Riduzione delle iterazioni GRAPE da $600$ a $250\text{--}300$: analizzando il log dei risultati si osserva che in tutti i casi validati GRAPE supera la soglia $P \ge 0.99$ entro $10\text{--}70$ iterazioni, $P \ge 0.999$ entro $25\text{--}130$ iterazioni e $P \ge 0.9999$ entro $50\text{--}250$ iterazioni (a $300$ iterazioni la mediana è già $\ge 0.99996$). Le iterazioni $300\text{--}600$ servono solo a limare la quinta cifra decimale o, nei casi non validati a $10\,\tau_s$, ad accentuare le oscillazioni ad alta frequenza.
+    \item Diminuire la dimensione dello spazio: per target con $\langle n\rangle \le 4$ (come Squeezed $3\text{ dB}$ e Cat $\alpha=2.0$), usare $\text{dim}=45\text{--}50$ (validato a $65\text{--}70$) invece di $60\to 80$.
 \end{enumerate}
 
-\subsection*{4. Piccoli interventi migliorativi sul codice v2 e nuove simulazioni (Cat e Squeezed)}
+\subsection*{4. Cambiamenti al codice}
 \begin{enumerate}
-    \item \textbf{Griglia temporale dedicata per CRAB (\texttt{crab\_intervals}):} valutare CRAB su una griglia più rada (es.\ $N_{\text{CRAB}} = 400\text{--}500$, ampiamente sufficiente per armoniche $\omega \le 3\omega_c$ filtrate) passando alla griglia fine $N=2000$ solo in GRAPE ridurrebbe di un ulteriore fattore $4\times$ il costo di CRAB.
-    \item \textbf{Criterio di \emph{early stopping} in GRAPE e regolarizzazione leggera:} fermare GRAPE quando $P_{\text{target}}$ supera una soglia di saturazione (es.\ $0.99995$ a penalità nulle) e introdurre un peso minimo $\texttt{slew\_weight} \sim 10^{-5}$ a $T=10\,\tau_s$ per evitare che L-BFGS-B insegua guadagni spurii di discretizzazione che fanno fallire \texttt{time\_grid}.
-    \item \textbf{Salvataggio nativo di $C_2$ in \texttt{qoc/metrics.py} e \texttt{reporting.py}:} includere direttamente $C_{2,\text{tot}}$ e $C_{2,\text{max ch}}$ nei JSON e nei CSV generati dalla pipeline.
-    \item \textbf{Avvio del blocco Cat ($\alpha=2.0$) e Squeezed ($3\text{ dB}$) in v2:} con i budget ottimizzati, attivare il blocco \texttt{optional\_cat\_squeezed} in \texttt{configurazione\_campagna.jsonc} per verificare il recupero della perdita post-PCHIP ($\sim 0.999 \to 0.899$) osservata in v1 sullo stato Cat.
+    \item Valutare CRAB su una griglia meno fine (es.\ $N_{\text{CRAB}} = 400\text{--}500$) passando alla griglia fine $N=2000$ solo in GRAPE.
+    \item Fermare GRAPE quando $P_{\text{target}}$ supera una soglia di saturazione (es.\ $0.99995$) e introdurre un peso minimo $\texttt{slew\_weight} \sim 10^{-5}$ a $T=10\,\tau_s$.
+    \item Includere direttamente $C_{2,\text{tot}}$ e $C_{2,\text{max ch}}$ nei JSON e nei CSV generati dalla pipeline.
 \end{enumerate}
+
+\noindent
+Con queste modifiche, le future campagne di simulazione dovrebbero essere completate in $\sim 1/10$ del tempo della campagna v2 (tempo di simulazione di 11 giorni).\\
+
+\noindent
+Tutti i log e i dati ottenuti dalla simulazione sono salvati e disponibili per ulteriori analisi.
 
 \end{document}
