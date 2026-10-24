@@ -10,6 +10,9 @@ venv.bak/
 __pycache__/
 *.py[cod]
 *$py.class
+*.egg-info/
+build/
+dist/
 
 # Jupyter Notebook checkpoints
 .ipynb_checkpoints/
@@ -25,7 +28,20 @@ __pycache__/
 .DS_Store
 Thumbs.db
 
-# Private external-archive credentials and generated exports
+# LaTeX build artifacts
+*.aux
+*.bbl
+*.blg
+*.fdb_latexmk
+*.fls
+*.log
+*.out
+*.synctex.gz
+*.toc
+
+# Private external-archive credentials and generated exports/test outputs
 /v2/archive.env
 /v2/exports/
+/v2/results/exports/
+/v2/test_outputs/
 *.npz

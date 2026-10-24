@@ -18,7 +18,7 @@ plt.rcParams.update({
 })
 
 ROOT = Path("/home/edo_laptop/Desktop/Stage_twoqubits")
-CAMP = ROOT / "backup_google_v2/results/campagna_fock_completa_20261005T152239_626536Z"
+CAMP = ROOT / "v2/results/campagna_fock_completa_20261005T152239_626536Z"
 OUT = ROOT / "report_relatrice/figure"
 OUT.mkdir(parents=True, exist_ok=True)
 
@@ -291,10 +291,10 @@ plt.close(fig)
 # ---------------------------------------------------------
 # Copia dei grafici originali delle run v1 (prima della v2)
 # ---------------------------------------------------------
-v1_f6_t20 = ROOT / "results_2q_fock_n6_dim40_T20taus/run_2026-09-30_14-42-12"
-v1_f10_t20 = ROOT / "results_2q_fock_n10_dim40_T20taus/run_2026-10-02_12-17-00"
-v1_f10_t10 = ROOT / "results_both_fock_n10_dim40_T10taus/run_2026-10-02_16-53-17"
-v1_cat_t15 = ROOT / "results_both_cat_2.00_dim40_T15taus/run_2026-10-03_15-06-31"
+v1_f6_t20 = ROOT / "v1/results_2q_fock_n6_dim40_T20taus/run_2026-09-30_14-42-12"
+v1_f10_t20 = ROOT / "v1/results_2q_fock_n10_dim40_T20taus/run_2026-10-02_12-17-00"
+v1_f10_t10 = ROOT / "v1/results_both_fock_n10_dim40_T10taus/run_2026-10-02_16-53-17"
+v1_cat_t15 = ROOT / "v1/results_both_cat_2.00_dim40_T15taus/run_2026-10-03_15-06-31"
 
 # Fock 6 e 10 a T=20 tau_s (2Q)
 shutil.copy2(v1_f6_t20 / "nmean.pdf", OUT / "v1_fock6_t20_2q_nmean.pdf")
