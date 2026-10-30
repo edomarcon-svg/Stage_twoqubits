@@ -1,21 +1,24 @@
-// Campagna proposta: 320 pipeline principali + 16 pipeline di collaudo.
+// Campagna intermedia (Fock 6 e 10 selezionati + Cat alpha=2.0 + Squeezed 3 dB e 8 dB):
+// 17 esperimenti principali (680 pipeline: 5 sistemi x 8 seed), pilot disattivato
+// (usa direttamente il profilo ottimale root + crab_initial_std=0.1 selezionato nella v2).
+//
+// Accorgimenti applicati rispetto alla prima campagna v2:
+// 1. Griglia midpoint separata per CRAB: crab_intervals = 500 a 20*tau_s (375 a 15*tau_s, 250 a 10*tau_s),
+//    passando alla griglia fine intervals = 2000 (1500 a 15*tau_s, 1000 a 10*tau_s) solo in GRAPE.
+// 2. Budget CRAB ridotto a 1500 valutazioni; GRAPE ridotto a max 300 iterazioni (3000 valutazioni)
+//    con arresto anticipato a saturazione grape_stop_probability = 0.99995.
+// 3. Dimensione di Fock adattata per blocco: dim = 60 (-> 80) per Fock n=6,10; dim = 48 (-> 68) per Cat e Squeezed.
+// 4. Salvataggio nativo di c2_paper_total e c2_paper_max_channel nei JSON e nei CSV.
+// 5. Ogni stato ha sia i blocchi con filtro causale (cutoff = 3.0) sia le run di controllo senza filtro (cutoff = null).
+// 6. Slew rate non vincolato in questa fase (max_slew = null, slew_weight = 0.0).
+//
 // Avvio dalla radice del progetto:
-// .venv/bin/python v2/run_campaign.py --config v2/configurazione_campagna.jsonc
-// Prima si può eseguire --validate-config oppure --pilot-only.
-// Il collaudo confronta 4 profili su 2 sistemi e 2 seed riservati.
-// Seleziona UN profilo comune a tutti i casi, senza usare i seed principali.
-// Se nessun profilo produce progressi validati in entrambi i sistemi, si ferma
-// con stato pilot_failed prima delle 320 pipeline: consultare pilot_selection.json.
-// La scelta è empirica sul collaudo, non una garanzia di ottimo globale.
-// Limiti di frequenza totale [0.5,3]; cutoff=3 è un polo, non una banda rigida.
-// null nel blocco senza filtro significa controllo lineare senza risposta hardware.
-// Cat/squeezed sono disponibili nel terzo blocco, disattivato (aggiunge 160 pipeline).
-// warm_starts è opzionale: mantenere separato dalle statistiche casuali.
-// Il tempo di hold è espresso in unità fisiche, qui 2*tau_s(g_ref=0.3).
+// .venv/bin/python v2/run_campaign.py --config v2/configurazione_campagna.jsonc --validate-config
+// .venv/bin/python -u v2/run_campaign.py --config v2/configurazione_campagna.jsonc
 {
-  "name": "campagna_fock_completa",
+  "name": "campagna_intermedia_fock_cat_squeezed",
   "base": {
-    "name": "fock_campaign_base",
+    "name": "intermediate_campaign_base",
     "dimension": 60,
     "intervals": 2000,
     "cases": [
@@ -109,9 +112,11 @@
         0.05,
         3.0
       ],
-      "crab_max_evaluations": 6000,
-      "grape_max_iterations": 600,
-      "grape_max_evaluations": 6000,
+      "crab_intervals": 500,
+      "crab_max_evaluations": 1500,
+      "grape_max_iterations": 300,
+      "grape_max_evaluations": 3000,
+      "grape_stop_probability": 0.99995,
       "refine_top": null,
       "workers": 8,
       "blas_threads": 1,
@@ -120,7 +125,7 @@
       "objective": "root",
       "objective_scale": 1.0,
       "root_epsilon": 1e-12,
-      "crab_initial_std": 0.3,
+      "crab_initial_std": 0.1,
       "warm_starts": []
     },
     "validation": {
@@ -144,7 +149,7 @@
     "target_probability_goal": 0.99
   },
   "pilot": {
-    "enabled": true,
+    "enabled": false,
     "cases": [
       "1q",
       "2q_normalized_independent"
@@ -206,16 +211,26 @@
   },
   "blocks": [
     {
-      "name": "fock_filtered",
+      "name": "fock6_short",
+      "dimension": 60,
       "targets": [
         {
           "kind": "fock",
-          "value": 2
-        },
-        {
-          "kind": "fock",
           "value": 6
-        },
+        }
+      ],
+      "factors_taus": [
+        10
+      ],
+      "cutoffs": [
+        3.0,
+        null
+      ]
+    },
+    {
+      "name": "fock10_filtered",
+      "dimension": 60,
+      "targets": [
         {
           "kind": "fock",
           "value": 10
@@ -223,6 +238,7 @@
       ],
       "factors_taus": [
         10,
+        15,
         20
       ],
       "cutoffs": [
@@ -230,7 +246,8 @@
       ]
     },
     {
-      "name": "fock10_without_filter",
+      "name": "fock10_unfiltered_control",
+      "dimension": 60,
       "targets": [
         {
           "kind": "fock",
@@ -238,24 +255,60 @@
         }
       ],
       "factors_taus": [
-        10,
-        20
+        10
       ],
       "cutoffs": [
         null
       ]
     },
     {
-      "name": "optional_cat_squeezed",
-      "enabled": false,
+      "name": "cat2_filtered",
+      "dimension": 48,
       "targets": [
         {
           "kind": "cat",
-          "value": 2
+          "value": 2.0
+        }
+      ],
+      "factors_taus": [
+        10,
+        15,
+        20
+      ],
+      "cutoffs": [
+        3.0
+      ]
+    },
+    {
+      "name": "cat2_unfiltered_control",
+      "dimension": 48,
+      "targets": [
+        {
+          "kind": "cat",
+          "value": 2.0
+        }
+      ],
+      "factors_taus": [
+        10,
+        15
+      ],
+      "cutoffs": [
+        null
+      ]
+    },
+    {
+      "name": "squeezed_filtered",
+      "dimension": 48,
+      "targets": [
+        {
+          "kind": "squeezed",
+          "value": 3.0,
+          "squeezing_unit": "dB",
+          "theta": 0.7853981633974483
         },
         {
           "kind": "squeezed",
-          "value": 3,
+          "value": 8.0,
           "squeezing_unit": "dB",
           "theta": 0.7853981633974483
         }
@@ -266,6 +319,30 @@
       ],
       "cutoffs": [
         3.0
+      ]
+    },
+    {
+      "name": "squeezed_unfiltered_control",
+      "dimension": 48,
+      "targets": [
+        {
+          "kind": "squeezed",
+          "value": 3.0,
+          "squeezing_unit": "dB",
+          "theta": 0.7853981633974483
+        },
+        {
+          "kind": "squeezed",
+          "value": 8.0,
+          "squeezing_unit": "dB",
+          "theta": 0.7853981633974483
+        }
+      ],
+      "factors_taus": [
+        10
+      ],
+      "cutoffs": [
+        null
       ]
     }
   ]

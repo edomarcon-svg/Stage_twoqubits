@@ -68,11 +68,12 @@ def fidelity_loss(probability, opt):
 
 
 class Objective:
-    def __init__(self, model, signal, cfg):
+    def __init__(self, model, signal, cfg, intervals=None):
         self.model = model
         self.signal = signal
         self.cfg = cfg
-        self.midpoints = (np.arange(cfg.intervals)+.5)*cfg.duration/cfg.intervals
+        self.intervals = cfg.intervals if intervals is None else int(intervals)
+        self.midpoints = (np.arange(self.intervals)+.5)*cfg.duration/self.intervals
         self.transfer = signal.matrix(self.midpoints)
         self.derivative_transfer = signal.matrix(self.midpoints, derivative=True)
         self.nfree = model.ncontrols*(signal.nodes-2)
@@ -97,8 +98,8 @@ class Objective:
         if not gradient:
             return float(cost), probability, state
         grad_nodes = slope * out[2] @ self.transfer
-        grad_nodes += 2*self.cfg.optimization.objective_scale*u.fluence_weight/self.cfg.intervals * (self.model.physical_map.T @ physical) @ self.transfer
-        grad_nodes += 2*self.cfg.optimization.objective_scale*u.slew_weight/self.cfg.intervals * (self.model.physical_map.T @ rates) @ self.derivative_transfer
+        grad_nodes += 2*self.cfg.optimization.objective_scale*u.fluence_weight/self.intervals * (self.model.physical_map.T @ physical) @ self.transfer
+        grad_nodes += 2*self.cfg.optimization.objective_scale*u.slew_weight/self.intervals * (self.model.physical_map.T @ rates) @ self.derivative_transfer
         return float(cost), grad_nodes[:,1:-1].ravel()
 
     def __call__(self, flat):

@@ -51,6 +51,8 @@ class Optimization:
     objective_scale: float = 1.0
     root_epsilon: float = 1e-12
     crab_initial_std: float | None = None
+    crab_intervals: int | None = None
+    grape_stop_probability: float | None = None
     warm_starts: list[dict] = field(default_factory=list)
 
 
@@ -114,6 +116,17 @@ class Experiment:
                     raise ValueError(f"{name} must be an integer")
         if self.optimization.refine_top is not None and (not isinstance(self.optimization.refine_top,int) or isinstance(self.optimization.refine_top,bool)):
             raise ValueError("refine_top must be an integer or null")
+        if self.optimization.crab_intervals is not None and (
+                not isinstance(self.optimization.crab_intervals, int)
+                or isinstance(self.optimization.crab_intervals, bool)
+                or self.optimization.crab_intervals < 2):
+            raise ValueError("crab_intervals must be an integer >= 2 or null")
+        if self.optimization.grape_stop_probability is not None and (
+                isinstance(self.optimization.grape_stop_probability, bool)
+                or not isinstance(self.optimization.grape_stop_probability, (int, float))
+                or not math.isfinite(self.optimization.grape_stop_probability)
+                or not 0 < self.optimization.grape_stop_probability <= 1):
+            raise ValueError("grape_stop_probability must lie in (0, 1] or be null")
         if not self.name or not isinstance(self.name, str):
             raise ValueError("name must be a nonempty string")
         if self.dimension < 3 or self.intervals < 2:

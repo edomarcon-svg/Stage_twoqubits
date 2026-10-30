@@ -41,15 +41,19 @@ class CampaignTests(unittest.TestCase):
         spec = load_campaign(Path(__file__).resolve().parents[1]/"configurazione_campagna.jsonc")
         jobs = campaign_plan(spec)
         counts = plan_counts(jobs)
-        self.assertEqual(counts["main"]["random_pipelines"],320)
-        self.assertEqual(counts["pilot"]["random_pipelines"],16)
+        self.assertEqual(counts["main"]["experiments"],17)
+        self.assertEqual(counts["main"]["random_pipelines"],680)
+        self.assertEqual(counts["pilot"]["random_pipelines"],0)
         for job in jobs:
             cfg = job["config"]
             self.assertEqual(cfg["intervals"],cfg["factor_taus"]*100)
+            self.assertEqual(cfg["optimization"]["crab_intervals"],cfg["factor_taus"]*25)
             self.assertEqual(cfg["control"]["nodes"],cfg["factor_taus"]*10+1)
-            self.assertEqual(cfg["dimension"],60)
-        spec["blocks"][-1]["enabled"] = True
-        self.assertEqual(plan_counts(campaign_plan(spec))["main"]["random_pipelines"],480)
+            self.assertEqual(cfg["optimization"]["grape_stop_probability"],0.99995)
+            expected_dim = 60 if cfg["target"]["kind"] == "fock" else 48
+            self.assertEqual(cfg["dimension"],expected_dim)
+        spec["pilot"]["enabled"] = True
+        self.assertEqual(plan_counts(campaign_plan(spec))["pilot"]["random_pipelines"],16)
 
     def test_bad_campaign_fails_before_execution(self):
         for mutate in [lambda s:s["blocks"][0].update(factors_taus=[0]),
@@ -120,9 +124,29 @@ class NewNumericsTests(unittest.TestCase):
     def test_spectral_fraction_above_threshold(self):
         cfg=small_config();model=build_model(cfg,cfg.cases[0]);signal=Signal(20,401,None)
         high=np.sin(6*signal.times)[None,:];low=np.sin(.6*signal.times)[None,:]
-        hi=actuator_metrics(model,signal,high)["ac_power_fraction_above_threshold_worst"]
-        lo=actuator_metrics(model,signal,low)["ac_power_fraction_above_threshold_worst"]
-        self.assertGreater(hi,.95);self.assertLess(lo,.02)
+        act_hi=actuator_metrics(model,signal,high)
+        act_lo=actuator_metrics(model,signal,low)
+        self.assertGreater(act_hi["ac_power_fraction_above_threshold_worst"],.95)
+        self.assertLess(act_lo["ac_power_fraction_above_threshold_worst"],.02)
+        self.assertAlmostEqual(act_hi["c2_paper_total"],0.5*act_hi["modulation_fluence_total"])
+        self.assertAlmostEqual(act_hi["c2_paper_max_channel"],0.5*act_hi["modulation_fluence_max_channel"])
+
+    def test_crab_intervals_and_grape_stop_probability(self):
+        with tempfile.TemporaryDirectory() as tmp, redirect_stdout(io.StringIO()):
+            cfg=tiny()
+            cfg.optimization.crab_intervals=4
+            cfg.optimization.grape_stop_probability=0.5
+            cfg.optimization.grape_max_iterations=50
+            cfg.optimization.grape_max_evaluations=100
+            root=run_experiment(cfg,tmp,plots=False)
+            summary=json.loads((root/"summary.json").read_text())["cases"][0]
+            seed=summary["seeds"][0]
+            self.assertEqual(seed["crab"]["intervals"],4)
+            self.assertEqual(seed["grape"]["stop_probability_threshold"],0.5)
+            self.assertIn("c2_paper_total",seed["actuator"])
+            self.assertIn("c2_paper_max_channel",seed["actuator"])
+            self.assertIn("c2_paper_total_median",summary["statistics"])
+            self.assertIn("c2_paper_max_channel_median",summary["statistics"])
 
     def test_legacy_import_and_separate_warm_statistics(self):
         with tempfile.TemporaryDirectory() as tmp, redirect_stdout(io.StringIO()):

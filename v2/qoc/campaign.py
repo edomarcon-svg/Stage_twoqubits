@@ -49,25 +49,32 @@ def campaign_plan(spec):
         raise ValueError("Campaign name must be a safe nonempty identifier")
     base = from_dict(spec["base"])
     dt = base.duration/base.intervals
+    crab_dt = base.duration/base.optimization.crab_intervals if base.optimization.crab_intervals is not None else None
     dh = base.duration/(base.control.nodes-1)
     jobs = []
     names = set()
-    def add(stage,block,target,factor,cutoff,case_names,optimization=None,profile=None):
+    def add(stage,block,target,factor,cutoff,case_names,optimization=None,profile=None,dimension=None,control=None):
         if isinstance(factor,bool) or not isinstance(factor,int) or factor < 1:
             raise ValueError("factors_taus must be positive integers")
         if cutoff is not None and (isinstance(cutoff,bool) or not isinstance(cutoff,(int,float)) or not math.isfinite(cutoff) or cutoff <= 0):
             raise ValueError("cutoff must be positive or null (no filter)")
         raw = base.to_dict()
+        if dimension is not None:
+            raw["dimension"] = dimension
         raw["target"] = deepcopy(target)
         raw["factor_taus"] = factor
         duration = factor*base.tau_s
         raw["intervals"] = max(2,math.ceil(duration/dt-1e-10))
+        if control is not None:
+            raw["control"] = _merge(raw["control"],control)
         raw["control"]["nodes"] = max(3,math.ceil(duration/dh-1e-10)+1)
         raw["control"]["filter_cutoff"] = cutoff
         raw["validation"]["trajectory_points"] = max(3,math.ceil((base.validation.trajectory_points-1)*duration/base.duration-1e-10)+1)
         if not case_names or len(set(case_names)) != len(case_names) or set(case_names)-{c.name for c in base.cases}:
             raise ValueError("Unknown, duplicate or empty campaign cases")
         raw["cases"] = [c for c in raw["cases"] if c["name"] in case_names]
+        if crab_dt is not None:
+            raw["optimization"]["crab_intervals"] = max(2,math.ceil(duration/crab_dt-1e-10))
         raw["optimization"] = _merge(raw["optimization"],optimization or {})
         if stage == "pilot":
             raw["optimization"]["warm_starts"] = []
@@ -82,7 +89,7 @@ def campaign_plan(spec):
             {"enabled","cases","target","factor_taus","filter_cutoff","seeds","profiles","budgets"})
         if not isinstance(pilot["enabled"],bool): raise ValueError("pilot.enabled must be boolean")
         if pilot.get("minimum_probability_gain",1e-6) < 0: raise ValueError("minimum_probability_gain must be nonnegative")
-        _keys(pilot["budgets"],{"crab_max_evaluations","grape_max_iterations","grape_max_evaluations"})
+        _keys(pilot["budgets"],{"crab_max_evaluations","grape_max_iterations","grape_max_evaluations","crab_intervals","grape_stop_probability"})
         profile_names = set()
         if not pilot["profiles"]: raise ValueError("Pilot profiles cannot be empty")
         for profile in pilot["profiles"]:
@@ -90,7 +97,7 @@ def campaign_plan(spec):
             if not isinstance(profile["name"],str) or not profile["name"] or profile["name"] in profile_names:
                 raise ValueError("Pilot profile names must be nonempty and unique")
             profile_names.add(profile["name"])
-            _keys(profile["optimization"],{"objective","objective_scale","root_epsilon","crab_initial_std","ftol","gtol"})
+            _keys(profile["optimization"],{"objective","objective_scale","root_epsilon","crab_initial_std","crab_intervals","grape_stop_probability","ftol","gtol"})
             if pilot["enabled"]:
                 opt = _merge(profile["optimization"],pilot["budgets"])
                 opt["seeds"] = pilot["seeds"]
@@ -98,7 +105,7 @@ def campaign_plan(spec):
                 add("pilot","pilot",pilot["target"],pilot["factor_taus"],pilot["filter_cutoff"],pilot["cases"],opt,profile["name"])
     if not isinstance(spec["blocks"],list) or not spec["blocks"]: raise ValueError("blocks must be nonempty")
     for block in spec["blocks"]:
-        _keys(block,{"name","enabled","targets","factors_taus","cutoffs","cases","optimization"},
+        _keys(block,{"name","enabled","targets","factors_taus","cutoffs","cases","optimization","dimension","control"},
             {"name","targets","factors_taus","cutoffs"})
         if not isinstance(block["name"],str) or not block["name"] or block["name"] in names: raise ValueError("Block names must be unique")
         names.add(block["name"])
@@ -109,7 +116,8 @@ def campaign_plan(spec):
         for target in block["targets"]:
             for factor in block["factors_taus"]:
                 for cutoff in block["cutoffs"]:
-                    add("main",block["name"],target,factor,cutoff,block.get("cases",[c.name for c in base.cases]),block.get("optimization"))
+                    add("main",block["name"],target,factor,cutoff,block.get("cases",[c.name for c in base.cases]),block.get("optimization"),
+                        dimension=block.get("dimension"),control=block.get("control"))
     if not any(j["stage"] == "main" for j in jobs): raise ValueError("No enabled main experiments")
     # Pilot and production draws must not be reused for selecting and assessing a profile.
     pilot_seeds = set(pilot.get("seeds",[])) if pilot.get("enabled") else set()
@@ -162,10 +170,11 @@ def write_campaign_report(root, spec, jobs, state):
         cfg = json.loads((run/"config.json").read_text())
         for case in summary["cases"]:
             shared = {"stage":job["stage"],"block":job["block"],"profile":entry.get("profile",job["profile"]),
-                "target":json.dumps(cfg["target"],sort_keys=True),"factor_taus":cfg["factor_taus"],
+                "target":json.dumps(cfg["target"],sort_keys=True),"dimension":cfg["dimension"],"factor_taus":cfg["factor_taus"],
                 "duration":cfg["duration"],"filter_cutoff":cfg["control"]["filter_cutoff"],"case":case["name"],
                 "run":str(run.relative_to(root)),"objective":cfg["optimization"]["objective"],
-                "crab_initial_std":cfg["optimization"]["crab_initial_std"]}
+                "crab_initial_std":cfg["optimization"]["crab_initial_std"],
+                "crab_intervals":cfg["optimization"].get("crab_intervals") or cfg["intervals"]}
             experiments.append({**shared,**case["statistics"]})
             for item in case["seeds"] + case.get("warm_starts",[]):
                 m,v,g,c,a = (item[k] for k in ["metrics","validation","grape","crab","actuator"])
@@ -182,7 +191,11 @@ def write_campaign_report(root, spec, jobs, state):
                     "dimension_trace_distance":v["dimension_cavity_trace_distance"],
                     "hold_P_min":(item.get("hold_summary") or {}).get("minimum_target_probability"),
                     "hold_P_final":(item.get("hold_metrics") or {}).get("target_probability"),
-                    "fluence":a["modulation_fluence_total"],"slew":a["slew_worst_channel"],
+                    "fluence":a["modulation_fluence_total"],
+                    "fluence_max_channel":a["modulation_fluence_max_channel"],
+                    "c2_paper_total":a.get("c2_paper_total",0.5*a["modulation_fluence_total"]),
+                    "c2_paper_max_channel":a.get("c2_paper_max_channel",0.5*a["modulation_fluence_max_channel"]),
+                    "slew":a["slew_worst_channel"],
                     "omega99":a["omega_99_worst_channel"],"spectral_power_above_threshold":a.get("ac_power_fraction_above_threshold_worst"),
                     "spectral_threshold":cfg["validation"]["spectral_threshold"],
                     "crab_seconds":c["elapsed_seconds"],"refinement_validation_seconds":item["elapsed_refinement_validation_seconds"],

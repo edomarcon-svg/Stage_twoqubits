@@ -51,7 +51,8 @@ def _crab_worker(args):
     with threadpool_limits(limits=cfg.optimization.blas_threads):
         model = build_model(cfg,case)
         signal = Signal(cfg.duration,cfg.control.nodes,cfg.control.filter_cutoff)
-        result = crab(Objective(model,signal,cfg),seed)
+        crab_intervals = cfg.optimization.crab_intervals or cfg.intervals
+        result = crab(Objective(model,signal,cfg,intervals=crab_intervals),seed)
     digest = save_arrays(path/"crab.npz",nodes=result.nodes,parameters=result.parameters,
         frequencies=result.frequencies,history=result.history,state=result.state)
     data = {"schema_version":SCHEMA_VERSION,**result.metadata,"array_file":"crab.npz","array_sha256":digest}
@@ -209,6 +210,8 @@ def run_experiment(cfg, destination=None, resume=None, plots=True):
             eligible = [x for x in items if x["validation"]["passed"]]
             selected = min(eligible or items,key=lambda x:(x["metrics"].get("continuous_optimization_objective",x["metrics"]["continuous_objective"]),x["seed"]))
             probabilities = np.array([x["metrics"]["target_probability"] for x in items])
+            c2_totals = np.array([x["actuator"].get("c2_paper_total", 0.5*x["actuator"]["modulation_fluence_total"]) for x in items])
+            c2_max_channels = np.array([x["actuator"].get("c2_paper_max_channel", 0.5*x["actuator"]["modulation_fluence_max_channel"]) for x in items])
             stats = {"count":len(items),"probability_mean":float(np.mean(probabilities)),
                 "probability_std_population":float(np.std(probabilities)),"probability_median":float(np.median(probabilities)),
                 "probability_min":float(np.min(probabilities)),"probability_max":float(np.max(probabilities)),
@@ -217,6 +220,8 @@ def run_experiment(cfg, destination=None, resume=None, plots=True):
                 "validated_goal_fraction":sum(x["metrics"]["goal_reached"] for x in eligible)/len(items),
                 "probability_q25":float(np.quantile(probabilities,.25)),
                 "probability_q75":float(np.quantile(probabilities,.75)),
+                "c2_paper_total_median":float(np.median(c2_totals)),
+                "c2_paper_max_channel_median":float(np.median(c2_max_channels)),
                 "selection_bias_top_only":cfg.optimization.refine_top is not None and cfg.optimization.refine_top<len(seeds)}
             warm_items = []
             for spec in [w for w in warm_specs if w["case"] == case.name]:

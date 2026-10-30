@@ -288,6 +288,13 @@
     "root_epsilon": 1e-12,
     // null conserva la scala precedente 0.15/sqrt(frequencies); valore esplicito = std dei coefficienti.
     "crab_initial_std": null,
+    // [crab_intervals] Numero di intervalli midpoint N_CRAB per la sola fase CRAB (intero >= 2 oppure null).
+    // Se null, CRAB usa lo stesso numero di intervalli di GRAPE ("intervals"). Impostare un valore ridotto
+    // (es. 500 a 20*tau_s) velocizza l'esplorazione globale mantenendo la griglia fine in GRAPE.
+    "crab_intervals": null,
+    // [grape_stop_probability] Soglia opzionale di arresto anticipato per GRAPE sulla probabilità target (0 < soglia <= 1 oppure null).
+    // Se un'iterazione accettata e ammissibile supera questa soglia (es. 0.99995), GRAPE termina anticipatamente.
+    "grape_stop_probability": null,
     // Ripartenze esterne separate dai seed casuali. Vedere CAMPAGNA.md.
     "warm_starts": [],
     // [seeds] Lista dei semi casuali per le inizializzazioni indipendenti di CRAB.

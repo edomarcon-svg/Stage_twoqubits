@@ -10,3 +10,8 @@ H0 = omega_c * (n_tot + 0.5 * identity) + g1 * x_couple1 + g2 * x_couple2 + H_qq
 
 ## 2
 
+- accopiamento qubit su stessi seed
+- eventuale bagno termico dissipativo implemeentato in algoritmo
+- vedere altri stati
+- ricerca per limiti attuatori e vedere cosa ottimizzare (utilizzo di slew-rate)
+

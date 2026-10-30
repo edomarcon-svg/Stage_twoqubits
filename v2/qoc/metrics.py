@@ -60,7 +60,9 @@ def actuator_metrics(model, signal, nodes, points=4001, spectral_threshold=3.0):
         omega = 2*np.pi*np.fft.rfftfreq(len(sampled),d=ts[1]-ts[0])
         power_above = float(power[omega > spectral_threshold].sum()/power.sum()) if power.sum() > 1e-24 else 0.
         omega99 = 0. if power.sum()<1e-24 else float(omega[min(np.searchsorted(np.cumsum(power)/power.sum(),.99),len(omega)-1)])
-        metrics.append({"modulation_fluence":float(np.trapezoid(delta**2,ts)),
+        fluence = float(np.trapezoid(delta**2,ts))
+        metrics.append({"modulation_fluence":fluence,
+                        "c2_paper":0.5*fluence,
                         "total_frequency_fluence":float(np.trapezoid(u**2,ts)),
                         "slew_max_sampled":float(np.max(abs(rates[j]))),
                         "slew_rms":float(np.sqrt(np.trapezoid(rates[j]**2,ts)/signal.duration)),
@@ -68,6 +70,8 @@ def actuator_metrics(model, signal, nodes, points=4001, spectral_threshold=3.0):
                         "omega_99_ac":omega99,"ac_power_fraction_above_threshold":power_above,"spectral_threshold":spectral_threshold,"total_frequency_min":float(u.min()),
                         "total_frequency_max":float(u.max()),"terminal_modulation":float(delta[-1])})
     return {"channels":metrics,"modulation_fluence_total":sum(m["modulation_fluence"] for m in metrics),
+            "c2_paper_total":sum(m["c2_paper"] for m in metrics),
+            "c2_paper_max_channel":max(m["c2_paper"] for m in metrics),
             "normalized_hilbert_schmidt_control_cost":sum(m["modulation_fluence"] for m in metrics)/4,
             "modulation_fluence_max_channel":max(m["modulation_fluence"] for m in metrics),
             "total_frequency_fluence_total":sum(m["total_frequency_fluence"] for m in metrics),

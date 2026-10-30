@@ -53,6 +53,7 @@ def crab(objective, seed):
     cost, prob, state = objective.evaluate_nodes(nodes)
     meta = {"algorithm":"CRAB/Nelder-Mead", "seed":seed, "success":bool(res.success),
             "message":str(res.message), "iterations":int(res.nit), "evaluations":int(res.nfev),
+            "intervals":int(getattr(objective, "intervals", cfg.intervals)),
             "elapsed_seconds":time.perf_counter()-t0, "cost":cost, "target_probability":prob,
             "fidelity_root":float(np.sqrt(np.clip(prob,0,1))),
             "initial_probability":initial_probability, "probability_gain":prob-initial_probability,
@@ -68,7 +69,7 @@ def grape(objective, initial_nodes):
     x0 = initial_nodes[:,1:-1].ravel().copy()
     history = []
     best = [float("inf"), x0.copy()]
-    cached = [None,None]
+    cached = [None,None,None]
     count = 0
     diagnostics = []
     accepted_iterations = []
@@ -78,14 +79,9 @@ def grape(objective, initial_nodes):
         projected = x - np.clip(x - gradient, lower, upper)
         return {"gradient_max":float(np.max(abs(gradient))),
                 "projected_gradient_max":float(np.max(abs(projected)))}
-    def callback(x):
-        # SciPy calls this after an accepted iterate; fun is normally cached.
-        value, gradient = fun(x)
-        accepted_iterations.append({"iteration":len(accepted_iterations)+1,
-            "cost":float(value), "target_probability":float(objective.last_probability),
-            "command_step_max":float(np.max(abs(x-previous[0]))), **gradient_info(x,gradient)})
-        previous[0] = x.copy()
     class BudgetExceeded(Exception):
+        pass
+    class ProbabilityGoalReached(Exception):
         pass
     def feasible(x):
         nodes = objective.unpack(x)
@@ -96,18 +92,30 @@ def grape(objective, initial_nodes):
     def fun(x):
         nonlocal count
         if cached[0] is not None and np.array_equal(x,cached[0]):
+            objective.last_probability = cached[2]
             return cached[1]
         if count >= opt.grape_max_evaluations:
             raise BudgetExceeded()
         out = objective(x)
+        prob = float(objective.last_probability)
         count += 1
         history.append(out[0])
         diagnostics.append({"evaluation":count,"cost":float(out[0]),
-            "target_probability":float(objective.last_probability), **gradient_info(x,out[1])})
+            "target_probability":prob, **gradient_info(x,out[1])})
         if feasible(x) and out[0] < best[0]:
             best[:] = [out[0],x.copy()]
-        cached[:] = [x.copy(),out]
+        cached[:] = [x.copy(),out,prob]
         return out
+    def callback(x):
+        # SciPy calls this after an accepted iterate; fun is normally cached.
+        value, gradient = fun(x)
+        prob = float(objective.last_probability)
+        accepted_iterations.append({"iteration":len(accepted_iterations)+1,
+            "cost":float(value), "target_probability":prob,
+            "command_step_max":float(np.max(abs(x-previous[0]))), **gradient_info(x,gradient)})
+        previous[0] = x.copy()
+        if opt.grape_stop_probability is not None and feasible(x) and prob >= opt.grape_stop_probability:
+            raise ProbabilityGoalReached()
     method = "L-BFGS-B" if cfg.control.max_slew is None else "SLSQP"
     kwargs = {}
     options = {"maxiter":opt.grape_max_iterations,"ftol":opt.ftol}
@@ -119,6 +127,10 @@ def grape(objective, initial_nodes):
     try:
         res = minimize(fun, x0, jac=True, method=method, bounds=bounds, options=options, callback=callback, **kwargs)
         success, message, nit = bool(res.success), str(res.message), int(res.nit)
+    except ProbabilityGoalReached:
+        success = True
+        message = f"Target probability saturation threshold reached ({opt.grape_stop_probability})"
+        nit = len(accepted_iterations)
     except BudgetExceeded:
         success, message, nit = False,"Explicit objective-evaluation budget exhausted",None
     # Retain the best feasible waveform, including the initial CRAB waveform.
@@ -129,6 +141,7 @@ def grape(objective, initial_nodes):
             "iterations":nit,"evaluations":count,"elapsed_seconds":time.perf_counter()-t0,
             "cost":cost,"target_probability":prob,"fidelity_root":float(np.sqrt(np.clip(prob,0,1))),
             "objective":opt.objective,"objective_scale":opt.objective_scale,
+            "stop_probability_threshold":opt.grape_stop_probability,
             "initial_probability":diagnostics[0]["target_probability"],
             "probability_gain":prob-diagnostics[0]["target_probability"],
             "initial_gradient":{k:diagnostics[0][k] for k in ["gradient_max","projected_gradient_max"]},

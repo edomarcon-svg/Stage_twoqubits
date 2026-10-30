@@ -1,6 +1,6 @@
-# Campagna Fock multi-target
+# Campagna intermedia multi-target (Fock selezionati + Cat + Squeezed)
 
-La configurazione `configurazione_campagna.jsonc` prepara **320 pipeline principali**, precedute da **16 pipeline di collaudo**. Non esegue automaticamente calcoli quando viene aperta o validata. Ogni target ha un impulso autonomo; non si chiede a un unico stato finale di coincidere con target diversi.
+La configurazione `configurazione_campagna.jsonc` prepara **17 esperimenti principali** (**680 pipeline**: 5 sistemi × 8 seed per esperimento), con collaudo disattivato (`pilot.enabled: false`, poiché il profilo ottimale `root` con `crab_initial_std = 0.1` è già stato selezionato nella campagna v2 precedente). Ogni stato target comprende sia le run con filtro causale ($\omega_{\text{cut}} = 3.0$) sia le run di controllo senza filtro (`cutoff: null`).
 
 ## Avvio
 
@@ -17,26 +17,35 @@ Su un server dove l'ambiente è già attivato, dalla cartella `v2`:
 python -u run_campaign.py --config configurazione_campagna.jsonc
 ```
 
-Per eseguire soltanto il collaudo aggiungere `--pilot-only`. Per ridurre il costo delle figure aggiungere `--no-plots`: CSV, JSON e array vengono comunque salvati. `run_simulation.py` resta l'ingresso per un singolo esperimento; `run_sweep.py` conserva gli sweep esistenti. Il nuovo formato va passato a **run_campaign.py**, non agli altri runner. Lo script `auto_v2.sh` ora avvia la campagna e archivia i risultati su storage S3 esterno prima dell’email; richiede la configurazione descritta in [ARCHIVIAZIONE.md](ARCHIVIAZIONE.md). Non è stato avviato durante l’implementazione.
+Per eseguire soltanto il collaudo (se riattivato) aggiungere `--pilot-only`. Per ridurre il costo delle figure aggiungere `--no-plots`: CSV, JSON e array vengono comunque salvati. `run_simulation.py` resta l'ingresso per un singolo esperimento; `run_sweep.py` conserva gli sweep esistenti. Il nuovo formato va passato a **run_campaign.py**, non agli altri runner. Lo script `auto_v2.sh` avvia la campagna e archivia i risultati su storage S3 esterno prima dell’email; richiede la configurazione descritta in [ARCHIVIAZIONE.md](ARCHIVIAZIONE.md).
 
 Il programma stampa `Campaign: <cartella>`. Per continuare, anche dopo un'interruzione:
 
 ```bash
-python -u run_campaign.py --resume results/campagna_fock_completa_TIMESTAMP
+python -u run_campaign.py --resume results/campagna_intermedia_fock_cat_squeezed_TIMESTAMP
 ```
 
 Non modificare codice, dipendenze o configurazione di una campagna in corso: la ripresa ne verifica la compatibilità. Una configurazione diversa richiede una nuova campagna. I figli già completati vengono verificati e i checkpoint CRAB riutilizzati. La ripresa opera fra fasi: un CRAB/GRAPE interrotto durante l'ottimizzazione riparte dal checkpoint precedente, non dallo stato interno di SciPy.
 
 Per un collaudo rapido dell'infrastruttura usare `configs/campaign_smoke.json`: è un caso artificiale a g=0, con budget minimi e due processi, che verifica orchestrazione e salvataggi; non testa la raggiungibilità fisica di Fock 10.
 
-## Disegno dell'esperimento
+## Disegno dell'esperimento e accorgimenti della campagna intermedia
 
-| Blocco | Target | Durate | Sistemi | Seed | Pipeline |
-| --- | --- | --- | --- | --- | --- |
-| Collaudo | Fock 10 | 20 tau_s | 1q e 2q normalized independent | 100, 101 per profilo | 16 |
-| Principale filtrato | Fock 2, 6, 10 | 10 e 20 tau_s | Tutti i cinque | 0–7 | 240 |
-| Diagnostica senza filtro | Fock 10 | 10 e 20 tau_s | Tutti i cinque | 0–7 | 80 |
-| Opzionale, disattivato | Cat alpha=2 e squeezed 3 dB | 10 e 20 tau_s | Tutti i cinque | 0–7 | 160 aggiuntive |
+| Blocco | ID run | Target | $\text{dim}$ ($\to \text{val}$) | Durate ($T/\tau_s$) | Filtro $\omega_{\text{cut}}$ | Sistemi | Seed | Pipeline |
+| --- | --- | --- | :---: | :---: | :---: | :---: | :---: | :---: |
+| `fock6_short` | `main_000`–`001` | Fock 6 | $60 \to 80$ | 10 | `3.0`, `null` | Tutti i 5 | 0–7 | 80 |
+| `fock10_filtered` | `main_002`–`004` | Fock 10 | $60 \to 80$ | 10, 15, 20 | `3.0` | Tutti i 5 | 0–7 | 120 |
+| `fock10_unfiltered_control` | `main_005` | Fock 10 | $60 \to 80$ | 10 | `null` | Tutti i 5 | 0–7 | 40 |
+| `cat2_filtered` | `main_006`–`008` | Cat $\alpha=2.0$ | $48 \to 68$ | 10, 15, 20 | `3.0` | Tutti i 5 | 0–7 | 120 |
+| `cat2_unfiltered_control` | `main_009`–`010` | Cat $\alpha=2.0$ | $48 \to 68$ | 10, 15 | `null` | Tutti i 5 | 0–7 | 80 |
+| `squeezed_filtered` | `main_011`–`014` | Squeezed 3 dB e 8 dB ($\theta=\pi/4$) | $48 \to 68$ | 10, 20 | `3.0` | Tutti i 5 | 0–7 | 160 |
+| `squeezed_unfiltered_control` | `main_015`–`016` | Squeezed 3 dB e 8 dB ($\theta=\pi/4$) | $48 \to 68$ | 10 | `null` | Tutti i 5 | 0–7 | 80 |
+
+Accorgimenti introdotti:
+1. **Griglia ridotta in CRAB (`crab_intervals`):** $N_{\text{CRAB}} = 250 / 375 / 500$ alle durate $10 / 15 / 20\,\tau_s$, passando alla griglia fine $N = 1000 / 1500 / 2000$ in GRAPE (con $101 / 151 / 201$ nodi di comando).
+2. **Budget ottimizzati e stop a saturazione:** `crab_max_evaluations = 1500`, `grape_max_iterations = 300`, `grape_max_evaluations = 3000` e arresto anticipato `grape_stop_probability = 0.99995`.
+3. **Dimensione per blocco (`dimension`):** $60$ (validata a $80$) per Fock $n=6, 10$ e $48$ (validata a $68$) per Cat e Squeezed.
+4. **Metriche del paper native:** salvataggio diretto di `c2_paper_total` e `c2_paper_max_channel` ($\mathcal{F}_{\text{mod}}/2$) in `result.json`, `summary.csv` e `seeds.csv`.
 
 I cinque sistemi sono 1q, 2q common, 2q independent, 2q normalized common e 2q normalized independent. I normalized hanno g1=g2=0.3/sqrt(2); gli altri hanno g=0.3 per ogni qubit. Il riferimento temporale rimane g_ref=0.3 in tutti i casi. Il cat implementato è a quattro componenti, con supporto n=2 mod 4.
 

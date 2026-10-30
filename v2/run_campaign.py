@@ -28,9 +28,12 @@ def main():
                 key = json.dumps([cfg.target.__dict__,case.__dict__,cfg.dimension,cfg.initial_state,cfg.parity_reduction],sort_keys=True)
                 if key not in seen: build_model(cfg,case);seen.add(key)
         print(json.dumps({"name":spec["name"],"counts":plan_counts(jobs),"experiments":[{
-            "id":j["id"],"stage":j["stage"],"target":j["config"]["target"],"factor_taus":j["config"]["factor_taus"],
+            "id":j["id"],"stage":j["stage"],"block":j["block"],"dimension":j["config"]["dimension"],
+            "target":j["config"]["target"],"factor_taus":j["config"]["factor_taus"],
             "cutoff":j["config"]["control"]["filter_cutoff"],"intervals":j["config"]["intervals"],
-            "nodes":j["config"]["control"]["nodes"]} for j in jobs]},indent=2))
+            "crab_intervals":j["config"]["optimization"].get("crab_intervals") or j["config"]["intervals"],
+            "nodes":j["config"]["control"]["nodes"],
+            "grape_stop_probability":j["config"]["optimization"].get("grape_stop_probability")} for j in jobs]},indent=2))
         return
     root = run_campaign(spec,args.output,args.resume,not args.no_plots,args.pilot_only)
     print(f"Report: {root/'report.html'}")
