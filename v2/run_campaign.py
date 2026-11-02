@@ -29,8 +29,13 @@ def main():
                 if key not in seen: build_model(cfg,case);seen.add(key)
         print(json.dumps({"name":spec["name"],"counts":plan_counts(jobs),"experiments":[{
             "id":j["id"],"stage":j["stage"],"block":j["block"],"dimension":j["config"]["dimension"],
+            "initial_state":j["config"]["initial_state"],
             "target":j["config"]["target"],"factor_taus":j["config"]["factor_taus"],
-            "cutoff":j["config"]["control"]["filter_cutoff"],"intervals":j["config"]["intervals"],
+            "cutoff":j["config"]["control"]["filter_cutoff"],
+            "total_frequency_bounds":j["config"]["control"]["total_frequency_bounds"],
+            "max_slew":j["config"]["control"]["max_slew"],
+            "slew_weight":j["config"]["control"]["slew_weight"],
+            "intervals":j["config"]["intervals"],
             "crab_intervals":j["config"]["optimization"].get("crab_intervals") or j["config"]["intervals"],
             "nodes":j["config"]["control"]["nodes"],
             "grape_stop_probability":j["config"]["optimization"].get("grape_stop_probability")} for j in jobs]},indent=2))

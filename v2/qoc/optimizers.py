@@ -106,6 +106,8 @@ def grape(objective, initial_nodes):
             best[:] = [out[0],x.copy()]
         cached[:] = [x.copy(),out,prob]
         return out
+    has_control_penalty = (cfg.control.slew_weight > 0) or (cfg.control.fluence_weight > 0)
+    stop_probability_active = opt.grape_stop_probability is not None and not has_control_penalty
     def callback(x):
         # SciPy calls this after an accepted iterate; fun is normally cached.
         value, gradient = fun(x)
@@ -114,7 +116,7 @@ def grape(objective, initial_nodes):
             "cost":float(value), "target_probability":prob,
             "command_step_max":float(np.max(abs(x-previous[0]))), **gradient_info(x,gradient)})
         previous[0] = x.copy()
-        if opt.grape_stop_probability is not None and feasible(x) and prob >= opt.grape_stop_probability:
+        if stop_probability_active and feasible(x) and prob >= opt.grape_stop_probability:
             raise ProbabilityGoalReached()
     method = "L-BFGS-B" if cfg.control.max_slew is None else "SLSQP"
     kwargs = {}
@@ -142,6 +144,7 @@ def grape(objective, initial_nodes):
             "cost":cost,"target_probability":prob,"fidelity_root":float(np.sqrt(np.clip(prob,0,1))),
             "objective":opt.objective,"objective_scale":opt.objective_scale,
             "stop_probability_threshold":opt.grape_stop_probability,
+            "stop_probability_active":bool(stop_probability_active),
             "initial_probability":diagnostics[0]["target_probability"],
             "probability_gain":prob-diagnostics[0]["target_probability"],
             "initial_gradient":{k:diagnostics[0][k] for k in ["gradient_max","projected_gradient_max"]},

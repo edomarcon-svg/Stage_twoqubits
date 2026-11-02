@@ -15,7 +15,8 @@ from qoc.controls import Signal
 from qoc.propagation import Objective
 from qoc.optimizers import grape
 from qoc.pipeline import run_experiment
-from qoc.metrics import actuator_metrics
+from qoc.metrics import actuator_metrics, initial_state_metrics
+from qoc.robustness import initial_state_analysis
 from qoc.warm_start import import_nodes
 from test_pipeline import tiny
 from test_numerics import small_config
@@ -41,11 +42,14 @@ class CampaignTests(unittest.TestCase):
         spec = load_campaign(Path(__file__).resolve().parents[1]/"configurazione_campagna.jsonc")
         jobs = campaign_plan(spec)
         counts = plan_counts(jobs)
-        self.assertEqual(counts["main"]["experiments"],17)
-        self.assertEqual(counts["main"]["random_pipelines"],680)
+        self.assertEqual(counts["main"]["experiments"],44)
+        self.assertEqual(counts["main"]["random_pipelines"],1056)
         self.assertEqual(counts["pilot"]["random_pipelines"],0)
+        ground_jobs = [j for j in jobs if j["config"]["initial_state"] == "ground"]
+        self.assertEqual(len(ground_jobs),7)
         for job in jobs:
             cfg = job["config"]
+            self.assertEqual([c["name"] for c in cfg["cases"]],["1q","2q_common","2q_independent"])
             self.assertEqual(cfg["intervals"],cfg["factor_taus"]*100)
             self.assertEqual(cfg["optimization"]["crab_intervals"],cfg["factor_taus"]*25)
             self.assertEqual(cfg["control"]["nodes"],cfg["factor_taus"]*10+1)
@@ -59,10 +63,36 @@ class CampaignTests(unittest.TestCase):
         for mutate in [lambda s:s["blocks"][0].update(factors_taus=[0]),
                        lambda s:s["blocks"][0].update(cutoffs=[-1]),
                        lambda s:s["blocks"][0].update(cases=["missing"]),
+                       lambda s:s["blocks"][0].update(control={"total_frequency_bounds":[1.,3.]},controls=[{"max_slew":1.}]),
+                       lambda s:s["blocks"][0].update(controls=[]),
+                       lambda s:s["blocks"][0].update(control={"filter_cutoff":2.}),
+                       lambda s:s["blocks"][0].update(initial_state="invalid"),
                        lambda s:s["pilot"].update(seeds=[0]),
                        lambda s:s["base"]["optimization"].update(objective="typo")]:
             spec=tiny_campaign();mutate(spec)
             with self.assertRaises(ValueError): campaign_plan(spec)
+
+    def test_block_controls_list_and_initial_state(self):
+        spec=tiny_campaign()
+        spec["pilot"]["enabled"]=False
+        spec["blocks"]=[{
+            "name":"bounds_and_slew_scan",
+            "initial_state":"ground",
+            "targets":[{"kind":"fock","value":0}],
+            "factors_taus":[1],
+            "cutoffs":[2.,None],
+            "controls":[
+                {"total_frequency_bounds":[1.0,3.0],"slew_weight":1e-4},
+                {"total_frequency_bounds":[1.25,2.75],"max_slew":1.5}
+            ]
+        }]
+        jobs=campaign_plan(spec)
+        self.assertEqual(len(jobs),4)
+        self.assertEqual(jobs[0]["config"]["initial_state"],"ground")
+        self.assertEqual(jobs[0]["config"]["control"]["total_frequency_bounds"],[1.0,3.0])
+        self.assertEqual(jobs[0]["config"]["control"]["slew_weight"],1e-4)
+        self.assertEqual(jobs[1]["config"]["control"]["total_frequency_bounds"],[1.25,2.75])
+        self.assertEqual(jobs[1]["config"]["control"]["max_slew"],1.5)
 
     def test_pilot_selection_rejects_stagnation(self):
         spec=tiny_campaign()
@@ -130,6 +160,23 @@ class NewNumericsTests(unittest.TestCase):
         self.assertLess(act_lo["ac_power_fraction_above_threshold_worst"],.02)
         self.assertAlmostEqual(act_hi["c2_paper_total"],0.5*act_hi["modulation_fluence_total"])
         self.assertAlmostEqual(act_hi["c2_paper_max_channel"],0.5*act_hi["modulation_fluence_max_channel"])
+        self.assertIsNone(act_hi["ac_power_fraction_above_cutoff_worst"])
+        signal_filt=Signal(20,401,2.0)
+        act_filt=actuator_metrics(model,signal_filt,high)
+        self.assertIsNotNone(act_filt["ac_power_fraction_above_cutoff_worst"])
+        self.assertIn("slew_rms_worst_channel",act_filt)
+        self.assertIn("command_slew_worst_channel",act_filt)
+
+    def test_initial_state_analysis_bare_vs_ground(self):
+        cfg=small_config(2)
+        case=cfg.cases[0]
+        nodes=np.zeros((2,cfg.control.nodes))
+        ia=initial_state_analysis(cfg,case,nodes)
+        self.assertLess(ia["bare_ground_overlap_probability"],1.0)
+        self.assertGreater(ia["bare_ground_overlap_probability"],0.9)
+        self.assertLess(ia["dressed_energy_shift"],0.0)
+        self.assertGreater(ia["ground_virtual_photons"],0.0)
+        self.assertEqual(ia["bare"]["initial"]["bare_vacuum_probability"],1.0)
 
     def test_crab_intervals_and_grape_stop_probability(self):
         with tempfile.TemporaryDirectory() as tmp, redirect_stdout(io.StringIO()):
@@ -143,10 +190,18 @@ class NewNumericsTests(unittest.TestCase):
             seed=summary["seeds"][0]
             self.assertEqual(seed["crab"]["intervals"],4)
             self.assertEqual(seed["grape"]["stop_probability_threshold"],0.5)
+            self.assertTrue(seed["grape"]["stop_probability_active"])
             self.assertIn("c2_paper_total",seed["actuator"])
             self.assertIn("c2_paper_max_channel",seed["actuator"])
             self.assertIn("c2_paper_total_median",summary["statistics"])
             self.assertIn("c2_paper_max_channel_median",summary["statistics"])
+            self.assertIn("slew_median",summary["statistics"])
+            self.assertIn("omega99_median",summary["statistics"])
+            # When slew_weight > 0, early stopping on probability alone is disabled so GRAPE can smooth the pulse.
+            cfg.control.slew_weight=1e-3
+            model=build_model(cfg,cfg.cases[0]);sig=Signal(cfg.duration,cfg.control.nodes,3.)
+            res=grape(Objective(model,sig,cfg),np.zeros((1,cfg.control.nodes)))
+            self.assertFalse(res.metadata["stop_probability_active"])
 
     def test_legacy_import_and_separate_warm_statistics(self):
         with tempfile.TemporaryDirectory() as tmp, redirect_stdout(io.StringIO()):

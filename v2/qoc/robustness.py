@@ -4,7 +4,41 @@ import numpy as np
 from .controls import Signal
 from .models import build_model
 from .propagation import continuous_evolution
-from .metrics import state_metrics
+from .metrics import state_metrics, initial_state_metrics
+
+
+def initial_state_analysis(cfg, case, nodes):
+    """Compare bare |0,g...> and dressed ground |E0> initial states and cross-evaluate a pulse."""
+    signal = Signal(cfg.duration,cfg.control.nodes,cfg.control.filter_cutoff)
+    results = {}
+    models = {}
+    for kind in ["bare", "ground"]:
+        trial_cfg = deepcopy(cfg)
+        trial_cfg.initial_state = kind
+        m = build_model(trial_cfg, case)
+        models[kind] = m
+        final = continuous_evolution(m, signal, nodes, [0, cfg.duration], cfg.validation.atol, cfg.validation.rtol)[-1]
+        results[kind] = {
+            "initial": initial_state_metrics(m),
+            "final": state_metrics(m, final)
+        }
+    bare_full = models["bare"].expand(models["bare"].initial)
+    ground_full = models["ground"].expand(models["ground"].initial)
+    overlap = float(abs(np.vdot(bare_full, ground_full))**2)
+    return {
+        "nominal_initial_state": cfg.initial_state,
+        "bare_ground_overlap_probability": overlap,
+        "dressed_energy_shift": float(results["ground"]["initial"]["drift_energy"] - results["bare"]["initial"]["drift_energy"]),
+        "ground_virtual_photons": float(results["ground"]["initial"]["mean_photons"]),
+        "ground_cavity_purity": float(results["ground"]["initial"]["purity"]),
+        "bare": results["bare"],
+        "ground": results["ground"],
+        "target_probability_bare": float(results["bare"]["final"]["target_probability"]),
+        "target_probability_ground": float(results["ground"]["final"]["target_probability"]),
+        "target_probability_difference_ground_minus_bare": float(
+            results["ground"]["final"]["target_probability"] - results["bare"]["final"]["target_probability"]
+        )
+    }
 
 
 def filter_scan(cfg, case, nodes, cutoffs):

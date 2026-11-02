@@ -1,24 +1,28 @@
-// Campagna intermedia (Fock 6 e 10 selezionati + Cat alpha=2.0 + Squeezed 3 dB e 8 dB):
-// 17 esperimenti principali (680 pipeline: 5 sistemi x 8 seed), pilot disattivato
-// (usa direttamente il profilo ottimale root + crab_initial_std=0.1 selezionato nella v2).
+// Campagna sui vincoli dell'attuatore (banda filtro, escursione di ampiezza, slew rate)
+// e sullo stato iniziale vestito ("ground" vs "bare"):
+// 44 esperimenti principali (1056 pipeline: 3 sistemi fisici [1q, 2q_common, 2q_independent] x 8 seed),
+// pilot disattivato (usa direttamente il profilo ottimale root + crab_initial_std=0.1).
 //
-// Accorgimenti applicati rispetto alla prima campagna v2:
-// 1. Griglia midpoint separata per CRAB: crab_intervals = 500 a 20*tau_s (375 a 15*tau_s, 250 a 10*tau_s),
-//    passando alla griglia fine intervals = 2000 (1500 a 15*tau_s, 1000 a 10*tau_s) solo in GRAPE.
-// 2. Budget CRAB ridotto a 1500 valutazioni; GRAPE ridotto a max 300 iterazioni (3000 valutazioni)
-//    con arresto anticipato a saturazione grape_stop_probability = 0.99995.
-// 3. Dimensione di Fock adattata per blocco: dim = 60 (-> 80) per Fock n=6,10; dim = 48 (-> 68) per Cat e Squeezed.
-// 4. Salvataggio nativo di c2_paper_total e c2_paper_max_channel nei JSON e nei CSV.
-// 5. Ogni stato ha sia i blocchi con filtro causale (cutoff = 3.0) sia le run di controllo senza filtro (cutoff = null).
-// 6. Slew rate non vincolato in questa fase (max_slew = null, slew_weight = 0.0).
+// I casi normalizzati (2q_normalized_*) sono omessi in questa fase poiché il ruolo di g_eff
+// è già stato isolato nelle due campagne precedenti.
+//
+// Struttura dei 4 studi:
+// 1. Scansione sulla frequenza di taglio del filtro (filter_cutoff) per Fock |6> (10*tau_s),
+//    Fock |10> (10 e 15*tau_s) e Cat alpha=2.0 (10*tau_s), completando i punti tra 1.0*omega_c e null.
+// 2. Restrizione dell'escursione di frequenza (total_frequency_bounds: [1.0, 3.0], [1.25, 2.75], [1.5, 2.5])
+//    attorno a omega_q = 2.0*omega_c con filtro 3.0*omega_c.
+// 3. Regolarizzazione e vincolo rigido sullo slew rate (slew_weight in {1e-4, 5e-4, 2e-3} e max_slew in {2.5, 1.5})
+//    su Fock |6> (10*tau_s) e Fock |10> (15*tau_s).
+// 4. Analisi dello stato iniziale vestito ("initial_state": "ground", vero stato fondamentale USC dell'Hamiltoniana
+//    di Rabi a drive spento) su Fock |6> (10, 20*tau_s), Fock |10> (10, 15, 20*tau_s) e Cat alpha=2.0 (10, 15*tau_s).
 //
 // Avvio dalla radice del progetto:
 // .venv/bin/python v2/run_campaign.py --config v2/configurazione_campagna.jsonc --validate-config
 // .venv/bin/python -u v2/run_campaign.py --config v2/configurazione_campagna.jsonc
 {
-  "name": "campagna_intermedia_fock_cat_squeezed",
+  "name": "campagna_vincoli_filtro_ampiezza_slew_ground",
   "base": {
-    "name": "intermediate_campaign_base",
+    "name": "constraints_and_ground_campaign_base",
     "dimension": 60,
     "intervals": 2000,
     "cases": [
@@ -49,30 +53,6 @@
         "couplings": [
           0.3,
           0.3
-        ],
-        "qubit_frequencies": [
-          2.0,
-          2.0
-        ],
-        "control": "independent"
-      },
-      {
-        "name": "2q_normalized_common",
-        "couplings": [
-          0.21213203435596423,
-          0.21213203435596423
-        ],
-        "qubit_frequencies": [
-          2.0,
-          2.0
-        ],
-        "control": "common"
-      },
-      {
-        "name": "2q_normalized_independent",
-        "couplings": [
-          0.21213203435596423,
-          0.21213203435596423
         ],
         "qubit_frequencies": [
           2.0,
@@ -152,7 +132,7 @@
     "enabled": false,
     "cases": [
       "1q",
-      "2q_normalized_independent"
+      "2q_independent"
     ],
     "target": {
       "kind": "fock",
@@ -210,8 +190,13 @@
     "minimum_probability_gain": 1e-06
   },
   "blocks": [
+    // =========================================================================
+    // 1. SCANSIONE SULLA FREQUENZA DI TAGLIO DEL FILTRO (filter_cutoff)
+    //    (I punti cutoff = 3.0 e null a T = 10*tau_s sono già presenti nella
+    //    campagna intermedia; qui esploriamo le soglie critiche intermedie).
+    // =========================================================================
     {
-      "name": "fock6_short",
+      "name": "fock6_t10_cutoff_scan",
       "dimension": 60,
       "targets": [
         {
@@ -223,30 +208,15 @@
         10
       ],
       "cutoffs": [
-        3.0,
-        null
+        1.0,
+        1.5,
+        2.0,
+        4.5,
+        6.0
       ]
     },
     {
-      "name": "fock10_filtered",
-      "dimension": 60,
-      "targets": [
-        {
-          "kind": "fock",
-          "value": 10
-        }
-      ],
-      "factors_taus": [
-        10,
-        15,
-        20
-      ],
-      "cutoffs": [
-        3.0
-      ]
-    },
-    {
-      "name": "fock10_unfiltered_control",
+      "name": "fock10_t10_cutoff_scan",
       "dimension": 60,
       "targets": [
         {
@@ -258,16 +228,270 @@
         10
       ],
       "cutoffs": [
+        4.0,
+        5.0,
+        6.5,
+        8.0
+      ]
+    },
+    {
+      "name": "fock10_t15_cutoff_scan",
+      "dimension": 60,
+      "targets": [
+        {
+          "kind": "fock",
+          "value": 10
+        }
+      ],
+      "factors_taus": [
+        15
+      ],
+      "cutoffs": [
+        1.5,
+        2.0,
+        4.5,
         null
       ]
     },
     {
-      "name": "cat2_filtered",
+      "name": "cat2_t10_cutoff_scan",
       "dimension": 48,
       "targets": [
         {
           "kind": "cat",
           "value": 2.0
+        }
+      ],
+      "factors_taus": [
+        10
+      ],
+      "cutoffs": [
+        1.0,
+        1.5,
+        2.0,
+        4.5,
+        6.0
+      ]
+    },
+
+    // =========================================================================
+    // 2. RESTRIZIONE DELL'ESCURSIONE DI AMPIEZZA (total_frequency_bounds)
+    //    Attorno a omega_q,bare = 2.0*omega_c (con filtro causale omega_cut = 3.0):
+    //    - [1.0, 3.0]   -> delta in [-1.0, +1.0]*omega_c (tocca appena omega_c = 1.0)
+    //    - [1.25, 2.75] -> delta in [-0.75, +0.75]*omega_c (resta sopra omega_c)
+    //    - [1.5, 2.5]   -> delta in [-0.5, +0.5]*omega_c (modulazione stretta +-25%)
+    // =========================================================================
+    {
+      "name": "fock6_t10_bounds_scan",
+      "dimension": 60,
+      "targets": [
+        {
+          "kind": "fock",
+          "value": 6
+        }
+      ],
+      "factors_taus": [
+        10
+      ],
+      "cutoffs": [
+        3.0
+      ],
+      "controls": [
+        {
+          "total_frequency_bounds": [
+            1.0,
+            3.0
+          ]
+        },
+        {
+          "total_frequency_bounds": [
+            1.25,
+            2.75
+          ]
+        },
+        {
+          "total_frequency_bounds": [
+            1.5,
+            2.5
+          ]
+        }
+      ]
+    },
+    {
+      "name": "fock10_t15_bounds_scan",
+      "dimension": 60,
+      "targets": [
+        {
+          "kind": "fock",
+          "value": 10
+        }
+      ],
+      "factors_taus": [
+        15
+      ],
+      "cutoffs": [
+        3.0
+      ],
+      "controls": [
+        {
+          "total_frequency_bounds": [
+            1.0,
+            3.0
+          ]
+        },
+        {
+          "total_frequency_bounds": [
+            1.25,
+            2.75
+          ]
+        },
+        {
+          "total_frequency_bounds": [
+            1.5,
+            2.5
+          ]
+        }
+      ]
+    },
+    {
+      "name": "cat2_t10_bounds_scan",
+      "dimension": 48,
+      "targets": [
+        {
+          "kind": "cat",
+          "value": 2.0
+        }
+      ],
+      "factors_taus": [
+        10
+      ],
+      "cutoffs": [
+        3.0
+      ],
+      "controls": [
+        {
+          "total_frequency_bounds": [
+            1.0,
+            3.0
+          ]
+        },
+        {
+          "total_frequency_bounds": [
+            1.25,
+            2.75
+          ]
+        },
+        {
+          "total_frequency_bounds": [
+            1.5,
+            2.5
+          ]
+        }
+      ]
+    },
+
+    // =========================================================================
+    // 3. SCANSIONE SULLO SLEW RATE (slew_weight morbido vs max_slew rigido)
+    //    Con filtro causale omega_cut = 3.0 e bounds standard [0.5, 3.0].
+    // =========================================================================
+    {
+      "name": "fock6_t10_slew_scan",
+      "dimension": 60,
+      "targets": [
+        {
+          "kind": "fock",
+          "value": 6
+        }
+      ],
+      "factors_taus": [
+        10
+      ],
+      "cutoffs": [
+        3.0
+      ],
+      "controls": [
+        {
+          "slew_weight": 0.0001
+        },
+        {
+          "slew_weight": 0.0005
+        },
+        {
+          "slew_weight": 0.002
+        },
+        {
+          "max_slew": 2.5
+        },
+        {
+          "max_slew": 1.5
+        }
+      ]
+    },
+    {
+      "name": "fock10_t15_slew_scan",
+      "dimension": 60,
+      "targets": [
+        {
+          "kind": "fock",
+          "value": 10
+        }
+      ],
+      "factors_taus": [
+        15
+      ],
+      "cutoffs": [
+        3.0
+      ],
+      "controls": [
+        {
+          "slew_weight": 0.0001
+        },
+        {
+          "slew_weight": 0.0005
+        },
+        {
+          "slew_weight": 0.002
+        },
+        {
+          "max_slew": 2.5
+        },
+        {
+          "max_slew": 1.5
+        }
+      ]
+    },
+
+    // =========================================================================
+    // 4. ANALISI DELLO STATO INIZIALE VESTITO ("initial_state": "ground")
+    //    Preparazione a partire dal vero stato fondamentale interagente |E_0>
+    //    dell'Hamiltoniana di Rabi in regime USC (g = 0.3*omega_c) anziché da |0,g,...>.
+    // =========================================================================
+    {
+      "name": "ground_init_fock6",
+      "dimension": 60,
+      "initial_state": "ground",
+      "targets": [
+        {
+          "kind": "fock",
+          "value": 6
+        }
+      ],
+      "factors_taus": [
+        10,
+        20
+      ],
+      "cutoffs": [
+        3.0
+      ]
+    },
+    {
+      "name": "ground_init_fock10",
+      "dimension": 60,
+      "initial_state": "ground",
+      "targets": [
+        {
+          "kind": "fock",
+          "value": 10
         }
       ],
       "factors_taus": [
@@ -280,8 +504,9 @@
       ]
     },
     {
-      "name": "cat2_unfiltered_control",
+      "name": "ground_init_cat2",
       "dimension": 48,
+      "initial_state": "ground",
       "targets": [
         {
           "kind": "cat",
@@ -293,56 +518,7 @@
         15
       ],
       "cutoffs": [
-        null
-      ]
-    },
-    {
-      "name": "squeezed_filtered",
-      "dimension": 48,
-      "targets": [
-        {
-          "kind": "squeezed",
-          "value": 3.0,
-          "squeezing_unit": "dB",
-          "theta": 0.7853981633974483
-        },
-        {
-          "kind": "squeezed",
-          "value": 8.0,
-          "squeezing_unit": "dB",
-          "theta": 0.7853981633974483
-        }
-      ],
-      "factors_taus": [
-        10,
-        20
-      ],
-      "cutoffs": [
         3.0
-      ]
-    },
-    {
-      "name": "squeezed_unfiltered_control",
-      "dimension": 48,
-      "targets": [
-        {
-          "kind": "squeezed",
-          "value": 3.0,
-          "squeezing_unit": "dB",
-          "theta": 0.7853981633974483
-        },
-        {
-          "kind": "squeezed",
-          "value": 8.0,
-          "squeezing_unit": "dB",
-          "theta": 0.7853981633974483
-        }
-      ],
-      "factors_taus": [
-        10
-      ],
-      "cutoffs": [
-        null
       ]
     }
   ]

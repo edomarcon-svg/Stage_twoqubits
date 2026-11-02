@@ -44,6 +44,14 @@ def state_metrics(model, state):
     return out
 
 
+def initial_state_metrics(model):
+    out = state_metrics(model, model.initial)
+    full = model.expand(model.initial)
+    out["bare_vacuum_probability"] = float(abs(full[0])**2)
+    out["drift_energy"] = float(np.vdot(model.initial, model.drift @ model.initial).real)
+    return out
+
+
 def actuator_metrics(model, signal, nodes, points=4001, spectral_threshold=3.0):
     ts = np.linspace(0,signal.duration,points)
     modulation = model.physical_map @ signal.values(nodes,ts)
@@ -59,6 +67,8 @@ def actuator_metrics(model, signal, nodes, points=4001, spectral_threshold=3.0):
             power[1:-1] *= 2
         omega = 2*np.pi*np.fft.rfftfreq(len(sampled),d=ts[1]-ts[0])
         power_above = float(power[omega > spectral_threshold].sum()/power.sum()) if power.sum() > 1e-24 else 0.
+        power_above_cutoff = None if signal.cutoff is None else (
+            float(power[omega > signal.cutoff].sum()/power.sum()) if power.sum() > 1e-24 else 0.)
         omega99 = 0. if power.sum()<1e-24 else float(omega[min(np.searchsorted(np.cumsum(power)/power.sum(),.99),len(omega)-1)])
         fluence = float(np.trapezoid(delta**2,ts))
         metrics.append({"modulation_fluence":fluence,
@@ -67,7 +77,9 @@ def actuator_metrics(model, signal, nodes, points=4001, spectral_threshold=3.0):
                         "slew_max_sampled":float(np.max(abs(rates[j]))),
                         "slew_rms":float(np.sqrt(np.trapezoid(rates[j]**2,ts)/signal.duration)),
                         "command_slew_max":float(np.max(abs(np.diff(command[j])))/signal.h),
-                        "omega_99_ac":omega99,"ac_power_fraction_above_threshold":power_above,"spectral_threshold":spectral_threshold,"total_frequency_min":float(u.min()),
+                        "omega_99_ac":omega99,"ac_power_fraction_above_threshold":power_above,
+                        "ac_power_fraction_above_cutoff":power_above_cutoff,
+                        "spectral_threshold":spectral_threshold,"total_frequency_min":float(u.min()),
                         "total_frequency_max":float(u.max()),"terminal_modulation":float(delta[-1])})
     return {"channels":metrics,"modulation_fluence_total":sum(m["modulation_fluence"] for m in metrics),
             "c2_paper_total":sum(m["c2_paper"] for m in metrics),
@@ -77,7 +89,10 @@ def actuator_metrics(model, signal, nodes, points=4001, spectral_threshold=3.0):
             "total_frequency_fluence_total":sum(m["total_frequency_fluence"] for m in metrics),
             "omega_99_worst_channel":max(m["omega_99_ac"] for m in metrics),
             "slew_worst_channel":max(m["slew_max_sampled"] for m in metrics),
-            "ac_power_fraction_above_threshold_worst":max(m["ac_power_fraction_above_threshold"] for m in metrics)}
+            "slew_rms_worst_channel":max(m["slew_rms"] for m in metrics),
+            "command_slew_worst_channel":max(m["command_slew_max"] for m in metrics),
+            "ac_power_fraction_above_threshold_worst":max(m["ac_power_fraction_above_threshold"] for m in metrics),
+            "ac_power_fraction_above_cutoff_worst":None if signal.cutoff is None else max(m["ac_power_fraction_above_cutoff"] for m in metrics)}
 
 
 def phase_space(model, rho, points):

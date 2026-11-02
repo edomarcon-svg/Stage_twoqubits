@@ -1,0 +1,172 @@
+\documentclass[10pt,a4paper]{article}
+
+\usepackage[utf8]{inputenc}
+\usepackage[T1]{fontenc}
+\usepackage[italian]{babel}
+\usepackage{amsmath, amssymb, amsfonts, mathtools}
+\usepackage{geometry}
+\geometry{a4paper, top=1.6cm, bottom=1.6cm, left=1.4cm, right=1.4cm}
+\usepackage{booktabs}
+\usepackage{multirow}
+\usepackage{array}
+\usepackage{xcolor}
+\usepackage{caption}
+
+\pagestyle{plain}
+
+\begin{document}
+
+\begin{center}
+    {\Large \textbf{Risultati della campagna intermedia: stati di Fock, Cat e Squeezed}}\\[4pt]
+\end{center}
+
+\vspace{2pt}
+
+\begin{table}[h!]
+\centering
+\scriptsize
+\setlength{\tabcolsep}{3.4pt}
+\renewcommand{\arraystretch}{1.08}
+\caption*{\textbf{Tabella 1 — Simulazioni principali con filtro passa-basso causale ($\omega_{\text{cut}} = 3.0\,\omega_c$, blocchi \texttt{main\_000}, \texttt{main\_002}--\texttt{main\_004}, \texttt{main\_006}--\texttt{main\_008}, \texttt{main\_011}--\texttt{main\_014}).}}
+\vspace{-4pt}
+\resizebox{\textwidth}{!}{%
+\begin{tabular}{llccccccc}
+\toprule
+\textbf{Esperimento} & \textbf{Sistema} & \textbf{Successi} & \textbf{$P_{\text{target}}$ med.} & \textbf{$P_{\text{target}}$ $[\min, \max]$} & \textbf{Fluenza $\mathcal{F}_{\text{mod}}$} & \textbf{Costo paper $C_2/\omega_c^2$} & \textbf{$\text{SR}_{\max}$ / $\omega_{99\%}$} & \textbf{Iter.\ GRAPE} \\
+ & & \textbf{(valid.\ num.)} & \textbf{(continua)} & & \textbf{tot (max ch)} & \textbf{tot (max ch)} & \textbf{(mediana)} & \textbf{med.\ $[\min, \max]$} \\
+\midrule
+ \multirow{5}{*}{\shortstack[l]{\textbf{Fock $|n=6\rangle$, $T=10\,\tau_s$}\\filtro $3.0$, $\text{dim}=60$ (\texttt{main\_000})}} & \texttt{1q} & 0/8 (0/8) & 0.717317 & $[0.617159, 0.748426]$ & $34.06$ ($34.06$) & $17.03$ ($17.03$) & $3.78$ / $4.74$ & $298$ $[206, 300]$ \\
+  & \texttt{2q\_common} & 5/8 (7/8) & \textbf{0.993292} & $[0.973599, 0.999936]$ & $53.03$ ($26.51$) & $26.51$ ($13.26$) & $3.77$ / $5.46$ & $300$ $[300, 300]$ \\
+  & \texttt{2q\_independent} & \textbf{8/8} (8/8) & \textbf{0.999942} & $[0.999874, 0.999948]$ & $48.16$ ($25.29$) & $24.08$ ($12.65$) & $3.73$ / $4.98$ & $300$ $[197, 300]$ \\
+  & \texttt{2q\_norm\_common} & 0/8 (0/8) & 0.651781 & $[0.525758, 0.917784]$ & $79.07$ ($39.54$) & $39.54$ ($19.77$) & $3.78$ / $4.62$ & $300$ $[258, 300]$ \\
+  & \texttt{2q\_norm\_independent} & 0/8 (0/8) & 0.738014 & $[0.384006, 0.768554]$ & $73.13$ ($37.44$) & $36.56$ ($18.72$) & $3.78$ / $4.74$ & $300$ $[300, 300]$ \\
+\midrule
+ \multirow{5}{*}{\shortstack[l]{\textbf{Fock $|n=10\rangle$, $T=10\,\tau_s$}\\filtro $3.0$, $\text{dim}=60$ (\texttt{main\_002})}} & \texttt{1q} & 0/8 (0/8) & 0.302737 & $[0.158032, 0.400833]$ & $39.11$ ($39.11$) & $19.56$ ($19.56$) & $3.78$ / $4.74$ & $208$ $[151, 300]$ \\
+  & \texttt{2q\_common} & 0/8 (0/8) & 0.882637 & $[0.763084, 0.947159]$ & $59.26$ ($29.63$) & $29.63$ ($14.81$) & $3.78$ / $5.04$ & $300$ $[167, 300]$ \\
+  & \texttt{2q\_independent} & 0/8 (0/8) & 0.921985 & $[0.877577, 0.975032]$ & $65.43$ ($34.17$) & $32.72$ ($17.08$) & $3.78$ / $5.22$ & $300$ $[300, 300]$ \\
+  & \texttt{2q\_norm\_common} & 0/8 (0/8) & 0.270133 & $[0.107894, 0.490162]$ & $75.16$ ($37.58$) & $37.58$ ($18.79$) & $3.78$ / $4.44$ & $256$ $[187, 300]$ \\
+  & \texttt{2q\_norm\_independent} & 0/8 (0/8) & 0.354498 & $[0.233794, 0.466442]$ & $81.09$ ($43.26$) & $40.55$ ($21.63$) & $3.78$ / $4.68$ & $300$ $[300, 300]$ \\
+\midrule
+ \multirow{5}{*}{\shortstack[l]{\textbf{Fock $|n=10\rangle$, $T=15\,\tau_s$}\\filtro $3.0$, $\text{dim}=60$ (\texttt{main\_003})}} & \texttt{1q} & 0/8 (0/8) & 0.937283 & $[0.872441, 0.973582]$ & $52.27$ ($52.27$) & $26.13$ ($26.13$) & $3.78$ / $4.84$ & $300$ $[219, 300]$ \\
+  & \texttt{2q\_common} & \textbf{8/8} (8/8) & \textbf{0.999946} & $[0.999808, 0.999949]$ & $62.98$ ($31.49$) & $31.49$ ($15.75$) & $3.69$ / $5.04$ & $264$ $[196, 300]$ \\
+  & \texttt{2q\_independent} & \textbf{8/8} (8/8) & \textbf{0.999945} & $[0.999943, 0.999946]$ & $65.08$ ($33.66$) & $32.54$ ($16.83$) & $3.68$ / $4.72$ & $204$ $[169, 300]$ \\
+  & \texttt{2q\_norm\_common} & 0/8 (0/8) & 0.838046 & $[0.574137, 0.947635]$ & $95.02$ ($47.51$) & $47.51$ ($23.76$) & $3.78$ / $4.84$ & $300$ $[300, 300]$ \\
+  & \texttt{2q\_norm\_independent} & 1/8 (1/8) & 0.979306 & $[0.810678, 0.992984]$ & $110.74$ ($56.80$) & $55.37$ ($28.40$) & $3.78$ / $4.80$ & $300$ $[300, 300]$ \\
+\midrule
+ \multirow{5}{*}{\shortstack[l]{\textbf{Fock $|n=10\rangle$, $T=20\,\tau_s$}\\filtro $3.0$, $\text{dim}=60$ (\texttt{main\_004})}} & \texttt{1q} & \textbf{8/8} (8/8) & \textbf{0.999948} & $[0.999945, 0.999950]$ & $52.01$ ($52.01$) & $26.01$ ($26.01$) & $3.76$ / $4.68$ & $182$ $[152, 225]$ \\
+  & \texttt{2q\_common} & \textbf{8/8} (8/8) & \textbf{0.999946} & $[0.999946, 0.999948]$ & $65.51$ ($32.75$) & $32.75$ ($16.38$) & $3.56$ / $4.32$ & $186$ $[127, 230]$ \\
+  & \texttt{2q\_independent} & \textbf{8/8} (8/8) & \textbf{0.999946} & $[0.999944, 0.999948]$ & $54.25$ ($30.23$) & $27.13$ ($15.12$) & $3.61$ / $4.29$ & $176$ $[118, 218]$ \\
+  & \texttt{2q\_norm\_common} & 6/8 (6/8) & \textbf{0.998454} & $[0.926864, 0.999860]$ & $117.09$ ($58.55$) & $58.55$ ($29.27$) & $3.78$ / $4.98$ & $300$ $[300, 300]$ \\
+  & \texttt{2q\_norm\_independent} & \textbf{8/8} (8/8) & \textbf{0.999945} & $[0.999937, 0.999949]$ & $103.18$ ($54.42$) & $51.59$ ($27.21$) & $3.76$ / $4.77$ & $282$ $[198, 300]$ \\
+\midrule
+ \multirow{5}{*}{\shortstack[l]{\textbf{Cat $\alpha=2.0$, $T=10\,\tau_s$}\\filtro $3.0$, $\text{dim}=48$ (\texttt{main\_006})}} & \texttt{1q} & 1/8 (6/8) & 0.977199 & $[0.951746, 0.992273]$ & $32.45$ ($32.45$) & $16.22$ ($16.22$) & $3.78$ / $4.80$ & $300$ $[300, 300]$ \\
+  & \texttt{2q\_common} & \textbf{8/8} (8/8) & \textbf{0.999431} & $[0.997890, 0.999856]$ & $45.67$ ($22.84$) & $22.84$ ($11.42$) & $3.76$ / $5.28$ & $300$ $[300, 300]$ \\
+  & \texttt{2q\_independent} & \textbf{8/8} (8/8) & \textbf{0.999838} & $[0.999489, 0.999906]$ & $47.28$ ($25.06$) & $23.64$ ($12.53$) & $3.77$ / $4.86$ & $300$ $[300, 300]$ \\
+  & \texttt{2q\_norm\_common} & 0/8 (0/8) & 0.883836 & $[0.873494, 0.919944]$ & $64.95$ ($32.47$) & $32.47$ ($16.24$) & $3.78$ / $4.86$ & $300$ $[300, 300]$ \\
+  & \texttt{2q\_norm\_independent} & 2/8 (3/8) & 0.979713 & $[0.956176, 0.998721]$ & $65.29$ ($33.94$) & $32.64$ ($16.97$) & $3.78$ / $5.04$ & $300$ $[300, 300]$ \\
+\midrule
+ \multirow{5}{*}{\shortstack[l]{\textbf{Cat $\alpha=2.0$, $T=15\,\tau_s$}\\filtro $3.0$, $\text{dim}=48$ (\texttt{main\_007})}} & \texttt{1q} & \textbf{8/8} (8/8) & \textbf{0.999949} & $[0.999947, 0.999951]$ & $32.20$ ($32.20$) & $16.10$ ($16.10$) & $3.68$ / $4.68$ & $223$ $[127, 273]$ \\
+  & \texttt{2q\_common} & \textbf{8/8} (8/8) & \textbf{0.999949} & $[0.999948, 0.999950]$ & $46.99$ ($23.50$) & $23.50$ ($11.75$) & $3.07$ / $4.08$ & $238$ $[187, 299]$ \\
+  & \texttt{2q\_independent} & \textbf{8/8} (8/8) & \textbf{0.999949} & $[0.999862, 0.999950]$ & $38.61$ ($23.16$) & $19.30$ ($11.58$) & $3.20$ / $4.16$ & $294$ $[233, 300]$ \\
+  & \texttt{2q\_norm\_common} & \textbf{8/8} (8/8) & \textbf{0.999399} & $[0.995952, 0.999910]$ & $83.96$ ($41.98$) & $41.98$ ($20.99$) & $3.74$ / $4.68$ & $300$ $[300, 300]$ \\
+  & \texttt{2q\_norm\_independent} & \textbf{8/8} (8/8) & \textbf{0.999883} & $[0.999680, 0.999947]$ & $79.29$ ($42.38$) & $39.64$ ($21.19$) & $3.73$ / $4.84$ & $300$ $[300, 300]$ \\
+\midrule
+ \multirow{5}{*}{\shortstack[l]{\textbf{Cat $\alpha=2.0$, $T=20\,\tau_s$}\\filtro $3.0$, $\text{dim}=48$ (\texttt{main\_008})}} & \texttt{1q} & \textbf{8/8} (8/8) & \textbf{0.999948} & $[0.999947, 0.999949]$ & $30.65$ ($30.65$) & $15.33$ ($15.33$) & $3.52$ / $4.14$ & $170$ $[122, 235]$ \\
+  & \texttt{2q\_common} & \textbf{8/8} (8/8) & \textbf{0.999949} & $[0.999947, 0.999950]$ & $43.38$ ($21.69$) & $21.69$ ($10.84$) & $2.67$ / $3.75$ & $215$ $[185, 300]$ \\
+  & \texttt{2q\_independent} & \textbf{8/8} (8/8) & \textbf{0.999949} & $[0.999948, 0.999950]$ & $35.31$ ($18.83$) & $17.66$ ($9.42$) & $2.65$ / $3.84$ & $241$ $[225, 290]$ \\
+  & \texttt{2q\_norm\_common} & \textbf{8/8} (8/8) & \textbf{0.999947} & $[0.999920, 0.999949]$ & $72.35$ ($36.18$) & $36.18$ ($18.09$) & $3.65$ / $4.20$ & $278$ $[198, 300]$ \\
+  & \texttt{2q\_norm\_independent} & \textbf{8/8} (8/8) & \textbf{0.999948} & $[0.999840, 0.999950]$ & $64.54$ ($35.00$) & $32.27$ ($17.50$) & $3.69$ / $4.02$ & $292$ $[174, 300]$ \\
+\midrule
+ \multirow{5}{*}{\shortstack[l]{\textbf{Squeezed $3\,\text{dB}$, $T=10\,\tau_s$}\\filtro $3.0$, $\text{dim}=48$ (\texttt{main\_011})}} & \texttt{1q} & \textbf{8/8} (8/8) & \textbf{0.999953} & $[0.999950, 0.999964]$ & $5.54$ ($5.54$) & $2.77$ ($2.77$) & $1.67$ / $3.60$ & $34$ $[29, 39]$ \\
+  & \texttt{2q\_common} & \textbf{8/8} (8/8) & \textbf{0.999951} & $[0.999950, 0.999953]$ & $13.36$ ($6.68$) & $6.68$ ($3.34$) & $1.45$ / $3.60$ & $35$ $[26, 39]$ \\
+  & \texttt{2q\_independent} & \textbf{8/8} (8/8) & \textbf{0.999951} & $[0.999950, 0.999953]$ & $8.40$ ($4.74$) & $4.20$ ($2.37$) & $1.53$ / $3.54$ & $43$ $[39, 57]$ \\
+  & \texttt{2q\_norm\_common} & \textbf{8/8} (8/8) & \textbf{0.999951} & $[0.999950, 0.999952]$ & $12.54$ ($6.27$) & $6.27$ ($3.14$) & $1.76$ / $3.60$ & $37$ $[31, 49]$ \\
+  & \texttt{2q\_norm\_independent} & \textbf{8/8} (8/8) & \textbf{0.999953} & $[0.999950, 0.999955]$ & $9.39$ ($5.48$) & $4.70$ ($2.74$) & $1.40$ / $3.60$ & $46$ $[40, 52]$ \\
+\midrule
+ \multirow{5}{*}{\shortstack[l]{\textbf{Squeezed $3\,\text{dB}$, $T=20\,\tau_s$}\\filtro $3.0$, $\text{dim}=48$ (\texttt{main\_012})}} & \texttt{1q} & \textbf{8/8} (8/8) & \textbf{0.999953} & $[0.999950, 0.999965]$ & $6.77$ ($6.77$) & $3.38$ ($3.38$) & $1.39$ / $3.66$ & $28$ $[23, 39]$ \\
+  & \texttt{2q\_common} & \textbf{8/8} (8/8) & \textbf{0.999953} & $[0.999950, 0.999961]$ & $7.83$ ($3.91$) & $3.91$ ($1.96$) & $1.22$ / $3.09$ & $26$ $[15, 34]$ \\
+  & \texttt{2q\_independent} & \textbf{8/8} (8/8) & \textbf{0.999952} & $[0.999950, 0.999955]$ & $10.23$ ($5.60$) & $5.12$ ($2.80$) & $1.39$ / $3.12$ & $33$ $[25, 39]$ \\
+  & \texttt{2q\_norm\_common} & \textbf{8/8} (8/8) & \textbf{0.999951} & $[0.999950, 0.999952]$ & $12.88$ ($6.44$) & $6.44$ ($3.22$) & $1.28$ / $3.36$ & $42$ $[31, 56]$ \\
+  & \texttt{2q\_norm\_independent} & \textbf{8/8} (8/8) & \textbf{0.999951} & $[0.999950, 0.999953]$ & $12.24$ ($6.41$) & $6.12$ ($3.20$) & $1.52$ / $3.24$ & $47$ $[45, 56]$ \\
+\midrule
+ \multirow{5}{*}{\shortstack[l]{\textbf{Squeezed $8\,\text{dB}$, $T=10\,\tau_s$}\\filtro $3.0$, $\text{dim}=48$ (\texttt{main\_013})}} & \texttt{1q} & \textbf{8/8} (8/8) & \textbf{0.998505} & $[0.998025, 0.999255]$ & $27.64$ ($27.64$) & $13.82$ ($13.82$) & $3.75$ / $5.10$ & $300$ $[295, 300]$ \\
+  & \texttt{2q\_common} & \textbf{8/8} (8/8) & \textbf{0.999404} & $[0.999055, 0.999621]$ & $36.25$ ($18.12$) & $18.12$ ($9.06$) & $3.71$ / $5.16$ & $300$ $[300, 300]$ \\
+  & \texttt{2q\_independent} & \textbf{8/8} (8/8) & \textbf{0.999285} & $[0.998880, 0.999644]$ & $33.79$ ($17.98$) & $16.90$ ($8.99$) & $3.68$ / $5.28$ & $300$ $[300, 300]$ \\
+  & \texttt{2q\_norm\_common} & \textbf{8/8} (8/8) & \textbf{0.998954} & $[0.998128, 0.999326]$ & $50.83$ ($25.42$) & $25.42$ ($12.71$) & $3.69$ / $4.92$ & $300$ $[300, 300]$ \\
+  & \texttt{2q\_norm\_independent} & \textbf{8/8} (8/8) & \textbf{0.999400} & $[0.998095, 0.999610]$ & $50.82$ ($26.42$) & $25.41$ ($13.21$) & $3.70$ / $5.10$ & $300$ $[300, 300]$ \\
+\midrule
+ \multirow{5}{*}{\shortstack[l]{\textbf{Squeezed $8\,\text{dB}$, $T=20\,\tau_s$}\\filtro $3.0$, $\text{dim}=48$ (\texttt{main\_014})}} & \texttt{1q} & \textbf{8/8} (8/8) & \textbf{0.999627} & $[0.999159, 0.999809]$ & $27.72$ ($27.72$) & $13.86$ ($13.86$) & $3.67$ / $4.68$ & $300$ $[300, 300]$ \\
+  & \texttt{2q\_common} & \textbf{8/8} (8/8) & \textbf{0.999751} & $[0.999635, 0.999842]$ & $32.20$ ($16.10$) & $16.10$ ($8.05$) & $3.19$ / $4.92$ & $300$ $[300, 300]$ \\
+  & \texttt{2q\_independent} & \textbf{8/8} (8/8) & \textbf{0.999607} & $[0.999461, 0.999771]$ & $30.22$ ($15.40$) & $15.11$ ($7.70$) & $3.41$ / $4.92$ & $300$ $[300, 300]$ \\
+  & \texttt{2q\_norm\_common} & \textbf{8/8} (8/8) & \textbf{0.999647} & $[0.999511, 0.999841]$ & $55.25$ ($27.63$) & $27.63$ ($13.81$) & $3.55$ / $3.96$ & $300$ $[300, 300]$ \\
+  & \texttt{2q\_norm\_independent} & \textbf{8/8} (8/8) & \textbf{0.999636} & $[0.999482, 0.999692]$ & $54.01$ ($30.02$) & $27.00$ ($15.01$) & $3.50$ / $4.02$ & $300$ $[300, 300]$ \\
+\bottomrule
+\end{tabular}%
+}
+\end{table}
+
+\newpage
+
+\begin{table}[h!]
+\centering
+\scriptsize
+\setlength{\tabcolsep}{3.4pt}
+\renewcommand{\arraystretch}{1.15}
+\caption*{\textbf{Tabella 2 — Simulazioni di controllo senza filtro ($\omega_{\text{cut}} = \text{null}$, blocchi \texttt{main\_001}, \texttt{main\_005}, \texttt{main\_009}, \texttt{main\_010}, \texttt{main\_015}, \texttt{main\_016}).}}
+\vspace{-4pt}
+\resizebox{\textwidth}{!}{%
+\begin{tabular}{llccccccc}
+\toprule
+\textbf{Esperimento} & \textbf{Sistema} & \textbf{Successi} & \textbf{$P_{\text{target}}$ med.} & \textbf{$P_{\text{target}}$ $[\min, \max]$} & \textbf{Fluenza $\mathcal{F}_{\text{mod}}$} & \textbf{Costo paper $C_2/\omega_c^2$} & \textbf{$\text{SR}_{\max}$ / $\omega_{99\%}$} & \textbf{Iter.\ GRAPE} \\
+ & & \textbf{(valid.\ num.)} & \textbf{(continua)} & & \textbf{tot (max ch)} & \textbf{tot (max ch)} & \textbf{(mediana)} & \textbf{med.\ $[\min, \max]$} \\
+\midrule
+ \multirow{5}{*}{\shortstack[l]{\textbf{Fock $|n=6\rangle$, $T=10\,\tau_s$}\\senza filtro, $\text{dim}=60$ (\texttt{main\_001})}} & \texttt{1q} & 1/8 (1/8) & 0.981119 & $[0.956183, 0.999322]$ & $49.20$ ($49.20$) & $24.60$ ($24.60$) & $4.77$ / $8.16$ & $300$ $[235, 300]$ \\
+  & \texttt{2q\_common} & \textbf{8/8} (8/8) & \textbf{0.999937} & $[0.999917, 0.999939]$ & $53.70$ ($26.85$) & $26.85$ ($13.42$) & $4.76$ / $7.80$ & $218$ $[179, 300]$ \\
+  & \texttt{2q\_independent} & \textbf{8/8} (8/8) & \textbf{0.999938} & $[0.999929, 0.999941]$ & $54.19$ ($30.55$) & $27.09$ ($15.27$) & $4.76$ / $8.16$ & $176$ $[130, 214]$ \\
+  & \texttt{2q\_norm\_common} & 0/8 (0/8) & 0.828066 & $[0.777615, 0.936965]$ & $97.49$ ($48.75$) & $48.75$ ($24.37$) & $4.77$ / $7.56$ & $300$ $[300, 300]$ \\
+  & \texttt{2q\_norm\_independent} & 0/8 (0/8) & 0.976268 & $[0.887827, 0.995310]$ & $103.93$ ($54.05$) & $51.96$ ($27.03$) & $4.77$ / $7.44$ & $300$ $[300, 300]$ \\
+\midrule
+ \multirow{5}{*}{\shortstack[l]{\textbf{Fock $|n=10\rangle$, $T=10\,\tau_s$}\\senza filtro, $\text{dim}=60$ (\texttt{main\_005})}} & \texttt{1q} & 0/8 (0/8) & 0.687505 & $[0.603246, 0.724137]$ & $52.88$ ($52.88$) & $26.44$ ($26.44$) & $4.77$ / $7.80$ & $190$ $[157, 300]$ \\
+  & \texttt{2q\_common} & 3/8 (3/8) & \textbf{0.994516} & $[0.959896, 0.999734]$ & $79.74$ ($39.87$) & $39.87$ ($19.93$) & $4.77$ / $7.86$ & $300$ $[300, 300]$ \\
+  & \texttt{2q\_independent} & \textbf{8/8} (8/8) & \textbf{0.999737} & $[0.998240, 0.999903]$ & $78.60$ ($40.65$) & $39.30$ ($20.33$) & $4.77$ / $8.04$ & $300$ $[300, 300]$ \\
+  & \texttt{2q\_norm\_common} & 0/8 (0/8) & 0.502739 & $[0.383340, 0.638977]$ & $100.73$ ($50.37$) & $50.37$ ($25.18$) & $4.77$ / $7.68$ & $298$ $[240, 300]$ \\
+  & \texttt{2q\_norm\_independent} & 0/8 (0/8) & 0.653033 & $[0.565350, 0.806457]$ & $104.43$ ($53.58$) & $52.21$ ($26.79$) & $4.77$ / $7.92$ & $300$ $[300, 300]$ \\
+\midrule
+ \multirow{5}{*}{\shortstack[l]{\textbf{Cat $\alpha=2.0$, $T=10\,\tau_s$}\\senza filtro, $\text{dim}=48$ (\texttt{main\_009})}} & \texttt{1q} & \textbf{8/8} (8/8) & \textbf{0.999789} & $[0.997088, 0.999928]$ & $43.56$ ($43.56$) & $21.78$ ($21.78$) & $4.77$ / $7.74$ & $300$ $[300, 300]$ \\
+  & \texttt{2q\_common} & 7/8 (7/8) & \textbf{0.999931} & $[0.999776, 0.999946]$ & $54.80$ ($27.40$) & $27.40$ ($13.70$) & $4.65$ / $7.14$ & $294$ $[209, 300]$ \\
+  & \texttt{2q\_independent} & \textbf{8/8} (8/8) & \textbf{0.999941} & $[0.999934, 0.999944]$ & $45.76$ ($25.09$) & $22.88$ ($12.55$) & $4.70$ / $7.80$ & $285$ $[191, 300]$ \\
+  & \texttt{2q\_norm\_common} & 3/8 (3/8) & 0.989409 & $[0.922015, 0.997865]$ & $89.97$ ($44.98$) & $44.98$ ($22.49$) & $4.77$ / $7.74$ & $300$ $[300, 300]$ \\
+  & \texttt{2q\_norm\_independent} & \textbf{8/8} (8/8) & \textbf{0.999779} & $[0.999151, 0.999888]$ & $79.36$ ($41.00$) & $39.68$ ($20.50$) & $4.77$ / $7.98$ & $300$ $[300, 300]$ \\
+\midrule
+ \multirow{5}{*}{\shortstack[l]{\textbf{Cat $\alpha=2.0$, $T=15\,\tau_s$}\\senza filtro, $\text{dim}=48$ (\texttt{main\_010})}} & \texttt{1q} & \textbf{8/8} (8/8) & \textbf{0.999942} & $[0.999941, 0.999943]$ & $32.73$ ($32.73$) & $16.37$ ($16.37$) & $4.56$ / $7.76$ & $130$ $[125, 175]$ \\
+  & \texttt{2q\_common} & \textbf{8/8} (8/8) & \textbf{0.999944} & $[0.999940, 0.999945]$ & $42.10$ ($21.05$) & $21.05$ ($10.52$) & $3.55$ / $6.72$ & $189$ $[140, 253]$ \\
+  & \texttt{2q\_independent} & \textbf{8/8} (8/8) & \textbf{0.999944} & $[0.999940, 0.999946]$ & $35.87$ ($19.65$) & $17.94$ ($9.83$) & $3.48$ / $6.60$ & $220$ $[131, 270]$ \\
+  & \texttt{2q\_norm\_common} & 7/8 (7/8) & \textbf{0.999918} & $[0.999815, 0.999944]$ & $88.57$ ($44.28$) & $44.28$ ($22.14$) & $4.72$ / $7.52$ & $300$ $[201, 300]$ \\
+  & \texttt{2q\_norm\_independent} & \textbf{8/8} (8/8) & \textbf{0.999942} & $[0.999888, 0.999944]$ & $73.66$ ($44.05$) & $36.83$ ($22.03$) & $4.63$ / $6.64$ & $250$ $[171, 300]$ \\
+\midrule
+ \multirow{5}{*}{\shortstack[l]{\textbf{Squeezed $3\,\text{dB}$, $T=10\,\tau_s$}\\senza filtro, $\text{dim}=48$ (\texttt{main\_015})}} & \texttt{1q} & \textbf{8/8} (8/8) & \textbf{0.999954} & $[0.999950, 0.999959]$ & $5.84$ ($5.84$) & $2.92$ ($2.92$) & $1.72$ / $3.96$ & $31$ $[24, 34]$ \\
+  & \texttt{2q\_common} & \textbf{8/8} (8/8) & \textbf{0.999951} & $[0.999950, 0.999959]$ & $12.78$ ($6.39$) & $6.39$ ($3.20$) & $1.76$ / $4.14$ & $35$ $[30, 44]$ \\
+  & \texttt{2q\_independent} & \textbf{8/8} (8/8) & \textbf{0.999951} & $[0.999950, 0.999956]$ & $8.57$ ($4.87$) & $4.28$ ($2.44$) & $1.52$ / $3.96$ & $38$ $[30, 46]$ \\
+  & \texttt{2q\_norm\_common} & \textbf{8/8} (8/8) & \textbf{0.999952} & $[0.999950, 0.999955]$ & $11.60$ ($5.80$) & $5.80$ ($2.90$) & $1.86$ / $3.78$ & $37$ $[32, 47]$ \\
+  & \texttt{2q\_norm\_independent} & \textbf{8/8} (8/8) & \textbf{0.999950} & $[0.999950, 0.999955]$ & $9.98$ ($5.79$) & $4.99$ ($2.90$) & $1.72$ / $3.84$ & $40$ $[36, 48]$ \\
+\midrule
+ \multirow{5}{*}{\shortstack[l]{\textbf{Squeezed $8\,\text{dB}$, $T=10\,\tau_s$}\\senza filtro, $\text{dim}=48$ (\texttt{main\_016})}} & \texttt{1q} & \textbf{8/8} (8/8) & \textbf{0.999550} & $[0.999173, 0.999677]$ & $33.96$ ($33.96$) & $16.98$ ($16.98$) & $4.77$ / $8.10$ & $300$ $[300, 300]$ \\
+  & \texttt{2q\_common} & 6/8 (6/8) & \textbf{0.999720} & $[0.999618, 0.999906]$ & $40.60$ ($20.30$) & $20.30$ ($10.15$) & $4.72$ / $7.80$ & $300$ $[300, 300]$ \\
+  & \texttt{2q\_independent} & \textbf{8/8} (8/8) & \textbf{0.999752} & $[0.999635, 0.999897]$ & $36.58$ ($20.85$) & $18.29$ ($10.42$) & $4.77$ / $8.10$ & $300$ $[300, 300]$ \\
+  & \texttt{2q\_norm\_common} & \textbf{8/8} (8/8) & \textbf{0.999610} & $[0.999480, 0.999791]$ & $64.46$ ($32.23$) & $32.23$ ($16.11$) & $4.77$ / $7.68$ & $300$ $[300, 300]$ \\
+  & \texttt{2q\_norm\_independent} & \textbf{8/8} (8/8) & \textbf{0.999727} & $[0.999616, 0.999795]$ & $60.13$ ($31.80$) & $30.07$ ($15.90$) & $4.77$ / $8.04$ & $300$ $[300, 300]$ \\
+\bottomrule
+\end{tabular}%
+}
+\end{table}
+
+\vspace{6pt}
+\footnotesize
+\noindent
+\begin{itemize}\setlength{\itemsep}{2pt}
+    \item \textbf{Sistemi confrontati:} \texttt{1q} ($1$ qubit con $g=0.3\,\omega_c$); \texttt{2q\_common} ($2$ qubit con $g_1=g_2=0.3\,\omega_c$, $1$ canale comune); \texttt{2q\_independent} ($2$ qubit con $g_1=g_2=0.3\,\omega_c$, $2$ canali indipendenti); \texttt{2q\_norm\_common} ($2$ qubit con $g_1=g_2=0.3/\sqrt{2}\,\omega_c$ tali che $g_{\text{eff}} = \sqrt{g_1^2+g_2^2} = 0.3\,\omega_c$, $1$ canale comune); \texttt{2q\_norm\_independent} ($2$ qubit con $g_1=g_2=0.3/\sqrt{2}\,\omega_c$, $2$ canali indipendenti).
+    \item \textbf{Fluenza e costo energetico:} $\mathcal{F}_{\text{mod,tot}} = \sum_j \int_0^T \Omega_{D,j}(t)^2\,dt$ e costo $C_2/\omega_c^2 = \frac{1}{2}\mathcal{F}_{\text{mod}}$.
+    \item \textbf{Slew rate e banda:} $\text{SR}_{\max} = \max_{j,t} |\dot{\Omega}_{D,j}(t)|/\omega_c^2$ (massima rapidità di variazione del drive) e $\omega_{99\%}/\omega_c$ (frequenza entro cui è contenuto il $99\%$ della potenza spettrale AC del controllo applicato).
+\end{itemize}
+
+\end{document}

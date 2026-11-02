@@ -510,4 +510,206 @@ Con queste modifiche, le future campagne di simulazione dovrebbero essere comple
 \noindent
 Tutti i log e i dati ottenuti dalla simulazione sono salvati e disponibili per ulteriori analisi.
 
+\newpage
+\section{Campagna intermedia: ottimizzazioni di calcolo ed estensione a stati Cat e Squeezed}
+
+Prima di passare all'introduzione del vincolo esplicito sullo slew rate, ho implementato nella pipeline \texttt{v2/qoc/} gli accorgimenti individuati alla fine della sezione precedente e ho eseguito una campagna intermedia completa (\texttt{campagna\_intermedia\_fock\_cat\_squeezed\_20261030T163304\_082788Z}, $17$ blocchi $\times 5$ sistemi $\times 8$ seed $= 680$ pipeline totali).
+
+\subsection{Modifiche implementate e piano degli esperimenti}
+\begin{enumerate}
+    \item \textbf{Griglia temporale ridotta in CRAB (\texttt{crab\_intervals}) e budget \texttt{crab\_max\_eval = 1500}:} la fase esplorativa CRAB viene valutata su una griglia temporale ridotta di un fattore $4$ rispetto a GRAPE ($N_{\text{CRAB}} = N_{\text{GRAPE}}/4$, scalata automaticamente con la durata $T$: $250$, $375$ e $500$ intervalli midpoint per $T = 10, 15, 20\,\tau_s$), passando poi alla griglia fine ($1000$, $1500$, $2000$ intervalli) per il raffinamento locale con GRAPE.
+    \item \textbf{Early stopping in GRAPE (\texttt{grape\_stop\_probability = 0.99995}):} il raffinamento con \texttt{L-BFGS-B} (tetto massimo ridotto da $600$ a $300$ iterazioni) si arresta automaticamente non appena la probabilità discreta supera $P_{\text{disc}} \ge 0.99995$, evitando iterazioni superflue in regime di saturazione.
+    \item \textbf{Dimensione di Fock adattata per famiglia di stato e metriche $C_2$ native:} ho aggiunto il supporto per sovrascrivere \texttt{dimension} e \texttt{control} per singolo blocco della campagna, mantenendo $\text{dim}=60$ (validato a $\text{dim}=80$) per gli stati di Fock $|6\rangle$ e $|10\rangle$ e impostando $\text{dim}=48$ (validato a $\text{dim}=68$) per gli stati Cat ($\alpha=2.0$) e Squeezed ($3\,\text{dB}$ e $8\,\text{dB}$, con angolo $\theta = \pi/4$). I costi energetici del paper $C_{2,\text{tot}}$ e $C_{2,\text{max ch}}$ vengono ora salvati nativamente in tutti i file JSON e CSV.
+\end{enumerate}
+
+\noindent
+La campagna intermedia esplora tre famiglie di stati non classici, affiancando alle simulazioni con filtro causale ($\omega_{\text{cut}} = 3.0\,\omega_c$, Tabella~\ref{tab:intermedia_filtrata}) un set sistematico di simulazioni di controllo senza filtro ($\omega_{\text{cut}} = \text{null}$, Tabella~\ref{tab:intermedia_nofiltro}):
+\begin{itemize}
+    \item \textbf{Stati di Fock ($\text{dim}=60 \to 80$):} verifica dei casi chiave della campagna precedente su $|n=6\rangle$ a $T=10\,\tau_s$ (con e senza filtro, \texttt{main\_000}--\texttt{main\_001}) e su $|n=10\rangle$ a $T=10, 20\,\tau_s$ (\texttt{main\_002}, \texttt{main\_004}, \texttt{main\_005}), più il nuovo punto intermedio a $T = 15\,\tau_s$ con filtro (\texttt{main\_003}).
+    \item \textbf{Stati di Schrödinger Cat a 4 componenti ($\alpha = 2.0$, $\langle n \rangle = 4$, $\text{dim}=48 \to 68$):} scansione su tre durate $T = 10, 15, 20\,\tau_s$ con filtro (\texttt{main\_006}--\texttt{main\_008}) e controlli senza filtro a $T = 10, 15\,\tau_s$ (\texttt{main\_009}--\texttt{main\_010}).
+    \item \textbf{Stati Squeezed Vacuum ($3\,\text{dB}$ e $8\,\text{dB}$, $\theta = \pi/4$, $\text{dim}=48 \to 68$):} confronto tra squeezing moderato ($3\,\text{dB}$, $r \approx 0.346$, $\langle n\rangle \approx 0.12$) e squeezing forte ($8\,\text{dB}$, $r \approx 0.921$, $\langle n\rangle \approx 1.11$) a $T = 10, 20\,\tau_s$ con filtro (\texttt{main\_011}--\texttt{main\_014}) e a $T = 10\,\tau_s$ senza filtro (\texttt{main\_015}--\texttt{main\_016}).
+\end{itemize}
+
+\begin{table}[H]
+\centering
+\scriptsize
+\setlength{\tabcolsep}{3.2pt}
+\renewcommand{\arraystretch}{1.08}
+\resizebox{\textwidth}{!}{%
+\begin{tabular}{llccccccc}
+\toprule
+\textbf{Esperimento} & \textbf{Sistema} & \textbf{Successi} & \textbf{$P_{\text{target}}$ med.} & \textbf{$P_{\text{target}}$ $[\min, \max]$} & \textbf{Fluenza $\mathcal{F}_{\text{mod}}$} & \textbf{Costo paper $C_2/\omega_c^2$} & \textbf{$\text{SR}_{\max}$ / $\omega_{99\%}$} & \textbf{Iter.\ GRAPE} \\
+ & & \textbf{(valid.\ num.)} & \textbf{(continua)} & & \textbf{tot (max ch)} & \textbf{tot (max ch)} & \textbf{(mediana)} & \textbf{med.\ $[\min, \max]$} \\
+\midrule
+\multirow{5}{*}{\shortstack[l]{\textbf{Fock $|n=6\rangle$, $T=10\,\tau_s$}\\filtro $3.0$, $\text{dim}=60$ (\texttt{main\_000})}}
+ & \texttt{1q} & 0/8 (0/8) & 0.717317 & $[0.617159, 0.748426]$ & $34.06$ ($34.06$) & $17.03$ ($17.03$) & $3.78$ / $4.74$ & $298$ $[206, 300]$ \\
+ & \texttt{2q\_common} & 5/8 (7/8) & \textbf{0.993292} & $[0.973599, 0.999936]$ & $53.03$ ($26.51$) & $26.51$ ($13.26$) & $3.77$ / $5.46$ & $300$ $[300, 300]$ \\
+ & \texttt{2q\_independent} & \textbf{8/8} (8/8) & \textbf{0.999942} & $[0.999874, 0.999948]$ & $48.16$ ($25.29$) & $24.08$ ($12.65$) & $3.73$ / $4.98$ & $300$ $[197, 300]$ \\
+ & \texttt{2q\_norm\_common} & 0/8 (0/8) & 0.651781 & $[0.525758, 0.917784]$ & $79.07$ ($39.54$) & $39.54$ ($19.77$) & $3.78$ / $4.62$ & $300$ $[258, 300]$ \\
+ & \texttt{2q\_norm\_independent} & 0/8 (0/8) & 0.738014 & $[0.384006, 0.768554]$ & $73.13$ ($37.44$) & $36.56$ ($18.72$) & $3.78$ / $4.74$ & $300$ $[300, 300]$ \\
+\midrule
+\multirow{5}{*}{\shortstack[l]{\textbf{Fock $|n=10\rangle$, $T=10\,\tau_s$}\\filtro $3.0$, $\text{dim}=60$ (\texttt{main\_002})}}
+ & \texttt{1q} & 0/8 (0/8) & 0.302737 & $[0.158032, 0.400833]$ & $39.11$ ($39.11$) & $19.56$ ($19.56$) & $3.78$ / $4.74$ & $208$ $[151, 300]$ \\
+ & \texttt{2q\_common} & 0/8 (0/8) & 0.882637 & $[0.763084, 0.947159]$ & $59.26$ ($29.63$) & $29.63$ ($14.81$) & $3.78$ / $5.04$ & $300$ $[167, 300]$ \\
+ & \texttt{2q\_independent} & 0/8 (0/8) & 0.921985 & $[0.877577, 0.975032]$ & $65.43$ ($34.17$) & $32.72$ ($17.08$) & $3.78$ / $5.22$ & $300$ $[300, 300]$ \\
+ & \texttt{2q\_norm\_common} & 0/8 (0/8) & 0.270133 & $[0.107894, 0.490162]$ & $75.16$ ($37.58$) & $37.58$ ($18.79$) & $3.78$ / $4.44$ & $256$ $[187, 300]$ \\
+ & \texttt{2q\_norm\_independent} & 0/8 (0/8) & 0.354498 & $[0.233794, 0.466442]$ & $81.09$ ($43.26$) & $40.55$ ($21.63$) & $3.78$ / $4.68$ & $300$ $[300, 300]$ \\
+\midrule
+\multirow{5}{*}{\shortstack[l]{\textbf{Fock $|n=10\rangle$, $T=15\,\tau_s$}\\filtro $3.0$, $\text{dim}=60$ (\texttt{main\_003})}}
+ & \texttt{1q} & 0/8 (0/8) & 0.937283 & $[0.872441, 0.973582]$ & $52.27$ ($52.27$) & $26.13$ ($26.13$) & $3.78$ / $4.84$ & $300$ $[219, 300]$ \\
+ & \texttt{2q\_common} & \textbf{8/8} (8/8) & \textbf{0.999946} & $[0.999808, 0.999949]$ & $62.98$ ($31.49$) & $31.49$ ($15.75$) & $3.69$ / $5.04$ & $264$ $[196, 300]$ \\
+ & \texttt{2q\_independent} & \textbf{8/8} (8/8) & \textbf{0.999945} & $[0.999943, 0.999946]$ & $65.08$ ($33.66$) & $32.54$ ($16.83$) & $3.68$ / $4.72$ & $204$ $[169, 300]$ \\
+ & \texttt{2q\_norm\_common} & 0/8 (0/8) & 0.838046 & $[0.574137, 0.947635]$ & $95.02$ ($47.51$) & $47.51$ ($23.76$) & $3.78$ / $4.84$ & $300$ $[300, 300]$ \\
+ & \texttt{2q\_norm\_independent} & 1/8 (1/8) & 0.979306 & $[0.810678, 0.992984]$ & $110.74$ ($56.80$) & $55.37$ ($28.40$) & $3.78$ / $4.80$ & $300$ $[300, 300]$ \\
+\midrule
+\multirow{5}{*}{\shortstack[l]{\textbf{Fock $|n=10\rangle$, $T=20\,\tau_s$}\\filtro $3.0$, $\text{dim}=60$ (\texttt{main\_004})}}
+ & \texttt{1q} & \textbf{8/8} (8/8) & \textbf{0.999948} & $[0.999945, 0.999950]$ & $52.01$ ($52.01$) & $26.01$ ($26.01$) & $3.76$ / $4.68$ & $182$ $[152, 225]$ \\
+ & \texttt{2q\_common} & \textbf{8/8} (8/8) & \textbf{0.999946} & $[0.999946, 0.999948]$ & $65.51$ ($32.75$) & $32.75$ ($16.38$) & $3.56$ / $4.32$ & $186$ $[127, 230]$ \\
+ & \texttt{2q\_independent} & \textbf{8/8} (8/8) & \textbf{0.999946} & $[0.999944, 0.999948]$ & $54.25$ ($30.23$) & $27.13$ ($15.12$) & $3.61$ / $4.29$ & $176$ $[118, 218]$ \\
+ & \texttt{2q\_norm\_common} & 6/8 (6/8) & \textbf{0.998454} & $[0.926864, 0.999860]$ & $117.09$ ($58.55$) & $58.55$ ($29.27$) & $3.78$ / $4.98$ & $300$ $[300, 300]$ \\
+ & \texttt{2q\_norm\_independent} & \textbf{8/8} (8/8) & \textbf{0.999945} & $[0.999937, 0.999949]$ & $103.18$ ($54.42$) & $51.59$ ($27.21$) & $3.76$ / $4.77$ & $282$ $[198, 300]$ \\
+\midrule
+\multirow{5}{*}{\shortstack[l]{\textbf{Cat $\alpha=2.0$, $T=10\,\tau_s$}\\filtro $3.0$, $\text{dim}=48$ (\texttt{main\_006})}}
+ & \texttt{1q} & 1/8 (6/8) & 0.977199 & $[0.951746, 0.992273]$ & $32.45$ ($32.45$) & $16.22$ ($16.22$) & $3.78$ / $4.80$ & $300$ $[300, 300]$ \\
+ & \texttt{2q\_common} & \textbf{8/8} (8/8) & \textbf{0.999431} & $[0.997890, 0.999856]$ & $45.67$ ($22.84$) & $22.84$ ($11.42$) & $3.76$ / $5.28$ & $300$ $[300, 300]$ \\
+ & \texttt{2q\_independent} & \textbf{8/8} (8/8) & \textbf{0.999838} & $[0.999489, 0.999906]$ & $47.28$ ($25.06$) & $23.64$ ($12.53$) & $3.77$ / $4.86$ & $300$ $[300, 300]$ \\
+ & \texttt{2q\_norm\_common} & 0/8 (0/8) & 0.883836 & $[0.873494, 0.919944]$ & $64.95$ ($32.47$) & $32.47$ ($16.24$) & $3.78$ / $4.86$ & $300$ $[300, 300]$ \\
+ & \texttt{2q\_norm\_independent} & 2/8 (3/8) & 0.979713 & $[0.956176, 0.998721]$ & $65.29$ ($33.94$) & $32.64$ ($16.97$) & $3.78$ / $5.04$ & $300$ $[300, 300]$ \\
+\midrule
+\multirow{5}{*}{\shortstack[l]{\textbf{Cat $\alpha=2.0$, $T=15\,\tau_s$}\\filtro $3.0$, $\text{dim}=48$ (\texttt{main\_007})}}
+ & \texttt{1q} & \textbf{8/8} (8/8) & \textbf{0.999949} & $[0.999947, 0.999951]$ & $32.20$ ($32.20$) & $16.10$ ($16.10$) & $3.68$ / $4.68$ & $223$ $[127, 273]$ \\
+ & \texttt{2q\_common} & \textbf{8/8} (8/8) & \textbf{0.999949} & $[0.999948, 0.999950]$ & $46.99$ ($23.50$) & $23.50$ ($11.75$) & $3.07$ / $4.08$ & $238$ $[187, 299]$ \\
+ & \texttt{2q\_independent} & \textbf{8/8} (8/8) & \textbf{0.999949} & $[0.999862, 0.999950]$ & $38.61$ ($23.16$) & $19.30$ ($11.58$) & $3.20$ / $4.16$ & $294$ $[233, 300]$ \\
+ & \texttt{2q\_norm\_common} & \textbf{8/8} (8/8) & \textbf{0.999399} & $[0.995952, 0.999910]$ & $83.96$ ($41.98$) & $41.98$ ($20.99$) & $3.74$ / $4.68$ & $300$ $[300, 300]$ \\
+ & \texttt{2q\_norm\_independent} & \textbf{8/8} (8/8) & \textbf{0.999883} & $[0.999680, 0.999947]$ & $79.29$ ($42.38$) & $39.64$ ($21.19$) & $3.73$ / $4.84$ & $300$ $[300, 300]$ \\
+\midrule
+\multirow{5}{*}{\shortstack[l]{\textbf{Cat $\alpha=2.0$, $T=20\,\tau_s$}\\filtro $3.0$, $\text{dim}=48$ (\texttt{main\_008})}}
+ & \texttt{1q} & \textbf{8/8} (8/8) & \textbf{0.999948} & $[0.999947, 0.999949]$ & $30.65$ ($30.65$) & $15.33$ ($15.33$) & $3.52$ / $4.14$ & $170$ $[122, 235]$ \\
+ & \texttt{2q\_common} & \textbf{8/8} (8/8) & \textbf{0.999949} & $[0.999947, 0.999950]$ & $43.38$ ($21.69$) & $21.69$ ($10.84$) & $2.67$ / $3.75$ & $215$ $[185, 300]$ \\
+ & \texttt{2q\_independent} & \textbf{8/8} (8/8) & \textbf{0.999949} & $[0.999948, 0.999950]$ & $35.31$ ($18.83$) & $17.66$ ($9.42$) & $2.65$ / $3.84$ & $241$ $[225, 290]$ \\
+ & \texttt{2q\_norm\_common} & \textbf{8/8} (8/8) & \textbf{0.999947} & $[0.999920, 0.999949]$ & $72.35$ ($36.18$) & $36.18$ ($18.09$) & $3.65$ / $4.20$ & $278$ $[198, 300]$ \\
+ & \texttt{2q\_norm\_independent} & \textbf{8/8} (8/8) & \textbf{0.999948} & $[0.999840, 0.999950]$ & $64.54$ ($35.00$) & $32.27$ ($17.50$) & $3.69$ / $4.02$ & $292$ $[174, 300]$ \\
+\midrule
+\multirow{5}{*}{\shortstack[l]{\textbf{Squeezed $3\,\text{dB}$, $T=10\,\tau_s$}\\filtro $3.0$, $\text{dim}=48$ (\texttt{main\_011})}}
+ & \texttt{1q} & \textbf{8/8} (8/8) & \textbf{0.999953} & $[0.999950, 0.999964]$ & $5.54$ ($5.54$) & $2.77$ ($2.77$) & $1.67$ / $3.60$ & $34$ $[29, 39]$ \\
+ & \texttt{2q\_common} & \textbf{8/8} (8/8) & \textbf{0.999951} & $[0.999950, 0.999953]$ & $13.36$ ($6.68$) & $6.68$ ($3.34$) & $1.45$ / $3.60$ & $35$ $[26, 39]$ \\
+ & \texttt{2q\_independent} & \textbf{8/8} (8/8) & \textbf{0.999951} & $[0.999950, 0.999953]$ & $8.40$ ($4.74$) & $4.20$ ($2.37$) & $1.53$ / $3.54$ & $43$ $[39, 57]$ \\
+ & \texttt{2q\_norm\_common} & \textbf{8/8} (8/8) & \textbf{0.999951} & $[0.999950, 0.999952]$ & $12.54$ ($6.27$) & $6.27$ ($3.14$) & $1.76$ / $3.60$ & $37$ $[31, 49]$ \\
+ & \texttt{2q\_norm\_independent} & \textbf{8/8} (8/8) & \textbf{0.999953} & $[0.999950, 0.999955]$ & $9.39$ ($5.48$) & $4.70$ ($2.74$) & $1.40$ / $3.60$ & $46$ $[40, 52]$ \\
+\midrule
+\multirow{5}{*}{\shortstack[l]{\textbf{Squeezed $3\,\text{dB}$, $T=20\,\tau_s$}\\filtro $3.0$, $\text{dim}=48$ (\texttt{main\_012})}}
+ & \texttt{1q} & \textbf{8/8} (8/8) & \textbf{0.999953} & $[0.999950, 0.999965]$ & $6.77$ ($6.77$) & $3.38$ ($3.38$) & $1.39$ / $3.66$ & $28$ $[23, 39]$ \\
+ & \texttt{2q\_common} & \textbf{8/8} (8/8) & \textbf{0.999953} & $[0.999950, 0.999961]$ & $7.83$ ($3.91$) & $3.91$ ($1.96$) & $1.22$ / $3.09$ & $26$ $[15, 34]$ \\
+ & \texttt{2q\_independent} & \textbf{8/8} (8/8) & \textbf{0.999952} & $[0.999950, 0.999955]$ & $10.23$ ($5.60$) & $5.12$ ($2.80$) & $1.39$ / $3.12$ & $33$ $[25, 39]$ \\
+ & \texttt{2q\_norm\_common} & \textbf{8/8} (8/8) & \textbf{0.999951} & $[0.999950, 0.999952]$ & $12.88$ ($6.44$) & $6.44$ ($3.22$) & $1.28$ / $3.36$ & $42$ $[31, 56]$ \\
+ & \texttt{2q\_norm\_independent} & \textbf{8/8} (8/8) & \textbf{0.999951} & $[0.999950, 0.999953]$ & $12.24$ ($6.41$) & $6.12$ ($3.20$) & $1.52$ / $3.24$ & $47$ $[45, 56]$ \\
+\midrule
+\multirow{5}{*}{\shortstack[l]{\textbf{Squeezed $8\,\text{dB}$, $T=10\,\tau_s$}\\filtro $3.0$, $\text{dim}=48$ (\texttt{main\_013})}}
+ & \texttt{1q} & \textbf{8/8} (8/8) & \textbf{0.998505} & $[0.998025, 0.999255]$ & $27.64$ ($27.64$) & $13.82$ ($13.82$) & $3.75$ / $5.10$ & $300$ $[295, 300]$ \\
+ & \texttt{2q\_common} & \textbf{8/8} (8/8) & \textbf{0.999404} & $[0.999055, 0.999621]$ & $36.25$ ($18.12$) & $18.12$ ($9.06$) & $3.71$ / $5.16$ & $300$ $[300, 300]$ \\
+ & \texttt{2q\_independent} & \textbf{8/8} (8/8) & \textbf{0.999285} & $[0.998880, 0.999644]$ & $33.79$ ($17.98$) & $16.90$ ($8.99$) & $3.68$ / $5.28$ & $300$ $[300, 300]$ \\
+ & \texttt{2q\_norm\_common} & \textbf{8/8} (8/8) & \textbf{0.998954} & $[0.998128, 0.999326]$ & $50.83$ ($25.42$) & $25.42$ ($12.71$) & $3.69$ / $4.92$ & $300$ $[300, 300]$ \\
+ & \texttt{2q\_norm\_independent} & \textbf{8/8} (8/8) & \textbf{0.999400} & $[0.998095, 0.999610]$ & $50.82$ ($26.42$) & $25.41$ ($13.21$) & $3.70$ / $5.10$ & $300$ $[300, 300]$ \\
+\midrule
+\multirow{5}{*}{\shortstack[l]{\textbf{Squeezed $8\,\text{dB}$, $T=20\,\tau_s$}\\filtro $3.0$, $\text{dim}=48$ (\texttt{main\_014})}}
+ & \texttt{1q} & \textbf{8/8} (8/8) & \textbf{0.999627} & $[0.999159, 0.999809]$ & $27.72$ ($27.72$) & $13.86$ ($13.86$) & $3.67$ / $4.68$ & $300$ $[300, 300]$ \\
+ & \texttt{2q\_common} & \textbf{8/8} (8/8) & \textbf{0.999751} & $[0.999635, 0.999842]$ & $32.20$ ($16.10$) & $16.10$ ($8.05$) & $3.19$ / $4.92$ & $300$ $[300, 300]$ \\
+ & \texttt{2q\_independent} & \textbf{8/8} (8/8) & \textbf{0.999607} & $[0.999461, 0.999771]$ & $30.22$ ($15.40$) & $15.11$ ($7.70$) & $3.41$ / $4.92$ & $300$ $[300, 300]$ \\
+ & \texttt{2q\_norm\_common} & \textbf{8/8} (8/8) & \textbf{0.999647} & $[0.999511, 0.999841]$ & $55.25$ ($27.63$) & $27.63$ ($13.81$) & $3.55$ / $3.96$ & $300$ $[300, 300]$ \\
+ & \texttt{2q\_norm\_independent} & \textbf{8/8} (8/8) & \textbf{0.999636} & $[0.999482, 0.999692]$ & $54.01$ ($30.02$) & $27.00$ ($15.01$) & $3.50$ / $4.02$ & $300$ $[300, 300]$ \\
+\bottomrule
+\end{tabular}%
+}
+\caption{Risultati della campagna intermedia per gli 11 blocchi con filtro passa-basso causale ($\omega_{\text{cut}} = 3.0\,\omega_c$).}
+\label{tab:intermedia_filtrata}
+\end{table}
+
+\begin{table}[H]
+\centering
+\scriptsize
+\setlength{\tabcolsep}{3.2pt}
+\renewcommand{\arraystretch}{1.12}
+\resizebox{\textwidth}{!}{%
+\begin{tabular}{llccccccc}
+\toprule
+\textbf{Esperimento} & \textbf{Sistema} & \textbf{Successi} & \textbf{$P_{\text{target}}$ med.} & \textbf{$P_{\text{target}}$ $[\min, \max]$} & \textbf{Fluenza $\mathcal{F}_{\text{mod}}$} & \textbf{Costo paper $C_2/\omega_c^2$} & \textbf{$\text{SR}_{\max}$ / $\omega_{99\%}$} & \textbf{Iter.\ GRAPE} \\
+ & & \textbf{(valid.\ num.)} & \textbf{(continua)} & & \textbf{tot (max ch)} & \textbf{tot (max ch)} & \textbf{(mediana)} & \textbf{med.\ $[\min, \max]$} \\
+\midrule
+\multirow{5}{*}{\shortstack[l]{\textbf{Fock $|n=6\rangle$, $T=10\,\tau_s$}\\senza filtro, $\text{dim}=60$ (\texttt{main\_001})}}
+ & \texttt{1q} & 1/8 (1/8) & 0.981119 & $[0.956183, 0.999322]$ & $49.20$ ($49.20$) & $24.60$ ($24.60$) & $4.77$ / $8.16$ & $300$ $[235, 300]$ \\
+ & \texttt{2q\_common} & \textbf{8/8} (8/8) & \textbf{0.999937} & $[0.999917, 0.999939]$ & $53.70$ ($26.85$) & $26.85$ ($13.42$) & $4.76$ / $7.80$ & $218$ $[179, 300]$ \\
+ & \texttt{2q\_independent} & \textbf{8/8} (8/8) & \textbf{0.999938} & $[0.999929, 0.999941]$ & $54.19$ ($30.55$) & $27.09$ ($15.27$) & $4.76$ / $8.16$ & $176$ $[130, 214]$ \\
+ & \texttt{2q\_norm\_common} & 0/8 (0/8) & 0.828066 & $[0.777615, 0.936965]$ & $97.49$ ($48.75$) & $48.75$ ($24.37$) & $4.77$ / $7.56$ & $300$ $[300, 300]$ \\
+ & \texttt{2q\_norm\_independent} & 0/8 (0/8) & 0.976268 & $[0.887827, 0.995310]$ & $103.93$ ($54.05$) & $51.96$ ($27.03$) & $4.77$ / $7.44$ & $300$ $[300, 300]$ \\
+\midrule
+\multirow{5}{*}{\shortstack[l]{\textbf{Fock $|n=10\rangle$, $T=10\,\tau_s$}\\senza filtro, $\text{dim}=60$ (\texttt{main\_005})}}
+ & \texttt{1q} & 0/8 (0/8) & 0.687505 & $[0.603246, 0.724137]$ & $52.88$ ($52.88$) & $26.44$ ($26.44$) & $4.77$ / $7.80$ & $190$ $[157, 300]$ \\
+ & \texttt{2q\_common} & 3/8 (3/8) & \textbf{0.994516} & $[0.959896, 0.999734]$ & $79.74$ ($39.87$) & $39.87$ ($19.93$) & $4.77$ / $7.86$ & $300$ $[300, 300]$ \\
+ & \texttt{2q\_independent} & \textbf{8/8} (8/8) & \textbf{0.999737} & $[0.998240, 0.999903]$ & $78.60$ ($40.65$) & $39.30$ ($20.33$) & $4.77$ / $8.04$ & $300$ $[300, 300]$ \\
+ & \texttt{2q\_norm\_common} & 0/8 (0/8) & 0.502739 & $[0.383340, 0.638977]$ & $100.73$ ($50.37$) & $50.37$ ($25.18$) & $4.77$ / $7.68$ & $298$ $[240, 300]$ \\
+ & \texttt{2q\_norm\_independent} & 0/8 (0/8) & 0.653033 & $[0.565350, 0.806457]$ & $104.43$ ($53.58$) & $52.21$ ($26.79$) & $4.77$ / $7.92$ & $300$ $[300, 300]$ \\
+\midrule
+\multirow{5}{*}{\shortstack[l]{\textbf{Cat $\alpha=2.0$, $T=10\,\tau_s$}\\senza filtro, $\text{dim}=48$ (\texttt{main\_009})}}
+ & \texttt{1q} & \textbf{8/8} (8/8) & \textbf{0.999789} & $[0.997088, 0.999928]$ & $43.56$ ($43.56$) & $21.78$ ($21.78$) & $4.77$ / $7.74$ & $300$ $[300, 300]$ \\
+ & \texttt{2q\_common} & 7/8 (7/8) & \textbf{0.999931} & $[0.999776, 0.999946]$ & $54.80$ ($27.40$) & $27.40$ ($13.70$) & $4.65$ / $7.14$ & $294$ $[209, 300]$ \\
+ & \texttt{2q\_independent} & \textbf{8/8} (8/8) & \textbf{0.999941} & $[0.999934, 0.999944]$ & $45.76$ ($25.09$) & $22.88$ ($12.55$) & $4.70$ / $7.80$ & $285$ $[191, 300]$ \\
+ & \texttt{2q\_norm\_common} & 3/8 (3/8) & 0.989409 & $[0.922015, 0.997865]$ & $89.97$ ($44.98$) & $44.98$ ($22.49$) & $4.77$ / $7.74$ & $300$ $[300, 300]$ \\
+ & \texttt{2q\_norm\_independent} & \textbf{8/8} (8/8) & \textbf{0.999779} & $[0.999151, 0.999888]$ & $79.36$ ($41.00$) & $39.68$ ($20.50$) & $4.77$ / $7.98$ & $300$ $[300, 300]$ \\
+\midrule
+\multirow{5}{*}{\shortstack[l]{\textbf{Cat $\alpha=2.0$, $T=15\,\tau_s$}\\senza filtro, $\text{dim}=48$ (\texttt{main\_010})}}
+ & \texttt{1q} & \textbf{8/8} (8/8) & \textbf{0.999942} & $[0.999941, 0.999943]$ & $32.73$ ($32.73$) & $16.37$ ($16.37$) & $4.56$ / $7.76$ & $130$ $[125, 175]$ \\
+ & \texttt{2q\_common} & \textbf{8/8} (8/8) & \textbf{0.999944} & $[0.999940, 0.999945]$ & $42.10$ ($21.05$) & $21.05$ ($10.52$) & $3.55$ / $6.72$ & $189$ $[140, 253]$ \\
+ & \texttt{2q\_independent} & \textbf{8/8} (8/8) & \textbf{0.999944} & $[0.999940, 0.999946]$ & $35.87$ ($19.65$) & $17.94$ ($9.83$) & $3.48$ / $6.60$ & $220$ $[131, 270]$ \\
+ & \texttt{2q\_norm\_common} & 7/8 (7/8) & \textbf{0.999918} & $[0.999815, 0.999944]$ & $88.57$ ($44.28$) & $44.28$ ($22.14$) & $4.72$ / $7.52$ & $300$ $[201, 300]$ \\
+ & \texttt{2q\_norm\_independent} & \textbf{8/8} (8/8) & \textbf{0.999942} & $[0.999888, 0.999944]$ & $73.66$ ($44.05$) & $36.83$ ($22.03$) & $4.63$ / $6.64$ & $250$ $[171, 300]$ \\
+\midrule
+\multirow{5}{*}{\shortstack[l]{\textbf{Squeezed $3\,\text{dB}$, $T=10\,\tau_s$}\\senza filtro, $\text{dim}=48$ (\texttt{main\_015})}}
+ & \texttt{1q} & \textbf{8/8} (8/8) & \textbf{0.999954} & $[0.999950, 0.999959]$ & $5.84$ ($5.84$) & $2.92$ ($2.92$) & $1.72$ / $3.96$ & $31$ $[24, 34]$ \\
+ & \texttt{2q\_common} & \textbf{8/8} (8/8) & \textbf{0.999951} & $[0.999950, 0.999959]$ & $12.78$ ($6.39$) & $6.39$ ($3.20$) & $1.76$ / $4.14$ & $35$ $[30, 44]$ \\
+ & \texttt{2q\_independent} & \textbf{8/8} (8/8) & \textbf{0.999951} & $[0.999950, 0.999956]$ & $8.57$ ($4.87$) & $4.28$ ($2.44$) & $1.52$ / $3.96$ & $38$ $[30, 46]$ \\
+ & \texttt{2q\_norm\_common} & \textbf{8/8} (8/8) & \textbf{0.999952} & $[0.999950, 0.999955]$ & $11.60$ ($5.80$) & $5.80$ ($2.90$) & $1.86$ / $3.78$ & $37$ $[32, 47]$ \\
+ & \texttt{2q\_norm\_independent} & \textbf{8/8} (8/8) & \textbf{0.999950} & $[0.999950, 0.999955]$ & $9.98$ ($5.79$) & $4.99$ ($2.90$) & $1.72$ / $3.84$ & $40$ $[36, 48]$ \\
+\midrule
+\multirow{5}{*}{\shortstack[l]{\textbf{Squeezed $8\,\text{dB}$, $T=10\,\tau_s$}\\senza filtro, $\text{dim}=48$ (\texttt{main\_016})}}
+ & \texttt{1q} & \textbf{8/8} (8/8) & \textbf{0.999550} & $[0.999173, 0.999677]$ & $33.96$ ($33.96$) & $16.98$ ($16.98$) & $4.77$ / $8.10$ & $300$ $[300, 300]$ \\
+ & \texttt{2q\_common} & 6/8 (6/8) & \textbf{0.999720} & $[0.999618, 0.999906]$ & $40.60$ ($20.30$) & $20.30$ ($10.15$) & $4.72$ / $7.80$ & $300$ $[300, 300]$ \\
+ & \texttt{2q\_independent} & \textbf{8/8} (8/8) & \textbf{0.999752} & $[0.999635, 0.999897]$ & $36.58$ ($20.85$) & $18.29$ ($10.42$) & $4.77$ / $8.10$ & $300$ $[300, 300]$ \\
+ & \texttt{2q\_norm\_common} & \textbf{8/8} (8/8) & \textbf{0.999610} & $[0.999480, 0.999791]$ & $64.46$ ($32.23$) & $32.23$ ($16.11$) & $4.77$ / $7.68$ & $300$ $[300, 300]$ \\
+ & \texttt{2q\_norm\_independent} & \textbf{8/8} (8/8) & \textbf{0.999727} & $[0.999616, 0.999795]$ & $60.13$ ($31.80$) & $30.07$ ($15.90$) & $4.77$ / $8.04$ & $300$ $[300, 300]$ \\
+\bottomrule
+\end{tabular}%
+}
+\caption{Risultati della campagna intermedia per i 6 blocchi diagnostici senza filtro ($\omega_{\text{cut}} = \text{null}$).}
+\label{tab:intermedia_nofiltro}
+\end{table}
+
+\subsection{Considerazioni dettagliate sui risultati della campagna intermedia}
+
+\begin{enumerate}
+    \item \textbf{Verifica dello speed-up computazionale ($\sim 10\times$ per blocco rispetto alla campagna precedente):}
+    L'intera campagna da $17$ esperimenti ($680$ pipeline) è terminata in $\sim 55{,}8$ ore di wall-clock ($\approx 2{,}3$ giorni, contro gli $11$ giorni richiesti dagli $8$ esperimenti della campagna precedente). L'uso di $N_{\text{CRAB}} = N_{\text{GRAPE}}/4$ e di $1500$ valutazioni ha abbattuto la quota del tempo CPU assorbita da CRAB dall'$85\%\text{--}92\%$ al $42{,}5\%$ ($191{,}2\,\text{h}$ CPU in CRAB contro $258{,}2\,\text{h}$ in GRAPE+validazione). Inoltre, l'early stopping a $P_{\text{disc}} \ge 0.99995$ si è attivato in $264$ pipeline su $680$, fermando GRAPE dopo sole $26\text{--}47$ iterazioni sugli stati Squeezed a $3\,\text{dB}$ e dopo $\sim 170\text{--}240$ iterazioni sui casi Fock $|10\rangle$ e Cat a $15\text{--}20\,\tau_s$, senza alcuna perdita di fedeltà né di tasso di successo rispetto alle run di riferimento.
+
+    \item \textbf{Stati di Fock $|n=6\rangle$ e $|n=10\rangle$, e individuazione della soglia a $T = 15\,\tau_s$ (\texttt{main\_000}--\texttt{main\_005}):}
+    \begin{itemize}
+        \item I blocchi di verifica su Fock $|6\rangle$ a $T=10\,\tau_s$ (\texttt{main\_000} con filtro, \texttt{main\_001} senza filtro) e su Fock $|10\rangle$ a $T=10\,\tau_s$ e $20\,\tau_s$ (\texttt{main\_002}, \texttt{main\_004}, \texttt{main\_005}) riproducono esattamente il quadro fisico della prima campagna v2: a $T=10\,\tau_s$ su $|6\rangle$ con filtro, \texttt{2q\_independent} ottiene $8/8$ seed validati ($P_{\text{med}} = 0.999942$) mentre \texttt{1q} e i casi normalizzati restano a $0/8$ ($P_{\text{med}} \approx 0.65\text{--}0.74$). Anche senza filtro (\texttt{main\_001}), per $|6\rangle$ a $10\,\tau_s$ sia \texttt{2q\_common} sia \texttt{2q\_independent} raggiungono $8/8$ ($0.999938$), mentre \texttt{1q} valida solo $1/8$ seed ($P_{\text{med}} = 0.9811$) e i casi normalizzati restano a $0/8$.
+        \item Il nuovo blocco intermedio su Fock $|10\rangle$ a $T = 15\,\tau_s$ con filtro $\omega_{\text{cut}} = 3.0\,\omega_c$ (\texttt{main\_003}) individua esattamente la finestra temporale in cui il vantaggio a 2 qubit su $10$ fotoni emerge \emph{anche in presenza del filtro passa-basso}: sia \texttt{2q\_common} sia \texttt{2q\_independent} centrano $8/8$ seed validati ($P_{\text{med}} = 0.999946$, fermandosi per early stopping a una mediana di $204$ iterazioni in \texttt{2q\_independent}), mentre il singolo qubit \texttt{1q} non supera mai la soglia ($0/8$, $P_{\text{med}} = 0.9373$, max $0.9736$) e i sistemi normalizzati si fermano a $0/8$ (\texttt{2q\_norm\_common}, $0.8380$) e $1/8$ (\texttt{2q\_norm\_independent}, $0.9793$). Questo conferma che l'aumento dell'accoppiamento collettivo $g_{\text{eff}} = \sqrt{2}g$ riduce di almeno il $25\%$ il tempo minimo necessario per preparare Fock $|10\rangle$ con controlli filtrati.
+    \end{itemize}
+
+    \item \textbf{Stati di Schrödinger Cat a 4 componenti ($\alpha = 2.0$, $\langle n \rangle = 4$, \texttt{main\_006}--\texttt{main\_010}):}
+    \begin{itemize}
+        \item \emph{Superamento definitivo del crollo post-PCHIP della v1:} nella v1 a $T = 15\,\tau_s$ la fedeltà sullo stato Cat crollava da $0.9995$ (GRAPE a gradini) a $\sim 0.895$ dopo lo smoothing PCHIP. Nella v2, ottimizzando direttamente il controllo continuo filtrato, a $T = 15\,\tau_s$ (\texttt{main\_007}) e a $T = 20\,\tau_s$ (\texttt{main\_008}) tutti e 5 i sistemi raggiungono $8/8$ seed validati con probabilità continue $P_{\text{target}} \approx 0.99995$ ($F_{\text{root}} \approx 0.99997$). Inoltre, \texttt{2q\_independent} riduce il costo massimo per singolo canale $C_{2,\text{max ch}}$ del $28\%\text{--}39\%$ rispetto a \texttt{1q} ($11.58$ contro $16.10$ a $15\,\tau_s$; $9.42$ contro $15.33$ a $20\,\tau_s$) e abbassa lo slew rate mediano da $3.52\text{--}3.68$ a $2.65\text{--}3.20$.
+        \item \emph{Natura del vantaggio a 2 qubit a $T = 10\,\tau_s$ (filtro vs limite di velocità quantistica):} a durata breve $T = 10\,\tau_s$ con filtro (\texttt{main\_006}), \texttt{2q\_common} e \texttt{2q\_independent} centrano $8/8$ seed ($P_{\text{med}} = 0.999431$ e $0.999838$, con costo per canale dimezzato a $11.4\text{--}12.5$), mentre \texttt{1q} si ferma a $1/8$ ($P_{\text{med}} = 0.9772$), \texttt{2q\_norm\_common} a $0/8$ ($0.8838$) e \texttt{2q\_norm\_independent} a $2/8$ ($0.9797$). Tuttavia, confrontando con il controllo senza filtro a $T = 10\,\tau_s$ (\texttt{main\_009}), si osserva che rimuovendo il filtro sia \texttt{1q} sia \texttt{2q\_norm\_independent} salgono a $8/8$ seed validati ($P_{\text{med}} = 0.999789$ e $0.999779$), ma per farlo devono sfruttare componenti ad alta frequenza ($\omega_{99\%} \approx 7.74\text{--}7.98\,\omega_c$, slew rate $4.77$). Ciò dimostra una differenza fisica importante rispetto a Fock $|6\rangle$ e $|10\rangle$: per lo stato Cat ($\langle n \rangle = 4$), a $T = 10\,\tau_s$ un accoppiamento efficace $g_{\text{eff}} = 0.3$ non è intrinsecamente troppo lento, ma richiede una modulazione rapida che viene tagliata dal filtro passa-basso a $3\,\omega_c$; l'accoppiamento collettivo $\sqrt{2}g$ dei due qubit permette invece di completare la sintesi dello stato Cat in $10\,\tau_s$ restando interamente dentro la banda del filtro ($\omega_{99\%} = 4.86\,\omega_c$).
+    \end{itemize}
+
+    \item \textbf{Stati Squeezed Vacuum a $3\,\text{dB}$ e $8\,\text{dB}$ (\texttt{main\_011}--\texttt{main\_016}) e diagnostica sul troncamento della coda fotonica:}
+    \begin{itemize}
+        \item \emph{Squeezed $3\,\text{dB}$ ($r \approx 0.346$, $\langle n \rangle \approx 0.12$, \texttt{main\_011}, \texttt{main\_012}, \texttt{main\_015}):} essendo molto vicino al vuoto, viene preparato da tutti i 5 sistemi con $8/8$ successi già a $T = 10\,\tau_s$ con filtro, attivando l'early stopping ($P \ge 0.99995$) in sole $26\text{--}47$ iterazioni GRAPE, con costi energetici minimi ($C_2 \approx 2.8\text{--}6.7$) e spettri naturalmente contenuti sotto la frequenza di taglio ($\omega_{99\%} \approx 3.1\text{--}3.7\,\omega_c$, slew rate $1.2\text{--}1.8$).
+        \item \emph{Squeezed $8\,\text{dB}$ ($r \approx 0.921$, $\langle n \rangle \approx 1.11$, \texttt{main\_013}, \texttt{main\_014}, \texttt{main\_016}):} con filtro attivo tutti i sistemi raggiungono $8/8$ seed validati sia a $10\,\tau_s$ sia a $20\,\tau_s$; a $T = 10\,\tau_s$ (\texttt{main\_013}) i sistemi a 2 qubit raggiungono mediane più elevate rispetto a \texttt{1q} ($0.9993\text{--}0.9994$ contro $0.9985$) e riducono il carico energetico per canale del $35\%\text{--}44\%$ ($C_{2,\text{max ch}} \approx 9.0$ a $10\,\tau_s$ e $7.7\text{--}8.1$ a $20\,\tau_s$, contro $13.8\text{--}13.9$ di \texttt{1q}).
+        \item \emph{Nota tecnica per il futuro sul troncamento di Fock per Squeezed $\ge 8\,\text{dB}$:} a differenza del caso a $3\,\text{dB}$, su $8\,\text{dB}$ tutte le pipeline arrivano al limite di $300$ iterazioni senza toccare la soglia di early stopping $0.99995$ (saturando a $P \approx 0.9993\text{--}0.9998$). Sebbene il numero medio di fotoni sia basso ($\langle n \rangle \approx 1.11$), la distribuzione sui livelli pari di uno stato Squeezed decade lentamente ($\propto \tanh^{2m} r$) e a $8\,\text{dB}$ presenta una coda non trascurabile fino a $n \approx 36\text{--}44$: a $\text{dim}=48$ la popolazione residua sui livelli di bordo è $\sim 3\times 10^{-5}$ e la distanza in traccia rispetto alla validazione a $\text{dim}=68$ è $\sim 2.4\times 10^{-4}$ (sotto la soglia di tolleranza $10^{-3}$, ma sufficiente a limitare la quarta cifra decimale di $P_{\text{target}}$). In particolare, nel controllo senza filtro a $T = 10\,\tau_s$ (\texttt{main\_016}), $2$ seed su $8$ di \texttt{2q\_common} raggiungono $P > 0.9997$ ma non superano il test \texttt{dimension\_convergence} ($1.04\times 10^{-3}$ e $1.23\times 10^{-3} > 10^{-3}$) perché i picchi ad alta frequenza non filtrati popolano transitoriamente la coda oltre $n=48$. Per future simulazioni su stati Squeezed a $8\,\text{dB}$ (o superiori) sarà quindi opportuno adottare $\text{dim}=60\text{--}64$ (validato a $\text{dim}=80\text{--}84$).
+    \end{itemize}
+
+    \item \textbf{Indicazioni per il prossimo passo (introduzione del vincolo sullo slew rate):}
+    Dai dati raccolti finora emerge che il filtro causale a $\omega_{\text{cut}} = 3.0\,\omega_c$ contiene già la banda a $\omega_{99\%} \approx 3.1\text{--}5.3\,\omega_c$, ma nei regimi rapidi ($T = 10\text{--}15\,\tau_s$) l'ottimizzatore spinge comunque la pendenza istantanea del comando al massimo consentito dalla risposta esponenziale del filtro ($\text{SR}_{\max} \approx 3.68\text{--}3.78\,\omega_c^2$, contro $\approx 4.77\,\omega_c^2$ senza filtro). Nella prossima fase potremo quindi attivare la penalità esplicita sullo slew rate (\texttt{slew\_weight}) sui casi più significativi (Fock $|6\rangle$ a $10\,\tau_s$, Fock $|10\rangle$ a $15\text{--}20\,\tau_s$, Cat $\alpha=2.0$ a $10\text{--}15\,\tau_s$ e Squeezed $8\,\text{dB}$ con $\text{dim}=60$), verificando se la ripartizione del drive sui due canali di \texttt{2q\_independent} consenta di mantenere $P_{\text{target}} \ge 0.99$ anche imponendo rampe di frequenza significativamente più dolci rispetto al singolo qubit.
+\end{enumerate}
+
 \end{document}

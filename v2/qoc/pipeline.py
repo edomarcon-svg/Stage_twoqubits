@@ -13,7 +13,7 @@ from .config import from_dict
 from .models import build_model
 from .controls import Signal
 from .propagation import Objective, continuous_evolution
-from .metrics import state_metrics
+from .metrics import state_metrics, initial_state_metrics
 from .optimizers import crab, grape
 from .validation import validate_waveform
 from .storage import SCHEMA_VERSION, prepare_run, save_json
@@ -169,9 +169,11 @@ def run_experiment(cfg, destination=None, resume=None, plots=True):
                     ts = np.linspace(0,cfg.duration,cfg.validation.trajectory_points)
                     baseline_states = continuous_evolution(model,signal,zero_nodes,ts,cfg.validation.atol,cfg.validation.rtol)
                     baseline_metrics = state_metrics(model,baseline_states[-1])
+                    init_metrics = initial_state_metrics(model)
                 checksum = save_arrays(case_folder/"baseline.npz",times=ts,states_reduced=baseline_states,
                     parity_indices=model.indices,state_final_full=model.expand(baseline_states[-1]))
-                baseline = {"metrics":baseline_metrics,"description":"No modulation; same interacting model and initial preparation",
+                baseline = {"initial_metrics":init_metrics,"metrics":baseline_metrics,
+                    "description":"No modulation; same interacting model and initial preparation",
                     "array_file":"baseline.npz","array_sha256":checksum}
                 save_json(case_folder/"baseline.json",baseline)
             seeds = cfg.optimization.seeds
@@ -212,6 +214,11 @@ def run_experiment(cfg, destination=None, resume=None, plots=True):
             probabilities = np.array([x["metrics"]["target_probability"] for x in items])
             c2_totals = np.array([x["actuator"].get("c2_paper_total", 0.5*x["actuator"]["modulation_fluence_total"]) for x in items])
             c2_max_channels = np.array([x["actuator"].get("c2_paper_max_channel", 0.5*x["actuator"]["modulation_fluence_max_channel"]) for x in items])
+            slews = np.array([x["actuator"]["slew_worst_channel"] for x in items])
+            slew_rms = np.array([x["actuator"].get("slew_rms_worst_channel", max(ch["slew_rms"] for ch in x["actuator"]["channels"])) for x in items])
+            command_slews = np.array([x["actuator"].get("command_slew_worst_channel", max(ch["command_slew_max"] for ch in x["actuator"]["channels"])) for x in items])
+            omega99s = np.array([x["actuator"]["omega_99_worst_channel"] for x in items])
+            grape_iters = [x["grape"]["iterations"] for x in items if x["grape"]["iterations"] is not None]
             stats = {"count":len(items),"probability_mean":float(np.mean(probabilities)),
                 "probability_std_population":float(np.std(probabilities)),"probability_median":float(np.median(probabilities)),
                 "probability_min":float(np.min(probabilities)),"probability_max":float(np.max(probabilities)),
@@ -222,6 +229,11 @@ def run_experiment(cfg, destination=None, resume=None, plots=True):
                 "probability_q75":float(np.quantile(probabilities,.75)),
                 "c2_paper_total_median":float(np.median(c2_totals)),
                 "c2_paper_max_channel_median":float(np.median(c2_max_channels)),
+                "slew_median":float(np.median(slews)),
+                "slew_rms_median":float(np.median(slew_rms)),
+                "command_slew_median":float(np.median(command_slews)),
+                "omega99_median":float(np.median(omega99s)),
+                "grape_iterations_median":float(np.median(grape_iters)) if grape_iters else None,
                 "selection_bias_top_only":cfg.optimization.refine_top is not None and cfg.optimization.refine_top<len(seeds)}
             warm_items = []
             for spec in [w for w in warm_specs if w["case"] == case.name]:

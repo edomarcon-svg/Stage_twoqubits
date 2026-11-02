@@ -53,7 +53,7 @@ def campaign_plan(spec):
     dh = base.duration/(base.control.nodes-1)
     jobs = []
     names = set()
-    def add(stage,block,target,factor,cutoff,case_names,optimization=None,profile=None,dimension=None,control=None):
+    def add(stage,block,target,factor,cutoff,case_names,optimization=None,profile=None,dimension=None,control=None,initial_state=None):
         if isinstance(factor,bool) or not isinstance(factor,int) or factor < 1:
             raise ValueError("factors_taus must be positive integers")
         if cutoff is not None and (isinstance(cutoff,bool) or not isinstance(cutoff,(int,float)) or not math.isfinite(cutoff) or cutoff <= 0):
@@ -61,11 +61,15 @@ def campaign_plan(spec):
         raw = base.to_dict()
         if dimension is not None:
             raw["dimension"] = dimension
+        if initial_state is not None:
+            raw["initial_state"] = initial_state
         raw["target"] = deepcopy(target)
         raw["factor_taus"] = factor
         duration = factor*base.tau_s
         raw["intervals"] = max(2,math.ceil(duration/dt-1e-10))
         if control is not None:
+            if not isinstance(control,dict) or "filter_cutoff" in control or "nodes" in control:
+                raise ValueError("Block control overrides must be dicts without filter_cutoff or nodes (use cutoffs and base nodes scaling)")
             raw["control"] = _merge(raw["control"],control)
         raw["control"]["nodes"] = max(3,math.ceil(duration/dh-1e-10)+1)
         raw["control"]["filter_cutoff"] = cutoff
@@ -105,19 +109,25 @@ def campaign_plan(spec):
                 add("pilot","pilot",pilot["target"],pilot["factor_taus"],pilot["filter_cutoff"],pilot["cases"],opt,profile["name"])
     if not isinstance(spec["blocks"],list) or not spec["blocks"]: raise ValueError("blocks must be nonempty")
     for block in spec["blocks"]:
-        _keys(block,{"name","enabled","targets","factors_taus","cutoffs","cases","optimization","dimension","control"},
+        _keys(block,{"name","enabled","targets","factors_taus","cutoffs","cases","optimization","dimension","control","controls","initial_state"},
             {"name","targets","factors_taus","cutoffs"})
         if not isinstance(block["name"],str) or not block["name"] or block["name"] in names: raise ValueError("Block names must be unique")
         names.add(block["name"])
         if not isinstance(block.get("enabled",True),bool): raise ValueError("block.enabled must be boolean")
+        if "control" in block and "controls" in block:
+            raise ValueError("Specify either 'control' or 'controls' in a block, not both")
+        if "controls" in block and (not isinstance(block["controls"],list) or not block["controls"]):
+            raise ValueError("block.controls must be a nonempty list of control override dicts")
         if not all(isinstance(block[k],list) and block[k] for k in ["targets","factors_taus","cutoffs"]):
             raise ValueError("Each block requires nonempty targets, factors_taus and cutoffs")
         if not block.get("enabled",True): continue
+        control_list = block["controls"] if "controls" in block else [block.get("control")]
         for target in block["targets"]:
             for factor in block["factors_taus"]:
                 for cutoff in block["cutoffs"]:
-                    add("main",block["name"],target,factor,cutoff,block.get("cases",[c.name for c in base.cases]),block.get("optimization"),
-                        dimension=block.get("dimension"),control=block.get("control"))
+                    for ctrl in control_list:
+                        add("main",block["name"],target,factor,cutoff,block.get("cases",[c.name for c in base.cases]),block.get("optimization"),
+                            dimension=block.get("dimension"),control=ctrl,initial_state=block.get("initial_state"))
     if not any(j["stage"] == "main" for j in jobs): raise ValueError("No enabled main experiments")
     # Pilot and production draws must not be reused for selecting and assessing a profile.
     pilot_seeds = set(pilot.get("seeds",[])) if pilot.get("enabled") else set()
@@ -169,9 +179,18 @@ def write_campaign_report(root, spec, jobs, state):
         summary = json.loads((run/"summary.json").read_text())
         cfg = json.loads((run/"config.json").read_text())
         for case in summary["cases"]:
+            init_m = (case.get("baseline") or {}).get("initial_metrics") or {}
             shared = {"stage":job["stage"],"block":job["block"],"profile":entry.get("profile",job["profile"]),
-                "target":json.dumps(cfg["target"],sort_keys=True),"dimension":cfg["dimension"],"factor_taus":cfg["factor_taus"],
-                "duration":cfg["duration"],"filter_cutoff":cfg["control"]["filter_cutoff"],"case":case["name"],
+                "target":json.dumps(cfg["target"],sort_keys=True),"initial_state":cfg["initial_state"],
+                "initial_mean_photons":init_m.get("mean_photons"),
+                "initial_bare_vacuum_prob":init_m.get("bare_vacuum_probability"),
+                "dimension":cfg["dimension"],"factor_taus":cfg["factor_taus"],
+                "duration":cfg["duration"],"filter_cutoff":cfg["control"]["filter_cutoff"],
+                "total_frequency_bounds":json.dumps(cfg["control"]["total_frequency_bounds"]),
+                "max_slew":cfg["control"]["max_slew"],
+                "slew_weight":cfg["control"]["slew_weight"],
+                "fluence_weight":cfg["control"]["fluence_weight"],
+                "case":case["name"],
                 "run":str(run.relative_to(root)),"objective":cfg["optimization"]["objective"],
                 "crab_initial_std":cfg["optimization"]["crab_initial_std"],
                 "crab_intervals":cfg["optimization"].get("crab_intervals") or cfg["intervals"]}
@@ -196,7 +215,11 @@ def write_campaign_report(root, spec, jobs, state):
                     "c2_paper_total":a.get("c2_paper_total",0.5*a["modulation_fluence_total"]),
                     "c2_paper_max_channel":a.get("c2_paper_max_channel",0.5*a["modulation_fluence_max_channel"]),
                     "slew":a["slew_worst_channel"],
-                    "omega99":a["omega_99_worst_channel"],"spectral_power_above_threshold":a.get("ac_power_fraction_above_threshold_worst"),
+                    "slew_rms":a.get("slew_rms_worst_channel"),
+                    "command_slew":a.get("command_slew_worst_channel"),
+                    "omega99":a["omega_99_worst_channel"],
+                    "spectral_power_above_threshold":a.get("ac_power_fraction_above_threshold_worst"),
+                    "spectral_power_above_cutoff":a.get("ac_power_fraction_above_cutoff_worst"),
                     "spectral_threshold":cfg["validation"]["spectral_threshold"],
                     "crab_seconds":c["elapsed_seconds"],"refinement_validation_seconds":item["elapsed_refinement_validation_seconds"],
                     "folder":str((run/item["folder"]).relative_to(root))})
@@ -212,10 +235,11 @@ def write_campaign_report(root, spec, jobs, state):
         "<p><a href='summary.csv'>Statistiche</a> · <a href='seeds.csv'>Tutti i tentativi e diagnostiche</a> · <a href='campaign.json'>Configurazione</a> · <a href='state.json'>Stato e ripresa</a></p>"]
     if (root/"pilot_selection.json").exists():
         body.append("<p><a href='pilot_selection.json'>Confronto e selezione del collaudo</a></p>")
-    body.append("<table><tr><th>Fase</th><th>Target</th><th>T/τs</th><th>Filtro</th><th>Sistema</th><th>P mediana</th><th>Successi validati</th><th>Report</th></tr>")
+    body.append("<table><tr><th>Fase</th><th>Blocco</th><th>Target</th><th>Stato iniz.</th><th>T/τs</th><th>Filtro</th><th>Bounds</th><th>Max slew / peso</th><th>Sistema</th><th>P mediana</th><th>Successi validati</th><th>Report</th></tr>")
     for row in experiments:
         label = json.loads(row["target"])
-        values = [row["stage"],f"{label['kind']} {label['value']}",row["factor_taus"],row["filter_cutoff"],row["case"],f"{row['probability_median']:.6g}",f"{row['validated_goal_count']}/{row['count']}"]
+        slew_desc = f"max={row['max_slew']}, w={row['slew_weight']}"
+        values = [row["stage"],row["block"],f"{label['kind']} {label['value']}",row["initial_state"],row["factor_taus"],row["filter_cutoff"],row["total_frequency_bounds"],slew_desc,row["case"],f"{row['probability_median']:.6g}",f"{row['validated_goal_count']}/{row['count']}"]
         body.append("<tr>"+"".join(f"<td>{html.escape(str(x))}</td>" for x in values)+f"<td><a href='{html.escape(row['run'],quote=True)}/report.html'>Apri</a></td></tr>")
     body.append("</table>")
     (root/"report.html").write_text("<!doctype html><html lang='it'><meta charset='utf-8'><title>Campagna QOC</title><style>body{font:16px system-ui;margin:30px}td,th{padding:8px;border:1px solid #ccc}table{border-collapse:collapse}</style><body>"+"\n".join(body)+"</body></html>")
